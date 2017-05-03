@@ -1,15 +1,17 @@
 import { connect } from 'react-redux';
-import WorkStation from './workstation';
+import Editor from './editor';
 
 const mapStateToProps = (state, ownProps) => ({
-  toggles: state.toggles
+  code: state.code,
+  paletteType: state.toggle.paletteType
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateToggle: (toggle) => dispatch(updateToggle(toggle))
+  updateCode: (code) => dispatch(updateCode(code)),
+  clearCode: () => dispatch(clearCode())
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(WorkStation);
+)(Editor);

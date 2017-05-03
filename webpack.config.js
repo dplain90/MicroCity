@@ -1,17 +1,15 @@
-var path = require("path");
+var path = require('path');
 
 module.exports = {
-  context: __dirname,
-  entry: "./micro_city.jsx",
+  entry: './micro_city.jsx',
   output: {
-    path: path.resolve(__dirname, 'app', 'assets', 'javascripts'),
-    filename: "bundle.js"
+    filename: './bundle.js',
   },
   module: {
     loaders: [
       {
-        test: [/\.jsx?$/, /\.js?$/],
-        exclude: /node_modules/,
+        test: [/\.jsx?$/],
+        exclude: /(node_modules)/,
         loader: 'babel-loader',
         query: {
           presets: ['es2015', 'react']
@@ -19,8 +17,8 @@ module.exports = {
       }
     ]
   },
-  devtool: 'source-maps',
+  devtool: 'source-map',
   resolve: {
-    extensions: [".js", ".jsx", "*"]
+    extensions: ['.js', '.jsx', '*']
   }
 };
