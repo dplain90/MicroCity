@@ -1,4 +1,4 @@
-## Sample JS Project Proposal: MicroCity
+## JS Project Proposal: MicroCity
 
 ### Background
 
