@@ -17,13 +17,10 @@ class WorkStation extends React.Component {
     }
   }
 
-
   render(){
-    let {  } = this.props;
     return (
       <div className="workstation">
         <div className="paletteContainer">
-          <PaletteContainer />
           <button className="togglePalette" onClick={this.handleClick}> Switch </button>
         </div>
         <EditorContainer />
@@ -31,5 +28,6 @@ class WorkStation extends React.Component {
     );
 
   }
+}
 
 export default WorkStation;

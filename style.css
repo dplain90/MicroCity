@@ -4,19 +4,20 @@ div, h1, h2, h3, h4 {
 
 }
 
-body {
+
+html, body {
   width: 100%;
   height: 100%;
 }
 
 
 div {
-  border: 1px solid black;
+
 }
 
 #root {
   width: 100%;
-  height: 100%;
+  height: 90%;
 
   display: flex;
   justify-content: center;
@@ -26,11 +27,66 @@ div {
 
 .main {
   width: 60%;
-  height: 60%;
+  height: 100%;
 }
 
 .chooseLevel {
 
+}
 
+.levelMenu {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 
+.levelMenu button {
+  margin-right: 115px;
+
+}
+.levelContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.level {
+  width: 100%;
+  display: inherit;
+  flex-direction: column;
+}
+
+.levelWidget {
+  flex: 3;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.grid {
+  border: 1px solid green;
+}
+.grid, .workstation {
+  width: 50%;
+  flex: 1;
+}
+
+.workstation {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+    border: 1px solid blue;
+}
+.paletteContainer {
+ flex: 0.5;
+}
+
+.palette {
+  flex: 2;
+}
+
+.editor {
+  height: 100%;
+  border: 1px solid red;
 }

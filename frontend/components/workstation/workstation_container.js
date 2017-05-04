@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import WorkStation from './workstation';
-
+import { updateToggle } from '../../actions/toggle_actions';
 const mapStateToProps = (state, ownProps) => ({
   toggles: state.toggles
 });

@@ -1,19 +1,14 @@
 import { connect } from 'react-redux';
-import Grid from './grid';
-import { resetGrid } from '../../actions/grid_actions';
-import { updateLevel } from '../../actions/level_actions';
+import Level from './level';
 import { updateToggle } from '../../actions/toggle_actions';
-
-
+import { updateLevel, getLevels } from '../../actions/level_actions';
 const mapStateToProps = (state, ownProps) => ({
-  toggles: state.toggles
   level: state.level,
-  code: state.code,
-  difficulty: state.difficulty
+  toggles: state.toggles
 });
 
 const mapDispatchToProps = dispatch => ({
-  resetGrid: () => dispatch(resetGrid()),
+  getLevels: () => dispatch(getLevels()),
   updateLevel: (level) => dispatch(updateLevel(level)),
   updateToggle: (toggle) => dispatch(updateToggle(toggle))
 });
@@ -21,4 +16,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Grid);
+)(Level);

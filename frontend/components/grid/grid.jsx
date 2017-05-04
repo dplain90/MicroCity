@@ -1,0 +1,84 @@
+import React from 'react';
+
+
+
+
+
+class Code {
+  constructor(obj){
+    this.obj = obj;
+    this.run = this.run.bind(this);
+
+  }
+
+  run(snippets){
+    if(snippets.length < 1){
+      return this.obj;
+    }
+    let snippet = snippets.shift();
+    snippet.call(this.obj);
+    debugger
+    run(snippets);
+  }
+}
+
+
+class Grid extends React.Component {
+  constructor(props){
+    super(props);
+    this.handleTick = this.handleTick.bind(this);
+    this.count = 0;
+    this.moveHorizontal = this.moveHorizontal.bind(this);
+    this.moveVertical = this.moveVertical.bind(this);
+    this.my_snippets = [ this.moveHorizontal(10), this.moveHorizontal(30), this.moveVertical(10), this.moveVertical(20)];
+  }
+
+  moveHorizontal(dir) {
+    return (obj) => {
+      return obj.x += dir;
+    }
+  }
+
+  moveVertical(dir) {
+    return (obj) => obj.y += dir;
+  }
+
+  componentDidMount() {
+    this.stage = new createjs.Stage("gridCanvas");
+    this.robot = new createjs.Bitmap("/images/robot.png");
+    this.stage.addChild(this.robot);
+    // this.codeRunner = new Code(this.robot);
+    createjs.Ticker.addEventListener("tick", this.handleTick);
+  }
+
+  handleTick(event){
+     this.robot.scaleX = .25;
+     this.robot.scaleY = .25;
+     if (!event.paused) {
+       this.my_snippets.forEach( (snippet) => {
+         snippet(this.robot);
+       });
+
+       this.count += 1;
+     }
+
+     if(this.count > 10){
+       createjs.Ticker.paused = true;
+     }
+     this.stage.update();
+
+  }
+
+  render(){
+    return (
+      <div className="grid">
+        <canvas id="gridCanvas" width="500px" height="500px">
+
+        </canvas>
+
+      </div>
+    );
+
+  }
+}
+export default Grid;

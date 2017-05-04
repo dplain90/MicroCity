@@ -1,3 +1,5 @@
+import React from 'react';
+
 class Editor extends React.Component {
   constructor(props){
     super(props);
@@ -10,7 +12,7 @@ class Editor extends React.Component {
   }
 
   componentWillReceiveProps(newProps){
-    { paletteType, code } = this.props;
+    let { paletteType, code } = this.props;
     if(paletteType !== newProps.paletteType) {
       this.setState({paletteType: newProps.paletteType});
     }
@@ -44,9 +46,9 @@ class Editor extends React.Component {
   render(){
     return (
       <div className="palette">
-        { editorDisplay() }
+        { this.editorDisplay() }
       </div>
     );
   }
-
-export default WorkStation;
+}
+export default Editor;

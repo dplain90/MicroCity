@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { setDifficulty } from '../../actions/difficulty_actions';
 import { getLevels } from '../../actions/level_actions';
-import LevelContainer from '../level/level_container.jsx';
+import LevelContainer from '../level/level_container';
 import WorkStationContainer from '../workstation/workstation_container.js';
-
+import React from 'react';
 class Difficulty extends React.Component {
   constructor(props){
     super(props);
@@ -24,7 +24,7 @@ class Difficulty extends React.Component {
 
   render(){
     return (
-      <div className="easyContainer">
+      <div className="levelContainer">
         <LevelContainer />
       </div>
     );
@@ -40,7 +40,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getLevels: () => dispatch(getLevels()),
+  getLevels: (difficulty) => dispatch(getLevels(difficulty)),
   updateLevel: (level) => dispatch(updateLevel(level))
 });
 

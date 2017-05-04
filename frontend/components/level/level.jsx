@@ -41,17 +41,19 @@ class Level extends React.Component {
     let { number, title, description } = this.props.level;
 
     return (
-      <div className={"level" + number}>
+      <div className="level">
         <div className="levelMenu">
           <h2> Level {number}: {title} </h2>
           <h3> { description } </h3>
           { this.runButton() }
         </div>
-        <GridContainer />
-        <WorkStationContainer />
+        <div className="levelWidget">
+          <WorkStationContainer />
+          <GridContainer />
+        </div>
       </div>
     );
 
   }
-
+}
 export default Level;

@@ -5,7 +5,7 @@ import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import App from './app';
 import Game from './game';
 import GridContainer from './grid/grid_container';
-import DifficultyContainer from './difficulties/easy';
+import DifficultyContainer from './difficulties/difficulty';
 import WorkStationContainer from './workstation/workstation_container';
 
 const Root = ({ store }) => {
@@ -13,11 +13,8 @@ const Root = ({ store }) => {
     <Provider store={store}>
       <Router history={hashHistory}>
         <Route path="/" component={App}>
-          <Route path="/game" component={Game} >
-            <Route path="/easy" component={DifficultyContainer} />
-            <Route path="/medium" component={DifficultyContainer} />
-            <Route path="/hard" component={DifficultyContainer} />
-          </Route>
+          <IndexRoute component={Game} />
+          <Route path="/:difficulty" component={DifficultyContainer} />
         </Route>
       </Router>
     </Provider>
