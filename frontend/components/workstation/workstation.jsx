@@ -12,6 +12,7 @@ class WorkStation extends React.Component {
       this.handleClick = this.handleClick.bind(this);
       this.handleTick = this.handleTick.bind(this);
       this.calcNextBlockPos = this.calcNextBlockPos.bind(this);
+      this.addCodeBlock = this.addCodeBlock.bind(this);
   }
 
   componentDidMount() {
@@ -63,39 +64,44 @@ class WorkStation extends React.Component {
   }
 
   dropCallback(e){
-    let blockBounds = e.currentTarget.getBounds().clone();
     let editorBounds = this.editorContainer.getBounds().clone();
     let farX = editorBounds.x + 200;
     let nearX = editorBounds.x;
     let topY = editorBounds.y;
     let bottomY = editorBounds.y + 600;
+    let blkX = e.currentTarget.x;
+    let blkY = e.currentTarget.y;
 
-
-     let blkX = e.currentTarget.x;
-     let blkY = e.currentTarget.y;
     if(blkX > nearX && blkX < farX && blkY > topY && blkY < bottomY){
       let { x: newX, y: newY } = this.calcNextBlockPos();
       e.currentTarget.x = newX;
       e.currentTarget.y = newY;
       this.stage.update(e);
-      // debugger
       this.editorContainer.addChild(e.currentTarget);
+
+      this.addCodeBlock({ fn: e.currentTarget.fnName, args: [] });
     }
   }
 
   calcNextBlockPos() {
-     let blockCount = this.editorContainer.children.length
+    let children = this.editorContainer.children;
+     let blockCount = children.length;
      if(blockCount === 1) {
        return { x: 210, y: 10 };
      } else {
-       debugger
-       let lastChild = this.editorContainer.children[blockCount - 1];
+       let lastChild = children[blockCount - 1];
        let lastChildBounds = lastChild.getBounds();
-       return { x: 210, y: lastChildBounds.y + (lastChildBounds.height + 10)};
+       return {
+         x: 210,
+         y: lastChildBounds.y + (lastChildBounds.height + 10)
+       };
      }
-
   }
 
+  addCodeBlock(fnName){
+    let updatedCode = this.props.code.concat(fnName);
+    this.props.updateCode(updatedCode);
+  }
 
   generateEditor(){
     this.editorContainer = new createjs.Container();
