@@ -1,11 +1,11 @@
 import React from 'react';
-// import { Code, Motion } from '../../../util/code_block_util';
 import Code from '../../blocks/code';
 
 
 class Grid extends React.Component {
   constructor(props){
     super(props);
+    this.queue = [];
     this.runButton = this.runButton.bind(this);
     this.handleRun = this.handleRun.bind(this);
     this.handleTick = this.handleTick.bind(this);
@@ -49,12 +49,13 @@ class Grid extends React.Component {
     this.stage.addChild(this.robot);
     this.stage.update();
      createjs.Ticker.addEventListener("tick", this.handleTick);
+     createjs.Ticker.setInterval(25);
+     createjs.Ticker.setFPS(100);
   }
 
   handleRun(e) {
     e.preventDefault();
-    this.code.run(this.state.code);
-    this.stage.update();
+    this.queue = this.code.run(this.state.code);
   }
 
 
@@ -73,21 +74,15 @@ class Grid extends React.Component {
 
   handleTick(event){
 
-    // let exampleBlock = [{ fn: this.motion.steps, args: [3] }, { fn: this.motion.move, args: ['y', 10] }];
-    //
-    //
-    //  this.motion.run(exampleBlock);
-    //  if (!event.paused) {
-    //    this.my_snippets.forEach( (snippet) => {
-    //      snippet(this.robot);
-    //    });
-     //
-    //    this.count += 1;
-    //  }
-     //
-    //  if(this.count > 10){
-    //    createjs.Ticker.paused = true;
-    //  }
+    if(this.queue.length > 0){
+      let movement = this.queue.shift();
+      if(movement[0] === 'x'){
+        this.robot.x += movement[1];
+      } else {
+        this.robot.y += movement[1];
+      }
+    }
+
      this.stage.update();
 
   }

@@ -5,6 +5,7 @@ class Code {
     this.stage = stage;
     this.obj = obj;
     this.fetchFn = this.fetchFn.bind(this);
+    this.queue = [];
   }
 
 
@@ -22,11 +23,13 @@ class Code {
     for (let i = 0; i < blocks.length; i++) {
       let { fn, args } = blocks[i];
         if(args.length > 0) {
+
           fnList[fn](...args);
         } else {
           fnList[fn]();
         }
     }
+    return this.motion.queue;
   }
 }
 
@@ -39,14 +42,14 @@ class Motion extends Code {
   }
 
   move(axis = 'y', steps = 30){
-
-    axis === 'x' ? this.obj.x += steps : this.obj.y += steps;
+    for (var i = 0; i < steps; i++) {
+      this.queue.push( [axis, 1] );
+    }
   }
 
   steps(num = 9){
     if(num > 0) {
-      this.obj.x += 10;
-      this.stage.update();
+      this.queue.push( [ 'x', 10] );
       this.steps(num - 1);
     }
   }

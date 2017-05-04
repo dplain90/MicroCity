@@ -21,10 +21,6 @@ class WorkStation extends React.Component {
     this.blocks = populateBlocks(this.stage, this.robot);
     this.moveBlock = this.blocks[0];
     this.stepsBlock = this.blocks[1];
-    // this.stepsBlock = this.blocks[1];
-    // this.robot = new createjs.Bitmap("/images/robot.png");
-    // this.stage.addChild(this.robot);
-    // this.populatePalette();
 
     this.moveBlock.on("pressmove", this.dragCallback);
     this.moveBlock.on("pressup", this.dropCallback);
@@ -32,9 +28,6 @@ class WorkStation extends React.Component {
     this.stepsBlock.on("pressup", this.dropCallback);
     this.stage.addChild(this.moveBlock, this.stepsBlock,  this.generateEditor());
 
-
-// this.stepsBlock,
-    // createjs.Ticker.addEventListener("tick", this.handleTick );
     this.stage.update();
   }
 
