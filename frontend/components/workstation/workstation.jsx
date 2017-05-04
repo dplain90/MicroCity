@@ -19,6 +19,7 @@ class WorkStation extends React.Component {
 
     this.blocks = populateBlocks(this.stage, this.robot);
     this.moveBlock = this.blocks[0];
+    this.stepsBlock = this.blocks[1];
     // this.stepsBlock = this.blocks[1];
     // this.robot = new createjs.Bitmap("/images/robot.png");
     // this.stage.addChild(this.robot);
@@ -26,7 +27,9 @@ class WorkStation extends React.Component {
 
     this.moveBlock.on("pressmove", this.dragCallback);
     this.moveBlock.on("pressup", this.dropCallback);
-    this.stage.addChild(this.moveBlock,  this.generateEditor());
+    this.stepsBlock.on("pressmove", this.dragCallback);
+    this.stepsBlock.on("pressup", this.dropCallback);
+    this.stage.addChild(this.moveBlock, this.stepsBlock,  this.generateEditor());
 
 
 // this.stepsBlock,
@@ -81,14 +84,16 @@ class WorkStation extends React.Component {
   }
 
   calcNextBlockPos() {
-     let lastChild = this.editorContainer.getChildAt(-1);
+     let blockCount = this.editorContainer.children.length
+     if(blockCount === 1) {
+       return { x: 210, y: 10 };
+     } else {
+       debugger
+       let lastChild = this.editorContainer.children[blockCount - 1];
+       let lastChildBounds = lastChild.getBounds();
+       return { x: 210, y: lastChildBounds.y + (lastChildBounds.height + 10)};
+     }
 
-     if(lastChild !== undefined) {
-     let lastChildBounds = lastChild.getBounds();
-     return { x: 210, y: lastChildBounds.y - (lastChildBounds.height + 10)};
-   } else {
-     return { x: 210, y: 10 } ;
-   }
   }
 
 

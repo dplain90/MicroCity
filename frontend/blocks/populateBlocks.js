@@ -3,7 +3,7 @@ import { generateSnippet } from './snippet';
 
 export const populateBlocks = (stage, obj) => {
   let motion = new Motion(stage, obj);
-  let motionBlocks = [generateBlock(generateSnippet(motion.move), stage, 5)];
+  let motionBlocks = [generateBlock(generateSnippet(motion.move), stage, 5), generateBlock(generateSnippet(motion.steps), stage, 30) ];
 
   return motionBlocks;
 };
