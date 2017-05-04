@@ -54,8 +54,8 @@ class WorkStation extends React.Component {
 
   dragCallback(e){
     console.log('called');
-    e.currentTarget.x = e.stageX;
-    e.currentTarget.y = e.stageY;
+    e.currentTarget.x = e.stageX - 40;
+    e.currentTarget.y = e.stageY - 40;
     this.stage.update();
   }
 
