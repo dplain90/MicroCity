@@ -14,17 +14,20 @@ export class Code {
   }
 }
 
-export class Motion extends CodeBlock {
+export class Motion extends Code {
   constructor(){
     super();
+    this.steps = this.steps.bind(this);
   }
 
   static steps(num){
-    if(num > 0) {
-    this.obj.x += 10;
-    this.stage.update();
-    this.steps(num - 1);
-    }
+    return () => {
+      if(num > 0) {
+        this.obj.x += 10;
+        this.stage.update();
+        this.steps(num - 1);
+      }
+    };
   }
 }
 //
@@ -41,4 +44,3 @@ export class Motion extends CodeBlock {
 //
 
 // }
-export const CodeBlock =
