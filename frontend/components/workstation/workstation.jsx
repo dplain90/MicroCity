@@ -7,10 +7,11 @@ class WorkStation extends React.Component {
     super(props);
       this.dragCallback = this.dragCallback.bind(this);
       this.populatePalette = this.populatePalette.bind(this);
-
+      this.dropCallback = this.dropCallback.bind(this);
       this.generateEditor = this.generateEditor.bind(this);
       this.handleClick = this.handleClick.bind(this);
       this.handleTick = this.handleTick.bind(this);
+      this.calcNextBlockPos = this.calcNextBlockPos.bind(this);
   }
 
   componentDidMount() {
@@ -24,9 +25,10 @@ class WorkStation extends React.Component {
     // this.populatePalette();
 
     this.moveBlock.on("pressmove", this.dragCallback);
-    this.stage.addChild(this.moveBlock,  this.editor);
-    console.log(this.moveBlock.hasEventListener());
-    debugger
+    this.moveBlock.on("pressup", this.dropCallback);
+    this.stage.addChild(this.moveBlock,  this.generateEditor());
+
+
 // this.stepsBlock,
     // createjs.Ticker.addEventListener("tick", this.handleTick );
     this.stage.update();
@@ -46,25 +48,58 @@ class WorkStation extends React.Component {
 
     this.workstationContainer = new createjs.Container();
     this.workstationContainer.setBounds(0,0, this.stage.width, this.stage.height);
-    this.generateEditor();
-    this.workstationContainer.addChild(this.moveBlock, this.stepsBlock);
+    this.workstationContainer.addChild(this.moveBlock, this.generateEditor());
 
   }
 
 
   dragCallback(e){
-    console.log('called');
     e.currentTarget.x = e.stageX - 40;
     e.currentTarget.y = e.stageY - 40;
     this.stage.update();
   }
 
+  dropCallback(e){
+    let blockBounds = e.currentTarget.getBounds().clone();
+    let editorBounds = this.editorContainer.getBounds().clone();
+    let farX = editorBounds.x + 200;
+    let nearX = editorBounds.x;
+    let topY = editorBounds.y;
+    let bottomY = editorBounds.y + 600;
+
+
+     let blkX = e.currentTarget.x;
+     let blkY = e.currentTarget.y;
+    if(blkX > nearX && blkX < farX && blkY > topY && blkY < bottomY){
+      let { x: newX, y: newY } = this.calcNextBlockPos();
+      e.currentTarget.x = newX;
+      e.currentTarget.y = newY;
+      this.stage.update(e);
+      // debugger
+      this.editorContainer.addChild(e.currentTarget);
+    }
+  }
+
+  calcNextBlockPos() {
+     let lastChild = this.editorContainer.getChildAt(-1);
+
+     if(lastChild !== undefined) {
+     let lastChildBounds = lastChild.getBounds();
+     return { x: 210, y: lastChildBounds.y - (lastChildBounds.height + 10)};
+   } else {
+     return { x: 210, y: 10 } ;
+   }
+  }
+
+
   generateEditor(){
     this.editorContainer = new createjs.Container();
     this.editorBox = new createjs.Shape();
-    this.editorBox.graphics.beginStroke("black").drawRect(5, 5, 100, 80);
+    this.editorBox.graphics.beginStroke("black").drawRect(200, 5, 200, 600);
     this.editorContainer.setBounds(150, 0, 150, this.stage.height);
-    this.editorContainer.addChild(this.editorBox);
+    this.editorContainer.addChild(this.moveBlock, this.editorBox );
+
+    return this.editorContainer;
   }
 
   handleClick(e){
@@ -88,11 +123,6 @@ class WorkStation extends React.Component {
 
   }
 }
-
-{/* <div className="paletteContainer">
-  <button className="togglePalette" onClick={this.handleClick}> Switch </button>
-</div>
-<EditorContainer /> */}
 
 
 export default WorkStation;
