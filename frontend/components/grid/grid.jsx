@@ -23,12 +23,12 @@ class Grid extends React.Component {
   }
 
   componentDidMount() {
-    this.stage = new createjs.Stage("gridCanvas");
-    this.robot = new createjs.Bitmap("/images/robot.png");
+    // this.stage = new createjs.Stage("gridCanvas");
+    // this.robot = new createjs.Bitmap("/images/robot.png");
 
-    this.stage.addChild(this.robot);
-    this.motion = new Motion(this.stage, this.robot);
-    createjs.Ticker.addEventListener("tick", this.handleTick);
+    // this.stage.addChild(this.robot);
+    // this.motion = new Motion(this.stage, this.robot);
+    // createjs.Ticker.addEventListener("tick", this.handleTick);
   }
 
   handleTick(event){

@@ -1,5 +1,5 @@
 export const generateSnippet = (fn) => {
-  return { fn: fn, args: [] txt: parseTxt(fn), argNum: fn.args.length };
+  return { fn: fn, args: [], name: parseName(fn.name), txt: parseTxt(fn) };
 };
 
 const parseName = (nameStr) => {
@@ -7,7 +7,8 @@ const parseName = (nameStr) => {
 };
 
 const parseTxt = (fn) => {
-  fnName = parseName(fn.name);
-  fnArgs = fn.args.join(",");
-  return `${fnName}(${fnArgs})`;
+  let fnName = parseName(fn.name);
+  // debugger
+  // let fnArgs = fn.args.join(",");
+  return `${fnName}()`;
 };
