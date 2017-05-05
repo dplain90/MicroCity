@@ -45,7 +45,7 @@ class Level extends React.Component {
         <div className="levelMenu">
           <h2> Level {number}: {title} </h2>
           <h3> { description } </h3>
-          { this.runButton() }
+        
         </div>
         <div className="levelWidget">
           <WorkStationContainer />

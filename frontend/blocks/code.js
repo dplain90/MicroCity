@@ -42,7 +42,8 @@ class Motion extends Code {
     this.steps.args = ['num'];
   }
 
-  move(axis = 'y', steps = 30, dir = 1){
+  move(axis = 'x', steps = 30, dir = 1, anim = 'move'){
+      this.queue.push([anim]);
     for (var i = 0; i < steps; i++) {
       this.queue.push( [axis, dir] );
     }
@@ -59,8 +60,8 @@ class Motion extends Code {
 
   leap(dir){
     for (var i = 0; i < 10; i++) {
-      this.move('y', 3, dir);
-      this.move('x', 3, 1);
+      this.move('y', 3, dir, 'jump');
+      this.move('x', 3, 1, 'jump');
     }
   }
 

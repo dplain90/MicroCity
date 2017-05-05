@@ -30,8 +30,8 @@ class Grid extends React.Component {
   componentDidMount() {
     this.stage = new createjs.Stage("gridCanvas");
     this.avatarSheet = generateAvatar();
-    this.avatarRun = new createjs.Sprite(this.avatarSheet, "run");
-    this.avatarIdle = new createjs.Sprite(this.avatarSheet, "idle");
+    this.avatar = new createjs.Sprite(this.avatarSheet, "idle");
+    this.avatar.y = 170;
     this.robot = new createjs.Bitmap("/images/robot.png");
 
     this.code = new Code(this.stage, this.robot);
@@ -39,13 +39,13 @@ class Grid extends React.Component {
     this.robot.scaleY = .25;
 
     this.generateTiles();
-    this.stage.addChild(this.avatarRun);
+    this.stage.addChild(this.avatar);
     this.stage.update();
 
-    this.avatarRun.gotoAndPlay("run");
+
      createjs.Ticker.addEventListener("tick", this.handleTick);
      createjs.Ticker.setInterval(10);
-     createjs.Ticker.setFPS(3);
+     createjs.Ticker.setFPS(30);
   }
 
   handleRun(e) {
@@ -53,6 +53,7 @@ class Grid extends React.Component {
     // if(this.state.code !== this.props.code){
     //
     // }
+    console.log(this.state.code);
     this.queue = this.code.run(this.state.code);
   }
 
@@ -83,26 +84,27 @@ class Grid extends React.Component {
   }
 
   handleTick(event){
+// if (this.queue.length > 0) this.setState({ code: [] });
 
-    this.avatarRun.y = 170;
-    // this.avatarIdle.x+=1;
-    //
-    // this.avatarIdle.x += 1;
-    // this.avatarRun.gotoAndStop(14);
-     this.avatarIdle.gotoAndStop("10");
-    if(this.queue.length > 0){
-      let movement = this.queue.shift();
-      if(movement[0] === 'x'){
-        this.robot.x += movement[1];
-      } else {
-        this.robot.y += movement[1];
-      }
-      console.log(this.robot.y);
-      if (this.queue.length > 0) this.setState({ code: [] });
+    if(this.queue.length === 0) {
+      this.avatar.gotoAndStop('idle');
     } else {
+      let movement = this.queue.shift();
+      if(movement.length === 1) {
+        this.avatar.gotoAndPlay(movement[0]);
+      } else {
+        if(movement[0] === 'x'){
+          this.avatar.x += movement[1];
+        } else {
+          this.avatar.y += movement[1];
+        }
+      }
     }
 
-     this.stage.update();
+
+
+
+  this.stage.update();
 
   }
 

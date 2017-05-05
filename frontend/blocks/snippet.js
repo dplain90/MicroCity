@@ -9,7 +9,5 @@ const parseName = (nameStr) => {
 
 const parseTxt = (fn) => {
   let fnName = parseName(fn.name);
-  // debugger
-  // let fnArgs = fn.args.join(",");
   return `${fnName}()`;
 };

@@ -5,7 +5,8 @@ const _defaultCode = Object.freeze({});
 const CodeReducer = (state = _defaultCode, action) => {
   switch(action.type) {
     case UPDATE_CODE:
-      return action.code;
+      let updatedCode = Object.assign({}, action.code, state);
+      return updatedCode;
     case CLEAR_CODE:
       return _defaultCode;
     case REMOVE_CODE:
