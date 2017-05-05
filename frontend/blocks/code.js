@@ -54,7 +54,6 @@ class Motion extends Code {
 
   jump(){
     this.leap(-1);
-    console.log('done going down');
     this.leap(1);
   }
 

@@ -23,8 +23,9 @@ class WorkStation extends React.Component {
   componentDidMount() {
     this.stage = new createjs.Stage("workstationCanvas");
     this.createBlocks();
-
+    window.stage = this.stage;
     this.stage.addChild(this.generateEditor());
+    window.editor = this.editorContainer;
     this.stage.update();
   }
 
@@ -38,6 +39,7 @@ class WorkStation extends React.Component {
       let block = this.blocks[i];
       block.on("mousedown", this.cloneBlock);
       this.stage.addChild(block);
+      block.visible = true;
       this.stage.update();
     }
   }
@@ -76,11 +78,11 @@ class WorkStation extends React.Component {
     let blkY = blk.y;
 
     if(blkX > nearX && blkX < farX && blkY > topY && blkY < bottomY){
+      this.editorContainer.addChildAt(e.currentTarget, 1);
       let { x: newX, y: newY } = this.calcNextBlockPos();
       blk.x = newX;
       blk.y = newY;
       this.stage.update(e);
-      this.editorContainer.addChild(e.currentTarget);
 
       blk.off("mousedown");
       this.addCodeBlock(blk.id, blk.fnName);
@@ -98,15 +100,17 @@ class WorkStation extends React.Component {
 
   calcNextBlockPos() {
     let children = this.editorContainer.children;
+
      let blockCount = children.length;
-     if(blockCount === 1) {
+     if(blockCount === 2) {
        return { x: 210, y: 10 };
      } else {
-       let lastChild = children[blockCount - 1];
+       let lastChild = children[2];
        let lastChildBounds = lastChild.getBounds();
+
        return {
-         x: 210,
-         y: lastChildBounds.y - 11
+         x: lastChild.x,
+         y: lastChild.y + 30
        };
      }
   }

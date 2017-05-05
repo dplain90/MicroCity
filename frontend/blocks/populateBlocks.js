@@ -14,11 +14,11 @@ const generateBlock = (name, stage, y) => {
    let block = new createjs.Bitmap(`images/blocks/motion/${name}.png`);
    block.x = 20;
    block.y = y;
-
   let blockContainer = new createjs.Container();
   blockContainer.y = y;
   blockContainer.fnName = name;
   blockContainer.addChild(block);
+
 
   return blockContainer;
 }
