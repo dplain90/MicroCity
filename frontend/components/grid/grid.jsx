@@ -1,6 +1,6 @@
 import React from 'react';
 import Code from '../../blocks/code';
-
+import { generateAvatar } from '../../../images/avatar/avatar';
 class Grid extends React.Component {
   constructor(props){
     super(props);
@@ -27,15 +27,19 @@ class Grid extends React.Component {
 
   componentDidMount() {
     this.stage = new createjs.Stage("gridCanvas");
+    this.avatarSheet = generateAvatar();
+    this.avatarRun = new createjs.Sprite(this.avatarSheet, "run");
+    this.avatarIdle = new createjs.Sprite(this.avatarSheet, "idle");
     this.robot = new createjs.Bitmap("/images/robot.png");
+
     this.code = new Code(this.stage, this.robot);
     this.robot.scaleX = .25;
     this.robot.scaleY = .25;
-    this.stage.addChild(this.robot);
+    this.stage.addChild(this.avatarIdle, this.avatarRun);
     this.stage.update();
      createjs.Ticker.addEventListener("tick", this.handleTick);
-     createjs.Ticker.setInterval(25);
-     createjs.Ticker.setFPS(100);
+    //  createjs.Ticker.setInterval(25);
+    //  createjs.Ticker.setFPS(100);
   }
 
   handleRun(e) {
@@ -62,6 +66,11 @@ class Grid extends React.Component {
 
   handleTick(event){
 
+    this.avatarIdle.y = 90
+    // this.avatarRun.gotoAndPlay("run");
+    this.avatarIdle.gotoAndPlay("idle");
+    // this.avatarRun.gotoAndStop(14);
+    //  this.avatarIdle.gotoAndStop("10");
     if(this.queue.length > 0){
       let movement = this.queue.shift();
       if(movement[0] === 'x'){
