@@ -1,6 +1,7 @@
 import React from 'react';
 import Code from '../../blocks/code';
 import { generateAvatar } from '../../../images/avatar/avatar';
+import { generateTileSheet } from '../../../images/tiles';
 class Grid extends React.Component {
   constructor(props){
     super(props);
@@ -8,6 +9,7 @@ class Grid extends React.Component {
     this.runButton = this.runButton.bind(this);
     this.handleRun = this.handleRun.bind(this);
     this.handleTick = this.handleTick.bind(this);
+    this.generateTiles = this.generateTiles.bind(this);
     this.state = {
       runStatus: false,
       code: this.props.code
@@ -35,11 +37,15 @@ class Grid extends React.Component {
     this.code = new Code(this.stage, this.robot);
     this.robot.scaleX = .25;
     this.robot.scaleY = .25;
-    this.stage.addChild(this.avatarIdle, this.avatarRun);
+
+    this.generateTiles();
+    this.stage.addChild(this.avatarRun);
     this.stage.update();
+
+    this.avatarRun.gotoAndPlay("run");
      createjs.Ticker.addEventListener("tick", this.handleTick);
-    //  createjs.Ticker.setInterval(25);
-    //  createjs.Ticker.setFPS(100);
+     createjs.Ticker.setInterval(10);
+     createjs.Ticker.setFPS(3);
   }
 
   handleRun(e) {
@@ -50,6 +56,18 @@ class Grid extends React.Component {
     this.queue = this.code.run(this.state.code);
   }
 
+
+  generateTiles(){
+    this.tileSheet = generateTileSheet();
+    for (var i = 0; i < 9; i++) {
+      let tile = new createjs.Sprite(this.tileSheet);
+      tile.scaleX = .25;
+      tile.scaleY = .25;
+      tile.x = (18.5*i);
+      tile.y = 200;
+      this.stage.addChild(tile);
+    }
+  }
 
   runButton(){
     let {runStatus} = this.state;
@@ -66,11 +84,12 @@ class Grid extends React.Component {
 
   handleTick(event){
 
-    this.avatarIdle.y = 90
-    // this.avatarRun.gotoAndPlay("run");
-    this.avatarIdle.gotoAndPlay("idle");
+    this.avatarRun.y = 170;
+    // this.avatarIdle.x+=1;
+    //
+    // this.avatarIdle.x += 1;
     // this.avatarRun.gotoAndStop(14);
-    //  this.avatarIdle.gotoAndStop("10");
+     this.avatarIdle.gotoAndStop("10");
     if(this.queue.length > 0){
       let movement = this.queue.shift();
       if(movement[0] === 'x'){
