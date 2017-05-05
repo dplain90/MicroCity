@@ -1,7 +1,6 @@
 import React from 'react';
 import Code from '../../blocks/code';
 
-
 class Grid extends React.Component {
   constructor(props){
     super(props);
@@ -9,10 +8,6 @@ class Grid extends React.Component {
     this.runButton = this.runButton.bind(this);
     this.handleRun = this.handleRun.bind(this);
     this.handleTick = this.handleTick.bind(this);
-    this.moveHorizontal = this.moveHorizontal.bind(this);
-    this.moveVertical = this.moveVertical.bind(this);
-    this.my_snippets = [ this.moveHorizontal(10), this.moveHorizontal(30), this.moveVertical(10), this.moveVertical(20)];
-
     this.state = {
       runStatus: false,
       code: this.props.code
@@ -28,16 +23,6 @@ class Grid extends React.Component {
     if(newProps.code !== this.props.code) {
       this.setState({code: newProps.code});
     }
-  }
-
-  moveHorizontal(dir) {
-    return (obj) => {
-      return obj.x += dir;
-    }
-  }
-
-  moveVertical(dir) {
-    return (obj) => obj.y += dir;
   }
 
   componentDidMount() {

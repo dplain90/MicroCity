@@ -5,6 +5,8 @@ import { populateBlocks } from '../../blocks/populateBlocks';
 class WorkStation extends React.Component {
   constructor(props){
     super(props);
+      this.cloneBlock = this.cloneBlock.bind(this);
+      this.removeCodeBlock = this.removeCodeBlock.bind(this);
       this.dragCallback = this.dragCallback.bind(this);
       this.populatePalette = this.populatePalette.bind(this);
       this.dropCallback = this.dropCallback.bind(this);
@@ -21,34 +23,40 @@ class WorkStation extends React.Component {
     this.blocks = populateBlocks(this.stage, this.robot);
     this.moveBlock = this.blocks[0];
     this.stepsBlock = this.blocks[1];
-
-    this.moveBlock.on("pressmove", this.dragCallback);
-    this.moveBlock.on("pressup", this.dropCallback);
-    this.stepsBlock.on("pressmove", this.dragCallback);
-    this.stepsBlock.on("pressup", this.dropCallback);
+    this.moveBlock.on("mousedown", this.cloneBlock);
+    this.stepsBlock.on("mousedown", this.cloneBlock);
+    // this.moveBlock.on("pressmove", this.dragCallback);
+    // this.moveBlock.on("pressup", this.dropCallback);
+    // this.stepsBlock.on("pressmove", this.dragCallback);
+    // this.stepsBlock.on("pressup", this.dropCallback);
     this.stage.addChild(this.moveBlock, this.stepsBlock,  this.generateEditor());
 
     this.stage.update();
   }
 
   handleTick(event){
-    //  this.robot.scaleX = .25;
-    //  this.robot.scaleY = .25;
-    //  this.robot.x += 10;
-    //  this.robot.y += 10;
      this.stage.update();
   }
 
 
   populatePalette() {
-
-
     this.workstationContainer = new createjs.Container();
     this.workstationContainer.setBounds(0,0, this.stage.width, this.stage.height);
     this.workstationContainer.addChild(this.moveBlock, this.generateEditor());
 
   }
 
+
+  cloneBlock(e) {
+
+    let blockClone = e.currentTarget.clone(true);
+    blockClone.fnName = e.currentTarget.fnName;
+    this.stage.addChild(blockClone);
+    blockClone.on("pressmove", this.dragCallback);
+    blockClone.on("pressup", this.dropCallback);
+
+    this.stage.update();
+  }
 
   dragCallback(e){
     e.currentTarget.x = e.stageX - 40;
@@ -71,8 +79,17 @@ class WorkStation extends React.Component {
       e.currentTarget.y = newY;
       this.stage.update(e);
       this.editorContainer.addChild(e.currentTarget);
-
+      e.currentTarget.off("mousedown");
+      debugger
       this.addCodeBlock({ fn: e.currentTarget.fnName, args: [] });
+    } else {
+      if(this.editorContainer.contains(e.currentTarget)){
+        this.editorContainer.removeChild(e.currentTarget);
+        this.stage.removeChild(e.currentTarget);
+        this.stage.update();
+        this.removeCodeBlock(e.currentTarget.fnName);
+      }
+
     }
   }
 
@@ -89,6 +106,14 @@ class WorkStation extends React.Component {
          y: lastChildBounds.y + (lastChildBounds.height + 10)
        };
      }
+  }
+  removeCodeBlock(fnName){
+    let updatedCode = [];
+    for (var i = 0; i < this.props.code.length; i++) {
+      if(this.props.code[i].fn !== fnName) {
+        updatedCode.push(this.props.code[i]);
+      }
+    }
   }
 
   addCodeBlock(fnName){

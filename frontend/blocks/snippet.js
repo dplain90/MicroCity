@@ -3,7 +3,8 @@ export const generateSnippet = (fn) => {
 };
 
 const parseName = (nameStr) => {
-  return nameStr.split(" ")[1];
+
+  return nameStr.split(" ")[-1];
 };
 
 const parseTxt = (fn) => {

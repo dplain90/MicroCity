@@ -1,5 +1,3 @@
-
-
 class Code {
   constructor(stage, obj) {
     this.stage = stage;
@@ -7,7 +5,6 @@ class Code {
     this.fetchFn = this.fetchFn.bind(this);
     this.queue = [];
   }
-
 
   fetchFn() {
     this.motion = new Motion(this.stage, this.obj);
@@ -23,9 +20,10 @@ class Code {
     for (let i = 0; i < blocks.length; i++) {
       let { fn, args } = blocks[i];
         if(args.length > 0) {
-
+          debugger
           fnList[fn](...args);
         } else {
+          debugger
           fnList[fn]();
         }
     }
