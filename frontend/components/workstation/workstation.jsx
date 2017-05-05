@@ -5,6 +5,7 @@ import { populateBlocks } from '../../blocks/populateBlocks';
 class WorkStation extends React.Component {
   constructor(props){
     super(props);
+      this.createBlocks = this.createBlocks.bind(this);
       this.cloneBlock = this.cloneBlock.bind(this);
       this.dragCallback = this.dragCallback.bind(this);
       this.populatePalette = this.populatePalette.bind(this);
@@ -14,18 +15,16 @@ class WorkStation extends React.Component {
       this.handleTick = this.handleTick.bind(this);
       this.calcNextBlockPos = this.calcNextBlockPos.bind(this);
       this.addCodeBlock = this.addCodeBlock.bind(this);
+      this.state = {
+        category: 'motion'
+      };
   }
 
   componentDidMount() {
     this.stage = new createjs.Stage("workstationCanvas");
+    this.createBlocks();
 
-    this.blocks = populateBlocks(this.stage, this.robot);
-    this.moveBlock = this.blocks[0];
-    this.stepsBlock = this.blocks[1];
-    this.moveBlock.on("mousedown", this.cloneBlock);
-    this.stepsBlock.on("mousedown", this.cloneBlock);
-    this.stage.addChild(this.moveBlock, this.stepsBlock,  this.generateEditor());
-
+    this.stage.addChild(this.generateEditor());
     this.stage.update();
   }
 
@@ -33,6 +32,15 @@ class WorkStation extends React.Component {
      this.stage.update();
   }
 
+  createBlocks(){
+    this.blocks = populateBlocks(this.stage, this.robot, this.state.category);
+    for (var i = 0; i < this.blocks.length; i++) {
+      let block = this.blocks[i];
+      block.on("mousedown", this.cloneBlock);
+      this.stage.addChild(block);
+      this.stage.update();
+    }
+  }
 
   populatePalette() {
     this.workstationContainer = new createjs.Container();
@@ -82,7 +90,7 @@ class WorkStation extends React.Component {
         this.stage.removeChild(blk);
         this.stage.update();
         this.props.removeCode(blk.id);
-        
+
       }
 
     }
@@ -98,7 +106,7 @@ class WorkStation extends React.Component {
        let lastChildBounds = lastChild.getBounds();
        return {
          x: 210,
-         y: lastChildBounds.y + (lastChildBounds.height + 10)
+         y: lastChildBounds.y - 11
        };
      }
   }
@@ -113,11 +121,11 @@ class WorkStation extends React.Component {
   generateEditor(){
     this.editorContainer = new createjs.Container();
     this.editorBox = new createjs.Shape();
-    this.editorBox.graphics.beginStroke("black").drawRect(200, 5, 200, 600);
+    this.editorBox.graphics.beginStroke("black").beginFill("black").drawRect(200, 5, 200, 600);
     this.editorContainer.setBounds(150, 0, 150, this.stage.height);
-    this.editorContainer.addChild(this.moveBlock, this.editorBox );
-
+    this.editorContainer.addChild(this.editorBox);
     return this.editorContainer;
+
   }
 
   handleClick(e){

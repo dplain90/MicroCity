@@ -10,7 +10,8 @@ class Code {
     this.motion = new Motion(this.stage, this.obj);
     return {
       'steps': this.motion.steps,
-      'move': this.motion.move
+      'move': this.motion.move,
+      'jump': this.motion.jump
     };
   }
 
@@ -35,12 +36,32 @@ class Motion extends Code {
     super(stage, obj);
     this.steps = this.steps.bind(this);
     this.move = this.move.bind(this);
+    this.leap = this.leap.bind(this);
+    this.jump = this.jump.bind(this);
+    this.climb = this.climb.bind(this);
     this.steps.args = ['num'];
   }
 
-  move(axis = 'y', steps = 30){
+  move(axis = 'y', steps = 30, dir = 1){
     for (var i = 0; i < steps; i++) {
-      this.queue.push( [axis, 1] );
+      this.queue.push( [axis, dir] );
+    }
+  }
+
+  climb(num){
+    this.move('y', 1, 1);
+  }
+
+  jump(){
+    this.leap(-1);
+    console.log('done going down');
+    this.leap(1);
+  }
+
+  leap(dir){
+    for (var i = 0; i < 10; i++) {
+      this.move('y', 3, dir);
+      this.move('x', 3, 1);
     }
   }
 
