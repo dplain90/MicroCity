@@ -40,6 +40,8 @@ class Grid extends React.Component {
 
   handleRun(e) {
     e.preventDefault();
+    console.log(this.queue);
+    console.log(this.state.code);
     this.queue = this.code.run(this.state.code);
   }
 
@@ -66,6 +68,8 @@ class Grid extends React.Component {
       } else {
         this.robot.y += movement[1];
       }
+      if (this.queue.length > 0) this.setState({ code: [] });
+    } else {
     }
 
      this.stage.update();

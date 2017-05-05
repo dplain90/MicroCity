@@ -6,7 +6,6 @@ class WorkStation extends React.Component {
   constructor(props){
     super(props);
       this.cloneBlock = this.cloneBlock.bind(this);
-      this.removeCodeBlock = this.removeCodeBlock.bind(this);
       this.dragCallback = this.dragCallback.bind(this);
       this.populatePalette = this.populatePalette.bind(this);
       this.dropCallback = this.dropCallback.bind(this);
@@ -25,10 +24,6 @@ class WorkStation extends React.Component {
     this.stepsBlock = this.blocks[1];
     this.moveBlock.on("mousedown", this.cloneBlock);
     this.stepsBlock.on("mousedown", this.cloneBlock);
-    // this.moveBlock.on("pressmove", this.dragCallback);
-    // this.moveBlock.on("pressup", this.dropCallback);
-    // this.stepsBlock.on("pressmove", this.dragCallback);
-    // this.stepsBlock.on("pressup", this.dropCallback);
     this.stage.addChild(this.moveBlock, this.stepsBlock,  this.generateEditor());
 
     this.stage.update();
@@ -48,13 +43,11 @@ class WorkStation extends React.Component {
 
 
   cloneBlock(e) {
-
     let blockClone = e.currentTarget.clone(true);
     blockClone.fnName = e.currentTarget.fnName;
     this.stage.addChild(blockClone);
     blockClone.on("pressmove", this.dragCallback);
     blockClone.on("pressup", this.dropCallback);
-
     this.stage.update();
   }
 
@@ -70,24 +63,26 @@ class WorkStation extends React.Component {
     let nearX = editorBounds.x;
     let topY = editorBounds.y;
     let bottomY = editorBounds.y + 600;
-    let blkX = e.currentTarget.x;
-    let blkY = e.currentTarget.y;
+    let blk = e.currentTarget;
+    let blkX = blk.x;
+    let blkY = blk.y;
 
     if(blkX > nearX && blkX < farX && blkY > topY && blkY < bottomY){
       let { x: newX, y: newY } = this.calcNextBlockPos();
-      e.currentTarget.x = newX;
-      e.currentTarget.y = newY;
+      blk.x = newX;
+      blk.y = newY;
       this.stage.update(e);
       this.editorContainer.addChild(e.currentTarget);
-      e.currentTarget.off("mousedown");
-      debugger
-      this.addCodeBlock({ fn: e.currentTarget.fnName, args: [] });
+
+      blk.off("mousedown");
+      this.addCodeBlock(blk.id, blk.fnName);
     } else {
-      if(this.editorContainer.contains(e.currentTarget)){
-        this.editorContainer.removeChild(e.currentTarget);
-        this.stage.removeChild(e.currentTarget);
+      if(this.editorContainer.contains(blk)){
+        this.editorContainer.removeChild(blk);
+        this.stage.removeChild(blk);
         this.stage.update();
-        this.removeCodeBlock(e.currentTarget.fnName);
+        this.props.removeCode(blk.id);
+        
       }
 
     }
@@ -107,17 +102,11 @@ class WorkStation extends React.Component {
        };
      }
   }
-  removeCodeBlock(fnName){
-    let updatedCode = [];
-    for (var i = 0; i < this.props.code.length; i++) {
-      if(this.props.code[i].fn !== fnName) {
-        updatedCode.push(this.props.code[i]);
-      }
-    }
-  }
 
-  addCodeBlock(fnName){
-    let updatedCode = this.props.code.concat(fnName);
+
+  addCodeBlock(id, fnName){
+    let updatedCode = Object.assign({}, this.props.code);
+    updatedCode[id] = { fn: fnName, args: [] };
     this.props.updateCode(updatedCode);
   }
 
@@ -144,7 +133,7 @@ class WorkStation extends React.Component {
   render(){
     return (
       <div className="workstation">
-        <canvas id="workstationCanvas" width="500px" height="500px">
+        <canvas id="workstationCanvas" width="400px" height="300px">
 
         </canvas>
       </div>

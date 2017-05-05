@@ -1,4 +1,3 @@
-
 export class Code {
   constructor(stage, obj, blocks) {
     this.stage = stage;
@@ -30,17 +29,3 @@ export class Motion extends Code {
     };
   }
 }
-//
-// class Events extends CodeBlock {
-//
-//
-// }
-//
-// class Conditionals extends CodeBlock {
-//
-// }
-//
-// class Operators extends CodeBlock {
-//
-
-// }

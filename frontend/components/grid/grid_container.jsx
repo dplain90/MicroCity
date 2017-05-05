@@ -3,14 +3,14 @@ import Grid from './grid';
 import { resetGrid } from '../../actions/grid_actions';
 import { updateLevel } from '../../actions/level_actions';
 import { updateToggle } from '../../actions/toggle_actions';
-
-
-const mapStateToProps = (state, ownProps) => ({
+import { asArray } from '../../reducers/selectors';
+const mapStateToProps = (state, ownProps) => {
+  return {
   toggles: state.toggles,
   level: state.level,
-  code: state.code,
-  difficulty: state.difficulty
-});
+  code: asArray(state.code),
+  difficulty: state.difficulty };
+};
 
 const mapDispatchToProps = dispatch => ({
   resetGrid: () => dispatch(resetGrid()),

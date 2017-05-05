@@ -15,15 +15,14 @@ class Code {
   }
 
   run(blocks){
+
     let fnList = this.fetchFn();
 
     for (let i = 0; i < blocks.length; i++) {
       let { fn, args } = blocks[i];
         if(args.length > 0) {
-          debugger
           fnList[fn](...args);
         } else {
-          debugger
           fnList[fn]();
         }
     }

@@ -65,7 +65,16 @@ div {
 }
 
 .grid {
+  display: flex;
+  flex-direction: flex-end;
+  align-items: flex-end;
   border: 1px solid green;
+}
+
+.grid button {
+  z-index: 400;
+  margin: 20px;
+  border: 1px solid black;
 }
 .grid, .workstation {
   width: 50%;
