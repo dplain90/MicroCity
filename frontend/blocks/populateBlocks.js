@@ -15,6 +15,22 @@ export const populateBlocks = (stage, obj, category) => {
   return generatedBlocks;
 };
 
+const generateConditional = (x,y) => {
+  let conditional = new createjs.Shape();
+  conditional.graphics
+    .beginStroke("black")
+    .beginFill("#FF0")
+    .lineTo(x+20, y)
+    .lineTo(x+30, y+10)
+    .lineTo(x+20, y+20)
+    .lineTo(x, y+20)
+    .lineTo(x-10, y+10)
+    .lineTo(x, y)
+    .lineTo(x+20, y);
+  return conditional;
+};
+
+
 const generateBlock = (name, stage, y, hasInput = false) => {
   let block = new createjs.Bitmap(`images/blocks/motion/${name}.png`);
   let blockContainer = new createjs.Container();

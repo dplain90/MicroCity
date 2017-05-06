@@ -8,10 +8,18 @@ class Code {
 
   fetchFn() {
     this.motion = new Motion(this.stage, this.obj);
+    this.conditional = new Conditional(this.stage, this.obj);
+    this.operator = new Operator(this.stage, this.obj);
     return {
       'steps': this.motion.steps,
       'move': this.motion.move,
-      'jump': this.motion.jump
+      'jump': this.motion.jump,
+      '!==': this.operator.notEql,
+      '===': this.operator.eql,
+      '<': this.operator.lessThan,
+      '>': this.operator.greaterThan,
+      'ifelse' : this.ifElseStatement,
+      'if': this.ifStatement
     };
   }
 
@@ -30,6 +38,62 @@ class Code {
     return this.motion.queue;
   }
 }
+
+class Operator extends Code {
+  constructor(stage, obj){
+    super(stage, obj);
+
+  }
+  notEql(var1, var2) {
+    return var1 !== var2;
+  }
+
+  eql(var1, var2){
+    return var1 === var2;
+  }
+
+  lessThan(var1, var2){
+    return var1 < var2;
+  }
+
+  greaterThan(var1, var2){
+    return var1 > var2;
+  }
+}
+
+class Conditional extends Code {
+  constructor(stage, obj){
+    super(stage, obj);
+  }
+
+  ifElseStatement(operator, trueFn, falseFn){
+    if(operator){
+      trueFn();
+    } else {
+      falseFn();
+    }
+  }
+
+  ifStatement(operator, trueFn){
+    if(operator) trueFn();
+  }
+}
+
+//
+// class Loops extends Code {
+//   constructor(stage, obj){
+//     super(stage, obj);
+//
+//   }
+//
+//   eql(
+//
+// }
+
+
+
+
+
 
 class Motion extends Code {
   constructor(stage, obj){
