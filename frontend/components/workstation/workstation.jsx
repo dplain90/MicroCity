@@ -1,6 +1,8 @@
 import React from 'react';
 import PaletteContainer from './palette/palette_container';
 import EditorContainer from './editor/editor_container';
+import { calcNextBlockPos } from '../../blocks/block_util';
+import { generateEditor } from '../../util/editor_util';
 import { populateBlocks, addInputBar, removeInputBar } from '../../blocks/populateBlocks';
 class WorkStation extends React.Component {
   constructor(props){
@@ -9,12 +11,11 @@ class WorkStation extends React.Component {
       this.createBlocks = this.createBlocks.bind(this);
       this.cloneBlock = this.cloneBlock.bind(this);
       this.dragCallback = this.dragCallback.bind(this);
-      this.populatePalette = this.populatePalette.bind(this);
       this.dropCallback = this.dropCallback.bind(this);
-      this.generateEditor = this.generateEditor.bind(this);
+
       this.handleClick = this.handleClick.bind(this);
       this.handleTick = this.handleTick.bind(this);
-      this.calcNextBlockPos = this.calcNextBlockPos.bind(this);
+
       this.addCodeBlock = this.addCodeBlock.bind(this);
       this.removeInputBar = removeInputBar.bind(this);
       this.state = {
@@ -25,10 +26,12 @@ class WorkStation extends React.Component {
   componentDidMount() {
     this.stage = new createjs.Stage("workstationCanvas");
     this.createBlocks();
+    this.editorContainer = generateEditor(this.stage);
     window.stage = this.stage;
-    this.stage.addChild(this.generateEditor());
+    this.stage.addChild(this.editorContainer);
     window.editor = this.editorContainer;
     this.stage.update();
+    createjs.Ticker.addEventListener("tick", this.handleTick);
   }
 
   handleTick(event){
@@ -41,17 +44,10 @@ class WorkStation extends React.Component {
       let block = this.blocks[i];
       block.on("mousedown", this.cloneBlock);
       this.stage.addChild(block);
-      block.visible = true;
       this.stage.update();
     }
   }
 
-  populatePalette() {
-    this.workstationContainer = new createjs.Container();
-    this.workstationContainer.setBounds(0,0, this.stage.width, this.stage.height);
-    this.workstationContainer.addChild(this.moveBlock, this.generateEditor());
-
-  }
 
   handleInput(e) {
     this.props.addArg(e.currentTarget.id, e.currentTarget.value);
@@ -87,7 +83,7 @@ class WorkStation extends React.Component {
     blk.off("pressmove");
     if(blkX > nearX && blkX < farX && blkY > topY && blkY < bottomY){
       this.editorContainer.addChildAt(blk, 1);
-      let { x: newX, y: newY } = this.calcNextBlockPos();
+      let { x: newX, y: newY } = calcNextBlockPos(this.editorContainer);
       blk.x = newX;
       blk.y = newY;
 
@@ -104,30 +100,10 @@ class WorkStation extends React.Component {
     }
   }
 
-  calcNextBlockPos() {
-    let children = this.editorContainer.children;
-    let blockCount = children.length - 1;
-    let newY = (blockCount * 20);
-    return { x: 210, y: newY };
-
-  }
-
-
   addCodeBlock(id, fnName){
     let newBlock = {};
     newBlock[id] = { fn: fnName, args: []};
-
     this.props.updateCode(newBlock);
-  }
-
-  generateEditor(){
-    this.editorContainer = new createjs.Container();
-    this.editorBox = new createjs.Shape();
-    this.editorBox.graphics.beginStroke("white").beginFill("#C2C0C0").drawRect(200, 5, 400, 290);
-    this.editorContainer.setBounds(150, 0, 150, this.stage.height);
-    this.editorContainer.addChild(this.editorBox);
-    return this.editorContainer;
-
   }
 
   handleClick(e){
