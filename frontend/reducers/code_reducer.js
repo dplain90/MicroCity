@@ -10,8 +10,9 @@ const CodeReducer = (state = _defaultCode, action) => {
     case CLEAR_CODE:
       return _defaultCode;
     case REMOVE_CODE:
-      delete state[action.id];
-      return state;
+        let newCode = Object.assign({}, state);
+        delete newCode[action.id];
+      return newCode;
     default:
       return state;
   }

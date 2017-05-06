@@ -93,6 +93,7 @@ class WorkStation extends React.Component {
         this.editorContainer.removeChild(blk);
         this.stage.removeChild(blk);
         this.stage.update();
+        debugger
         this.props.removeCode(blk.id);
 
       }
