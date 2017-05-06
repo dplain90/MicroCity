@@ -5,6 +5,7 @@ import { populateBlocks, addInputBar, removeInputBar } from '../../blocks/popula
 class WorkStation extends React.Component {
   constructor(props){
     super(props);
+      this.handleInput = this.handleInput.bind(this);
       this.createBlocks = this.createBlocks.bind(this);
       this.cloneBlock = this.cloneBlock.bind(this);
       this.dragCallback = this.dragCallback.bind(this);
@@ -15,6 +16,7 @@ class WorkStation extends React.Component {
       this.handleTick = this.handleTick.bind(this);
       this.calcNextBlockPos = this.calcNextBlockPos.bind(this);
       this.addCodeBlock = this.addCodeBlock.bind(this);
+      this.removeInputBar = removeInputBar.bind(this);
       this.state = {
         category: 'motion'
       };
@@ -51,12 +53,15 @@ class WorkStation extends React.Component {
 
   }
 
+  handleInput(e) {
+    this.props.addArg(e.currentTarget.id, e.currentTarget.value);
+  }
 
   cloneBlock(e) {
     let blockClone = e.currentTarget.clone(true);
     blockClone.fnName = e.currentTarget.fnName;
     blockClone.hasInput = e.currentTarget.hasInput;
-    if(blockClone.hasInput) addInputBar(blockClone);
+    if(blockClone.hasInput) addInputBar(blockClone, this);
     this.stage.addChild(blockClone);
     blockClone.on("pressmove", this.dragCallback);
     blockClone.on("pressup", this.dropCallback);
@@ -89,7 +94,7 @@ class WorkStation extends React.Component {
       this.stage.update();
       this.addCodeBlock(blk.id, blk.fnName);
     } else {
-      if(blk.hasInput) removeInputBar(blk.id);
+      if(blk.hasInput) this.removeInputBar(blk.id);
       this.stage.removeChild(blk);
       if(this.editorContainer.contains(blk)){
         this.editorContainer.removeChild(blk);

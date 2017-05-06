@@ -1,3 +1,4 @@
+import Grid from '../components/grid/grid';
 
 export const populateBlocks = (stage, obj, category) => {
   const blockNames = {
@@ -26,10 +27,13 @@ const generateBlock = (name, stage, y, hasInput = false) => {
 }
 
 
-export const addInputBar = (container) => {
+export const addInputBar = (container, grid) => {
    let inputBar = document.createElement("input");
    inputBar.className = "block-input";
    inputBar.id = container.id;
+  //  console.log(this);
+
+   inputBar.addEventListener("change", grid.handleInput);
    let workstation = document.getElementsByClassName("workstation")[0];
    workstation.append(inputBar);
   let domElement = new createjs.DOMElement(inputBar);

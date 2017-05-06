@@ -1,4 +1,4 @@
-import { UPDATE_CODE, CLEAR_CODE, REMOVE_CODE } from '../actions/code_actions';
+import { UPDATE_CODE, CLEAR_CODE, REMOVE_CODE, RECEIVE_ARG } from '../actions/code_actions';
 
 const _defaultCode = Object.freeze({});
 
@@ -13,6 +13,10 @@ const CodeReducer = (state = _defaultCode, action) => {
         let newCode = Object.assign({}, state);
         delete newCode[action.id];
       return newCode;
+    case RECEIVE_ARG:
+      let argCode = Object.assign({}, state);
+      argCode[action.id].args = [action.arg];
+      return argCode;
     default:
       return state;
   }
