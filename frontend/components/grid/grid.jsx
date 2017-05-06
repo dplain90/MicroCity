@@ -11,6 +11,7 @@ class Grid extends React.Component {
     this.handleTick = this.handleTick.bind(this);
     this.generateTiles = this.generateTiles.bind(this);
     this.generateBlock = this.generateBlock.bind(this);
+    this.generateBasicBlock = this.generateBasicBlock.bind(this);
     this.state = {
       runStatus: false,
       code: this.props.code
@@ -40,13 +41,22 @@ class Grid extends React.Component {
     .arcTo(x+23, y+30, x+19, y+30, 4)
     .lineTo(x-15, y+30)
     .arcTo(x-15, y+38, x-15, y+38-4, 4)
+
     .arcTo(x-35, y+38, x-35, y+38-4, 4)
+
     .arcTo(x-35, y+30, x-35, y+34, 4)
+      // im here
     .lineTo(x-35, y+22)
     .lineTo(x+31, y+22)
     .arcTo(x+31, y+14, x+31, y+18, 4)
     .lineTo(x+31, y)
     .lineTo(x-15, y)
+
+
+
+
+
+
 
 
     // .arcTo(x-, y+48+8, x-35, y+48-4, 4)
@@ -68,6 +78,21 @@ class Grid extends React.Component {
     // .arc(x+100, y, 20, 0, Math.PI, true).arcTo(x+140, y, x+180, y-60, 30).arcTo(x+180, y-60, x+220, y, 30).endStroke();
     //
     return block;
+  }
+
+
+  generateBasicBlock(x,y) {
+    let insideBlock = new createjs.Shape();
+      insideBlock.graphics.moveTo(x-16, y+29).beginStroke("blue").beginFill("white")
+      .arcTo(x-16, y+37, x-16, y+37-4, 4)
+      .arcTo(x-34, y+37, x-34, y+37-4, 4)
+      .arcTo(x-34, y+29, x-34, y+33, 4)
+      .lineTo(x-34, y+11) // adding 10 to it
+      .lineTo(x+21, y+11) // taking 10 off of the X
+      .lineTo(x+21, y+29)
+      .lineTo(x-16, y+29);
+
+    return insideBlock;
   }
 
   //
@@ -180,7 +205,9 @@ class Grid extends React.Component {
     let blockTest = this.generateBlock(190, 150);
     this.stage.addChild(blockTest);
     this.generateTiles();
-    this.stage.addChild(this.avatar, this.key);
+
+
+    this.stage.addChild(this.avatar, this.key, this.generateBasicBlock(190, 150));
     this.stage.update();
 
 

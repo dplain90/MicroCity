@@ -15,9 +15,9 @@ export const populateBlocks = (stage, obj, category) => {
   return generatedBlocks;
 };
 
-const generateConditional = (x,y) => {
-  let conditional = new createjs.Shape();
-  conditional.graphics
+const generateComparator = (x,y) => {
+  let comparator = new createjs.Shape();
+  comparator.graphics
     .beginStroke("black")
     .beginFill("#FF0")
     .lineTo(x+20, y)
@@ -27,8 +27,56 @@ const generateConditional = (x,y) => {
     .lineTo(x-10, y+10)
     .lineTo(x, y)
     .lineTo(x+20, y);
-  return conditional;
+  return comparator;
 };
+
+// export const generateBasicBlock = (x,y) => {
+//   let insideBlock = new createjs.Shape();
+//     .graphics.moveTo(x-16, y+29).beginStroke("blue").beginFill("white")
+//     .arcTo(x-16, y+37, x-16, y+37-4, 4)
+//     .arcTo(x-34, y+37, x-34, y+37-4, 4)
+//     .arcTo(x-34, y+29, x-34, y+33, 4)
+//     .lineTo(x-34, y+11) // adding 10 to it
+//     .lineTo(x+21, y+11) // taking 10 off of the X
+//     .lineTo(x+21, y+29)
+//     .lineTo(x-16, y+29);
+//
+//   return insideBlock;
+// }
+
+const generateConditionalBlock = (x,y) => {
+  let block = new createjs.Shape();
+  let max = 4;
+  block.graphics.beginStroke("red").beginFill("black")
+  .moveTo(x, y)
+  .lineTo(x-15, y)
+  .arcTo(x-15, y+8, x-15, y+8-4, 4)
+  .arcTo(x-35, y+8, x-35, y+8-4, 4)
+  .arcTo(x-35, y, x-35, y+4, 4)
+  .lineTo(x-50, y)
+  .arcTo(x-50, y+8, x-50, y+8-4, 4)
+  .lineTo(x-50, y+48)
+  .arcTo(x-35, y+48, x-35, y+52, 4)
+  .arcTo(x-35, y+48+8, x-35, y+48-4, 4)
+  .arcTo(x-15, y+48+8, x-15, y+48-4, 4)
+  .arcTo(x-15, y+48, x-15, y+52, 4)
+  .lineTo(x+31, y+48)
+  .arcTo(x+31, y+40, x+31, y+44, 4)
+  .lineTo(x+31, y+30)
+  .arcTo(x+23, y+30, x+19, y+30, 4)
+  .lineTo(x-15, y+30)
+  .arcTo(x-15, y+38, x-15, y+38-4, 4)
+  .arcTo(x-35, y+38, x-35, y+38-4, 4)
+  .arcTo(x-35, y+30, x-35, y+34, 4)
+  .lineTo(x-35, y+22)
+  .lineTo(x+31, y+22)
+  .arcTo(x+31, y+14, x+31, y+18, 4)
+  .lineTo(x+31, y)
+  .lineTo(x-15, y)
+
+  return block;
+};
+
 
 
 const generateBlock = (name, stage, y, hasInput = false) => {
