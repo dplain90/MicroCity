@@ -1,22 +1,46 @@
 
 export const populateBlocks = (stage, obj, category) => {
   const blockNames = {
-    'motion': ['steps', 'move', 'jump']
+    'motion': [
+      { name: 'steps', input: true },
+      { name: 'move', input: false},
+      { name: 'jump', input: false}
+    ]
   }
-  let names = blockNames[category];
-  let generatedBlocks = names.map( (name, idx) => {
-    return generateBlock(name, stage, 30*idx);
+  let blockData = blockNames[category];
+  let generatedBlocks = blockData.map( (blockData, idx) => {
+    return generateBlock(blockData.name, stage, 30*idx, blockData.input);
   });
   return generatedBlocks;
 };
 
-const generateBlock = (name, stage, y) => {
+const generateBlock = (name, stage, y, hasInput = false) => {
   let block = new createjs.Bitmap(`images/blocks/motion/${name}.png`);
   let blockContainer = new createjs.Container();
   blockContainer.y = y;
   blockContainer.fnName = name;
+  blockContainer.hasInput = hasInput;
   blockContainer.addChild(block);
 
-
   return blockContainer;
+}
+
+
+export const addInputBar = (container) => {
+   let inputBar = document.createElement("input");
+   inputBar.className = "block-input";
+   inputBar.id = container.id;
+   let workstation = document.getElementsByClassName("workstation")[0];
+   workstation.append(inputBar);
+  let domElement = new createjs.DOMElement(inputBar);
+   window.el = domElement;
+   window.input = inputBar;
+   container.addChildAt(domElement, 0);
+   domElement.x = 28;
+   domElement.y = 15;
+}
+
+export const removeInputBar = (id) => {
+  let inputBar = document.getElementById(id);
+  inputBar.remove();
 }

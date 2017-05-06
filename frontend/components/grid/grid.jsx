@@ -19,7 +19,7 @@ class Grid extends React.Component {
 
 
   componentWillReceiveProps(newProps) {
-    debugger
+
     if(newProps.toggles.run !== this.props.toggles.run) {
       this.setState({runStatus: newProps.toggles.run});
     }
@@ -46,7 +46,7 @@ class Grid extends React.Component {
 
      createjs.Ticker.addEventListener("tick", this.handleTick);
      createjs.Ticker.setInterval(10);
-     createjs.Ticker.setFPS(30);
+     createjs.Ticker.setFPS(50);
   }
 
   handleRun(e) {

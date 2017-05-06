@@ -1,7 +1,7 @@
 import React from 'react';
 import PaletteContainer from './palette/palette_container';
 import EditorContainer from './editor/editor_container';
-import { populateBlocks } from '../../blocks/populateBlocks';
+import { populateBlocks, addInputBar, removeInputBar } from '../../blocks/populateBlocks';
 class WorkStation extends React.Component {
   constructor(props){
     super(props);
@@ -55,6 +55,8 @@ class WorkStation extends React.Component {
   cloneBlock(e) {
     let blockClone = e.currentTarget.clone(true);
     blockClone.fnName = e.currentTarget.fnName;
+    blockClone.hasInput = e.currentTarget.hasInput;
+    if(blockClone.hasInput) addInputBar(blockClone);
     this.stage.addChild(blockClone);
     blockClone.on("pressmove", this.dragCallback);
     blockClone.on("pressup", this.dropCallback);
@@ -62,8 +64,8 @@ class WorkStation extends React.Component {
   }
 
   dragCallback(e){
-    e.currentTarget.x = e.stageX - 40;
-    e.currentTarget.y = e.stageY - 40;
+    e.currentTarget.x = e.stageX - 20;
+    e.currentTarget.y = e.stageY - 15;
     this.stage.update();
   }
 
@@ -84,20 +86,16 @@ class WorkStation extends React.Component {
       blk.x = newX;
       blk.y = newY;
 
-
-
       this.stage.update();
       this.addCodeBlock(blk.id, blk.fnName);
     } else {
+      if(blk.hasInput) removeInputBar(blk.id);
+      this.stage.removeChild(blk);
       if(this.editorContainer.contains(blk)){
         this.editorContainer.removeChild(blk);
-        this.stage.removeChild(blk);
-        this.stage.update();
-        debugger
         this.props.removeCode(blk.id);
-
       }
-
+      this.stage.update();
     }
   }
 

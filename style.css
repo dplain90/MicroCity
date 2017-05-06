@@ -8,6 +8,21 @@ div, h1, h2, h3, h4 {
   color: black;
 }
 
+.block-input {
+  height: 10px;
+  width: 5px;
+  font-size: 8px;
+  /*position: absolute;*/
+  z-index: 10000;
+  border: none;
+}
+
+input.block-input:focus {
+  border: none;
+  outline: none;
+}
+
+
 html, body {
   width: 100%;
   height: 100%;

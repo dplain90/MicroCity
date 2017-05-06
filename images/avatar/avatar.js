@@ -28,7 +28,7 @@ export const generateAvatar = () => {
     animations: {
       idle: [10, 12],
       move:[0, 9],
-      jump: [13, 18]
+      jump: [16]
     }
 }
 

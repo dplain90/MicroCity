@@ -59,9 +59,12 @@ class Motion extends Code {
   }
 
   leap(dir){
-    for (var i = 0; i < 10; i++) {
-      this.move('y', 3, dir, 'jump');
-      this.move('x', 3, 1, 'jump');
+    for (var i = 0; i < 2; i++) {
+      this.queue.push(['jump']);
+      this.queue.push(['y', 10 * dir]);
+      this.queue.push(['y', 10 * dir]);
+      this.queue.push(['y', 10 * dir]);
+      this.queue.push(['x', 10]);
     }
   }
 
