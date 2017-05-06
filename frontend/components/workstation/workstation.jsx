@@ -27,10 +27,7 @@ class WorkStation extends React.Component {
     this.stage = new createjs.Stage("workstationCanvas");
     this.createBlocks();
     this.editorContainer = generateEditor(this.stage);
-    window.stage = this.stage;
     this.stage.addChild(this.editorContainer);
-    window.editor = this.editorContainer;
-    this.stage.update();
     createjs.Ticker.addEventListener("tick", this.handleTick);
   }
 
@@ -59,8 +56,10 @@ class WorkStation extends React.Component {
     blockClone.hasInput = e.currentTarget.hasInput;
     if(blockClone.hasInput) addInputBar(blockClone, this);
     this.stage.addChild(blockClone);
+    blockClone.on("stagemousedown", this.dragCallback);
     blockClone.on("pressmove", this.dragCallback);
     blockClone.on("pressup", this.dropCallback);
+    // this.dragCallback(blockClone);
     this.stage.update();
   }
 
@@ -81,6 +80,7 @@ class WorkStation extends React.Component {
     let blkY = blk.y;
     blk.off("mouseup");
     blk.off("pressmove");
+    blk.off("mousedown");
     if(blkX > nearX && blkX < farX && blkY > topY && blkY < bottomY){
       this.editorContainer.addChildAt(blk, 1);
       let { x: newX, y: newY } = calcNextBlockPos(this.editorContainer);

@@ -34,13 +34,17 @@ class Grid extends React.Component {
     this.avatar = new createjs.Sprite(this.avatarSheet, "idle");
     this.avatar.y = 170;
     this.robot = new createjs.Bitmap("/images/robot.png");
-
+    this.key = new createjs.Bitmap("/images/objects/keyYellow.png");
+    this.key.y = 170;
+    this.key.x = 150;
+    this.key.scaleX = .25;
+    this.key.scaleY = .25;
     this.code = new Code(this.stage, this.robot);
     this.robot.scaleX = .25;
     this.robot.scaleY = .25;
 
     this.generateTiles();
-    this.stage.addChild(this.avatar);
+    this.stage.addChild(this.avatar, this.key);
     this.stage.update();
 
 
@@ -51,6 +55,7 @@ class Grid extends React.Component {
 
   handleRun(e) {
     e.preventDefault();
+
     // if(this.state.code !== this.props.code){
     //
     // }
@@ -86,6 +91,14 @@ class Grid extends React.Component {
 
   handleTick(event){
 // if (this.queue.length > 0) this.setState({ code: [] });
+
+    // console.log(this.avatar.hitTest(150,170));
+    let distanceFromKey = this.avatar.localToLocal(0, 0, this.key)
+    if(distanceFromKey.x === 0){
+      let winText = new createjs.Text("LEVEL COMPLETED!", "20px Arial", "#ff7700");
+      this.stage.addChild(winText);
+      this.stage.update();
+    }
 
     if(this.queue.length === 0) {
       this.avatar.gotoAndStop('idle');

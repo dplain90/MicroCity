@@ -6,3 +6,14 @@ export const generateEditor = (stage) => {
   editorContainer.addChild(editorBox);
   return editorContainer;
 }
+
+export const onEditor = (blk, editor) => {
+  let editorBounds = editor.getBounds().clone();
+  let farX = editorBounds.x + 200;
+  let nearX = editorBounds.x;
+  let topY = editorBounds.y;
+  let bottomY = editorBounds.y + 600;
+  let blkX = blk.x;
+  let blkY = blk.y;
+
+};
