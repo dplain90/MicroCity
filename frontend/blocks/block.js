@@ -16,7 +16,6 @@ class BlockSet {
   generateSet() {
     let set = this.blocks.map( (block, idx) => {
       let { name, blockType, inputs } = block;
-      debugger
       let y = idx * this.y_increment;
       return new Block(name, blockType, inputs, this.x, y, this.code);
     });
@@ -28,7 +27,6 @@ class BlockSet {
     let y = 0;
     if(this.blocks.length > 0) y = this.blocks[-1];
     y += this.y_increment;
-    debugger
     let newBlk = new Block(name, blockType, inputs, this.x, y, this.code);
     this.containers.push(newBlk.container);
     this.blocks.push(newBlk);
@@ -56,18 +54,17 @@ class Block {
   }
 
   generateDisplayBlock() {
-    debugger
     switch(this.type){
       case 'comparator':
         this.offset = [{x: 10, y: 5}, {x: 5, y: 0} ];
         this.comparatorBlock();
         break;
       case 'basic':
-        this.offset = [{x: 20, y: 10}, {x: 5, y: 0} ];
+        this.offset = [{x: 0, y: 60}, {x: 0, y: 60} ];
         this.basicBlock();
         break;
       case 'basic_bottom':
-        this.offset = [{x: 10, y: 5}, {x: 5, y: 0} ];
+        this.offset = [{x: 0, y: 30}, {x: 0, y: 0} ];
         this.basicBottomBlock();
         break;
       case 'dble_conditional':
@@ -96,7 +93,8 @@ class Block {
 
   createLabel(name){
     let label = new createjs.Text(name, "6px Arial", "#ff7700");
-    this.container.addChildAt(label, 0);
+    this.container.addChildAt(label, 1);
+    label.y = this.y + 30;
     return label;
   }
 
@@ -105,6 +103,8 @@ class Block {
     input.id = this.container.id;
     let easelInput = new createjs.DOMElement(input);
     this.container.addChildAt(easelInput, 0);
+    let workstation = document.getElementsByClassName("workstation")[0];
+    workstation.append(input);
     return easelInput;
     // These need to happen elsewhere!
     // let inputBar = document.createElement("input");
@@ -123,38 +123,42 @@ class Block {
   basicBlock() {
     this.container = this.createContainer();
     let basicBlock = new createjs.Shape();
-    this.container.addChild(basicBlock);
     basicBlock.graphics.beginStroke("blue").beginFill("white")
     basicBlock.graphics.rect(this.x-34, this.y+20, 55, 26);
+    this.container.addChild(basicBlock);
+
+    this.container.setBounds(this.x-34, this.y+20, 55, 26);
     this.innerDisplays();
     return basicBlock;
   }
 
   innerDisplays(){
     let labels = blockLabels[this.name].map((name) => this.createLabel(name));
-
-    let inputs = this.inputs.map((input) => {
-      return this.createInput(input);
-    });
-
-    let innerDisplays = [];
-    while(inputs.length > 0 && labels.length > 0){
-      innerDisplays.push(labels.shift());
-      inputs.push(inputs.shift());
-    }
-
-    innerDisplays.concat(labels, inputs);
-
-    for (let i = 0; i < innerDisplays.length; i++) {
-      let { x: xOffset, y: yOffset } = this.offset[i];
-      let obj = innerDisplays[i];
-      obj.x = this.x + xOffset;
-      obj.y = this.y + yOffset;
-    }
+    //
+    // let inputs = this.inputs.map((input) => {
+    //   return this.createInput(input);
+    // });
+    //
+    // let innerDisplays = [];
+    // while(inputs.length > 0 && labels.length > 0){
+    //   innerDisplays.push(labels.shift());
+    //   inputs.push(inputs.shift());
+    // }
+    //
+    // innerDisplays.concat(labels, inputs);
+    // let bounds = this.container.getBounds();
+    // for (let i = 0; i < innerDisplays.length; i++) {
+    //   let { x: xOffset, y: yOffset } = this.offset[i];
+    //   let obj = innerDisplays[i];
+    //
+    //   obj.x = this.x + xOffset;
+    //   obj.y = obj.y + yOffset;
+    //
+    //   //  obj.y = this.y + this.container.getBounds().height;
+    // }
   }
 
   basicBottomBlock() {
-    debugger
     this.container = this.createContainer();
     let insideBlock = new createjs.Shape();
     let x = this.x;
@@ -178,7 +182,6 @@ class Block {
   }
 
   conditionalBlock(incr){
-    debugger
     this.container = this.createContainer();
     let conditional = new createjs.Shape();
     this.container.addChild(conditional);

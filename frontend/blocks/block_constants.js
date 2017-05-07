@@ -1,14 +1,15 @@
 import { Code } from './code';
 
 const createInputDOM = () => {
-  return document.createElement("input");
+  let inputDOM = document.createElement("input");
+  return inputDOM;
 };
 
 export const blockCategories = {
     'motion': [
-      { name: 'steps', blockType: 'basic_bottom', inputs: [createInputDOM()] },
-      { name: 'move', blockType: 'basic_bottom', inputs: []},
-      { name: 'jump', blockType: 'basic_bottom', inputs: []},
+      { name: 'steps', blockType: 'comparator', inputs: [createInputDOM()] },
+      { name: 'move', blockType: 'basic', inputs: []},
+      { name: 'jump', blockType: 'basic', inputs: []},
 
     ],
     'operator': [

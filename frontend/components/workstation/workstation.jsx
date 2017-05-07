@@ -32,7 +32,7 @@ class WorkStation extends React.Component {
 
   componentDidMount() {
     this.stage = new createjs.Stage("workstationCanvas");
-    this.set = BlockSet.createSet(this.state.category, 20, { x: 0, y: 140}, this.props.code);
+    this.set = BlockSet.createSet(this.state.category, 20, { x: 20, y: 140}, this.props.code);
     this.addContainers();
     this.editorContainer = Editor.createEditor(this.stage);
     this.stage.addChild(this.editorContainer);
@@ -62,10 +62,11 @@ class WorkStation extends React.Component {
   }
 
   cloneBlock(e) {
+    // e.currentTarget
     let blockClone = e.currentTarget.clone(true);
     blockClone.fnName = e.currentTarget.fnName;
     blockClone.hasInput = e.currentTarget.hasInput;
-    if(blockClone.hasInput) addInputBar(blockClone, this);
+    // if(blockClone.hasInput) addInputBar(blockClone, this);
     this.stage.addChild(blockClone);
     blockClone.on("stagemousedown", this.dragCallback);
     blockClone.on("pressmove", this.dragCallback);
