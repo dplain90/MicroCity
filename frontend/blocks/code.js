@@ -1,49 +1,30 @@
 class Code {
-  constructor(stage, obj) {
-    this.stage = stage;
-    this.obj = obj;
-    this.fetchFn = this.fetchFn.bind(this);
+  constructor() {
+    this.run = this.run.bind(this);
     this.queue = [];
-  }
-
-  fetchFn() {
-    this.motion = new Motion(this.stage, this.obj);
-    this.conditional = new Conditional(this.stage, this.obj);
-    this.operator = new Operator(this.stage, this.obj);
-    return {
-      'steps': this.motion.steps,
-      'move': this.motion.move,
-      'jump': this.motion.jump,
-      '!==': this.operator.notEql,
-      '===': this.operator.eql,
-      '<': this.operator.lessThan,
-      '>': this.operator.greaterThan,
-      'ifelse' : this.ifElseStatement,
-      'if': this.ifStatement
-    };
+    this.motion = new Motion(this);
+    this.conditional = new Conditional(this);
+    this.operator = new Operator(this);
   }
 
   run(blocks){
-
-    let fnList = this.fetchFn();
-
     for (let i = 0; i < blocks.length; i++) {
       let { fn, args } = blocks[i];
         if(args.length > 0) {
-          fnList[fn](...args);
+          fn(...args);
         } else {
-          fnList[fn]();
+          fn();
         }
     }
     return this.motion.queue;
   }
 }
 
-class Operator extends Code {
-  constructor(stage, obj){
-    super(stage, obj);
-    this.blockType = 'operator';
+class Operator {
+  constructor(code) {
+    this.queue = code.queue;
   }
+
   notEql(var1, var2) {
     return var1 !== var2;
   }
@@ -61,10 +42,9 @@ class Operator extends Code {
   }
 }
 
-class Conditional extends Code {
-  constructor(stage, obj){
-    super(stage, obj);
-    this.blockType = 'conditional';
+class Conditional {
+  constructor(code) {
+    this.queue = code.queue;
   }
 
   ifElseStatement(operator, trueFn, falseFn){
@@ -80,17 +60,20 @@ class Conditional extends Code {
   }
 }
 
-class Motion extends Code {
-  constructor(stage, obj){
-    super(stage, obj);
-    this.blockType = 'basic';
-    this.steps = this.steps.bind(this);
-    this.move = this.move.bind(this);
-    this.leap = this.leap.bind(this);
-    this.jump = this.jump.bind(this);
-    this.climb = this.climb.bind(this);
-    this.steps.args = ['num'];
-  }
+class Motion {
+    constructor(code) {
+      this.queue = code.queue;
+    }
+  // constructor(stage, obj){
+  //   super(stage, obj);
+  //   this.blockType = 'basic';
+  //   this.steps = this.steps.bind(this);
+  //   this.move = this.move.bind(this);
+  //   this.leap = this.leap.bind(this);
+  //   this.jump = this.jump.bind(this);
+  //   this.climb = this.climb.bind(this);
+  //   this.steps.args = ['num'];
+  // }
 
   move(axis = 'x', steps = 30, dir = 1, anim = 'move'){
       this.queue.push([anim]);

@@ -10,7 +10,7 @@ class Grid extends React.Component {
     this.handleRun = this.handleRun.bind(this);
     this.handleTick = this.handleTick.bind(this);
     this.generateTiles = this.generateTiles.bind(this);
-    this.generateBlock = this.generateBlock.bind(this);
+    // this.generateBlock = this.generateBlock.bind(this);
 
     this.state = {
       runStatus: false,

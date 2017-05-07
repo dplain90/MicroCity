@@ -1,7 +1,8 @@
-import { blockCategories } from './blockCategories';
+import { blockCategories, blockLabels, createCode } from './block_constants';
 
 class BlockSet {
-  constructor(blocks, y_increment, start_x, start_y) {
+  constructor(blocks, y_increment, start_x, start_y, code){
+    this.code = code;
     this.x = start_x;
     this.y = start_y;
     this.blocks = blocks;
@@ -13,15 +14,25 @@ class BlockSet {
 
   generateSet() {
     let set = this.blocks.map( (block, idx) => {
+
       let { name, blockType, input } = block;
       let y = idx * this.y_increment;
-      let newBlock = new Block(name, blockType, input, this.x, y);
+      debugger
+      return new Block(name, blockType, input, this.x, y);
     });
-
     return set;
   }
 
-  static createSet(category, y_increment, pos) {
+  addBlock(fnName) {
+    let { name, blockType, input } = findBlock(blk.fnName);
+    let y = this.blocks[-1].y += this.y_increment;
+    let newBlk = new Block(name, blockType, input, this.x, y);
+    this.containers.push(newBlk.container);
+    this.blocks.push(newBlk);
+    return newBlk;
+  }
+
+  static createSet(category, y_increment, pos, code) {
     let { x, y } = pos;
     let blocks = blockCategories[category]
     return new BlockSet(blocks, y_increment, x, y);
@@ -29,19 +40,19 @@ class BlockSet {
 
 }
 
-
 class Block {
-  constructor(name, type, inputs, x, y){
+  constructor(name, type, inputs, x, y, code){
+    this.fn = createCode(name, code);
     this.inputs = inputs;
     this.name = name;
     this.type = type;
     this.y = y;
     this.x = x;
     this.generate = this.generate.bind(this);
-    this.generate();
+    this.generateDisplayBlock();
   }
 
-  generate() {
+  generateDisplayBlock() {
     switch(this.type){
       case 'comparator':
         this.offset = [{x: 10, y: 5}, {x: 5, y: 0} ];
@@ -87,6 +98,13 @@ class Block {
     // inputBar.addEventListener("change", grid.handleInput);
     // let workstation = document.getElementsByClassName("workstation")[0];
     // workstation.append(inputBar);
+  }
+
+  removeInput(){
+    let inputDOMs = document.getElementsById(this.container.id);
+    for (var i = 0; i < inputDOMs.length; i++) {
+      inputDOMs.remove();
+    }
   }
 
   basicBlock() {
@@ -206,3 +224,5 @@ class Block {
   }
 
 }
+
+export default BlockSet;

@@ -84,19 +84,6 @@ const adjustedConditional = (x,y, incr) => {
 }
 
 
-
-const generateBlock = (name, stage, y, hasInput = false) => {
-  let block = new createjs.Bitmap(`images/blocks/motion/${name}.png`);
-  let blockContainer = new createjs.Container();
-  blockContainer.y = y;
-  blockContainer.fnName = name;
-  blockContainer.hasInput = hasInput;
-  blockContainer.addChild(block);
-
-  return blockContainer;
-}
-
-
 export const addInputBar = (container, grid) => {
    let inputBar = document.createElement("input");
    inputBar.className = "block-input";

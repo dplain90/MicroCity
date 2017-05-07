@@ -1,23 +1,29 @@
 import React from 'react';
 import PaletteContainer from './palette/palette_container';
+import Code from '../../blocks/code';
+import Editor from '../../blocks/editor';
 import EditorContainer from './editor/editor_container';
 import { calcNextBlockPos } from '../../blocks/block_util';
+import BlockSet from '../../blocks/block';
 import { generateEditor } from '../../util/editor_util';
+import { findBlock } from '../../blocks/block_constants';
 import { populateBlocks, addInputBar, removeInputBar } from '../../blocks/populateBlocks';
 class WorkStation extends React.Component {
   constructor(props){
     super(props);
       this.handleInput = this.handleInput.bind(this);
-      this.createBlocks = this.createBlocks.bind(this);
+      // this.createContainers = this.createContainers.bind(this);
       this.cloneBlock = this.cloneBlock.bind(this);
       this.dragCallback = this.dragCallback.bind(this);
       this.dropCallback = this.dropCallback.bind(this);
-
+      this.addContainers = this.addContainers.bind(this);
       this.handleClick = this.handleClick.bind(this);
       this.handleTick = this.handleTick.bind(this);
 
       this.addCodeBlock = this.addCodeBlock.bind(this);
       this.removeInputBar = removeInputBar.bind(this);
+      this.code = new Code();
+
       this.state = {
         category: 'motion'
       };
@@ -25,9 +31,12 @@ class WorkStation extends React.Component {
 
   componentDidMount() {
     this.stage = new createjs.Stage("workstationCanvas");
-    this.createBlocks();
-    this.editorContainer = generateEditor(this.stage);
+    this.set = BlockSet.createSet(this.state.category, 20, { x: 0, y: 140}, this.code);
+    this.addContainers();
+    this.editorContainer = Editor.createEditor(this.stage);
     this.stage.addChild(this.editorContainer);
+    this.editor = new Editor(this.editorContainer);
+
     createjs.Ticker.addEventListener("tick", this.handleTick);
   }
 
@@ -35,12 +44,12 @@ class WorkStation extends React.Component {
      this.stage.update();
   }
 
-  createBlocks(){
-    this.blocks = populateBlocks(this.stage, this.robot, this.state.category);
-    for (var i = 0; i < this.blocks.length; i++) {
-      let block = this.blocks[i];
-      block.on("mousedown", this.cloneBlock);
-      this.stage.addChild(block);
+  addContainers(){
+    containers = this.stage.containers;
+    for (var i = 0; i < containers.length; i++) {
+      let container = containers[i];
+      container.on("mousedown", this.cloneBlock);
+      this.stage.addChild(container);
       this.stage.update();
     }
   }
@@ -68,34 +77,24 @@ class WorkStation extends React.Component {
     e.currentTarget.y = e.stageY - 15;
     this.stage.update();
   }
+  // this.addCodeBlock(blk.id, blk.fnName);
+  // if(this.editorContainer.contains(blk)){
+  //   this.editorContainer.removeChild(blk);
+  //   this.props.removeCode(blk.id);
+  // }
 
   dropCallback(e){
-    let editorBounds = this.editorContainer.getBounds().clone();
-    let farX = editorBounds.x + 200;
-    let nearX = editorBounds.x;
-    let topY = editorBounds.y;
-    let bottomY = editorBounds.y + 600;
     let blk = e.currentTarget;
-    let blkX = blk.x;
-    let blkY = blk.y;
     blk.off("mouseup");
     blk.off("pressmove");
     blk.off("mousedown");
-    if(blkX > nearX && blkX < farX && blkY > topY && blkY < bottomY){
-      this.editorContainer.addChildAt(blk, 1);
-      let { x: newX, y: newY } = calcNextBlockPos(this.editorContainer);
-      blk.x = newX;
-      blk.y = newY;
-
+    if(this.editor.OnEditor(blk)) {
+      this.editor.addBlock(e.currentTarget.fnName);
       this.stage.update();
-      this.addCodeBlock(blk.id, blk.fnName);
     } else {
       if(blk.hasInput) this.removeInputBar(blk.id);
       this.stage.removeChild(blk);
-      if(this.editorContainer.contains(blk)){
-        this.editorContainer.removeChild(blk);
-        this.props.removeCode(blk.id);
-      }
+      this.editor.removeBlock(blk);
       this.stage.update();
     }
   }
