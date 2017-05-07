@@ -36,8 +36,8 @@ class WorkStation extends React.Component {
     this.addContainers();
     this.editorContainer = Editor.createEditor(this.stage);
     this.stage.addChild(this.editorContainer);
-    this.editor = new Editor(this.editorContainer);
-
+    this.editor = new Editor(this.editorContainer, this.props.code);
+    this.stage.update();
     createjs.Ticker.addEventListener("tick", this.handleTick);
     // this.props.updateCode(this.props.code);
   }
@@ -87,10 +87,12 @@ class WorkStation extends React.Component {
 
   dropCallback(e){
     let blk = e.currentTarget;
+
     blk.off("mouseup");
     blk.off("pressmove");
     blk.off("mousedown");
-    if(this.editor.OnEditor(blk)) {
+
+    if(this.editor.onEditor(blk)) {
       this.editor.addBlock(e.currentTarget.fnName);
       this.stage.update();
     } else {

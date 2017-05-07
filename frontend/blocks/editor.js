@@ -1,6 +1,11 @@
+import BlockSet from './block';
+import Code from './code';
 class Editor {
-  constructor(editorContainer) {
+  constructor(editorContainer, code) {
     this.editor = editorContainer;
+    this.set = new BlockSet([], 30, 200, 600,
+      code);
+    this.onEditor = this.onEditor.bind(this);
   }
 
   onEditor(blk) {
@@ -19,7 +24,7 @@ class Editor {
     this.editor.addChild(newBlk.container);
   }
 
-  removeBlock() {
+  removeBlock(blk) {
     if(this.editor.contains(blk)) {
       this.editorContainer.removeChild(blk);
     }

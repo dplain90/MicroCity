@@ -31,8 +31,6 @@ class Grid extends React.Component {
   }
 
   componentDidMount() {
-
-    debugger
     this.stage = new createjs.Stage("gridCanvas");
     this.avatarSheet = generateAvatar();
     this.avatar = new createjs.Sprite(this.avatarSheet, "idle");
@@ -43,15 +41,14 @@ class Grid extends React.Component {
     this.key.x = 150;
     this.key.scaleX = .25;
     this.key.scaleY = .25;
-    this.code = new Code(this.stage, this.robot);
+    // this.code = new Code(this.stage, this.robot);
     this.robot.scaleX = .25;
     this.robot.scaleY = .25;
-    let blockTest = this.generateBlock(190, 150, 22+16);
-    this.stage.addChild(blockTest, this.generateBasicBlockTop(190, 150));
+    // let blockTest = this.generateBlock(190, 150, 22+16);
+    // this.stage.addChild(blockTest, this.generateBasicBlockTop(190, 150));
     this.generateTiles();
-
-
-    this.stage.addChild(this.avatar, this.key, this.generateBasicBlock(190, 150, 10+26));
+    this.stage.addChild(this.avatar, this.key);
+    // this.stage.addChild(this.avatar, this.key, this.generateBasicBlock(190, 150, 10+26));
     this.stage.update();
 
 
