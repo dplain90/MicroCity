@@ -30,19 +30,19 @@ const generateComparator = (x,y) => {
   return comparator;
 };
 
-// export const generateBasicBlock = (x,y) => {
-//   let insideBlock = new createjs.Shape();
-//     .graphics.moveTo(x-16, y+29).beginStroke("blue").beginFill("white")
-//     .arcTo(x-16, y+37, x-16, y+37-4, 4)
-//     .arcTo(x-34, y+37, x-34, y+37-4, 4)
-//     .arcTo(x-34, y+29, x-34, y+33, 4)
-//     .lineTo(x-34, y+11) // adding 10 to it
-//     .lineTo(x+21, y+11) // taking 10 off of the X
-//     .lineTo(x+21, y+29)
-//     .lineTo(x-16, y+29);
-//
-//   return insideBlock;
-// }
+export const generateBasicBlock = (x,y) => {
+  let insideBlock = new createjs.Shape();
+    insideBlock.graphics.moveTo(x-16, y+29+10).beginStroke("blue").beginFill("white")
+    .arcTo(x-16, y+37+10, x-16, y+37+10-4, 4)
+    .arcTo(x-34, y+37+10, x-34, y+37+10-4, 4)
+    .arcTo(x-34, y+29+10, x-34, y+33+10, 4)
+    .lineTo(x-34, y+11+10) // adding 10 to it
+    .lineTo(x+21, y+11+10) // taking 10 off of the X
+    .lineTo(x+21, y+29+10)
+    .lineTo(x-16, y+29+10);
+
+  return insideBlock;
+}
 
 const generateConditionalBlock = (x,y) => {
   let block = new createjs.Shape();
@@ -76,6 +76,12 @@ const generateConditionalBlock = (x,y) => {
 
   return block;
 };
+
+const adjustedConditional = (x,y, incr) => {
+
+
+
+}
 
 
 

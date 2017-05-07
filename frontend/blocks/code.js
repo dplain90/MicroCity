@@ -42,7 +42,7 @@ class Code {
 class Operator extends Code {
   constructor(stage, obj){
     super(stage, obj);
-
+    this.blockType = 'operator';
   }
   notEql(var1, var2) {
     return var1 !== var2;
@@ -64,6 +64,7 @@ class Operator extends Code {
 class Conditional extends Code {
   constructor(stage, obj){
     super(stage, obj);
+    this.blockType = 'conditional';
   }
 
   ifElseStatement(operator, trueFn, falseFn){
@@ -79,25 +80,10 @@ class Conditional extends Code {
   }
 }
 
-//
-// class Loops extends Code {
-//   constructor(stage, obj){
-//     super(stage, obj);
-//
-//   }
-//
-//   eql(
-//
-// }
-
-
-
-
-
-
 class Motion extends Code {
   constructor(stage, obj){
     super(stage, obj);
+    this.blockType = 'basic';
     this.steps = this.steps.bind(this);
     this.move = this.move.bind(this);
     this.leap = this.leap.bind(this);
