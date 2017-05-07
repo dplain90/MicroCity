@@ -1,4 +1,5 @@
 import { blockCategories, blockLabels, createCode } from './block_constants';
+import { Code } from './code';
 
 class BlockSet {
   constructor(blocks, y_increment, start_x, start_y, code){
@@ -14,11 +15,9 @@ class BlockSet {
 
   generateSet() {
     let set = this.blocks.map( (block, idx) => {
-
-      let { name, blockType, input } = block;
+      let { name, blockType, inputs } = block;
       let y = idx * this.y_increment;
-      debugger
-      return new Block(name, blockType, input, this.x, y);
+      return new Block(name, blockType, inputs, this.x, y, this.code);
     });
     return set;
   }
@@ -26,7 +25,7 @@ class BlockSet {
   addBlock(fnName) {
     let { name, blockType, input } = findBlock(blk.fnName);
     let y = this.blocks[-1].y += this.y_increment;
-    let newBlk = new Block(name, blockType, input, this.x, y);
+    let newBlk = new Block(name, blockType, input, this.x, y, this.code);
     this.containers.push(newBlk.container);
     this.blocks.push(newBlk);
     return newBlk;
@@ -35,7 +34,7 @@ class BlockSet {
   static createSet(category, y_increment, pos, code) {
     let { x, y } = pos;
     let blocks = blockCategories[category]
-    return new BlockSet(blocks, y_increment, x, y);
+    return new BlockSet(blocks, y_increment, x, y, code);
   }
 
 }
@@ -48,7 +47,7 @@ class Block {
     this.type = type;
     this.y = y;
     this.x = x;
-    this.generate = this.generate.bind(this);
+    this.createContainer = this.createContainer.bind(this);
     this.generateDisplayBlock();
   }
 
@@ -64,15 +63,17 @@ class Block {
         this.offset = [{x: 10, y: 5}, {x: 5, y: 0} ];
         this.basicBottomBlock();
       case 'dble_conditional':
-        this.offset = [{x: 5, y: 10}, {x:0, y:60}, {x:5, y:60}];
-        this.dblConditionalBlock();
+        // this.offset = [{x: 5, y: 10}, {x:0, y:60}, {x:5, y:60}];
+        // this.dblConditionalBlock();
+        this.offset = [{x: 10, y: 5}, {x: 5, y: 0} ];
+        this.conditionalBlock();
       case 'conditional':
         this.offset = [{x: 10, y: 5}, {x: 5, y: 0} ];
         this.conditionalBlock();
     }
   }
 
-  container(){
+  createContainer(){
     let container = new createjs.Container();
     container.x = this.x;
     container.y = this.y;
@@ -90,7 +91,7 @@ class Block {
   createInput(input){
     input.className = "block-input";
     input.id = this.container.id;
-    easelInput = new createjs.DOMElement(input);
+    let easelInput = new createjs.DOMElement(input);
     this.container.addChildAt(easelInput, 0);
     return easelInput;
     // These need to happen elsewhere!
@@ -108,7 +109,7 @@ class Block {
   }
 
   basicBlock() {
-    this.container = this.container();
+    this.container = this.createContainer();
     let basicBlock = new createjs.Shape();
     this.container.addChild(basicBlock);
     basicBlock.graphics.beginStroke("blue").beginFill("white")
@@ -140,8 +141,8 @@ class Block {
     }
   }
 
-  bottomInsideBlock() {
-    this.container = this.container();
+  basicBottomBlock() {
+    this.container = this.createContainer();
     let insideBlock = new createjs.Shape();
     this.container.addChild(insideBlock);
     let x = this.x;
@@ -162,7 +163,7 @@ class Block {
   }
 
   conditionalBlock(incr){
-    this.container = this.container();
+    this.container = this.createContainer();
     let conditional = new createjs.Shape();
     this.container.addChild(conditional);
     let x = this.x;
@@ -202,8 +203,9 @@ class Block {
     return conditional;
   }
 
+
   comparatorBlock(){
-    this.container = this.container();
+    this.container = this.createContainer();
     let comparator = new createjs.Shape();
     this.container.addChild(comparator);
     let x = this.x;

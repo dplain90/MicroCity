@@ -1,6 +1,7 @@
 import { UPDATE_CODE, CLEAR_CODE, REMOVE_CODE, RECEIVE_ARG } from '../actions/code_actions';
+import Code from '../blocks/code';
 
-const _defaultCode = Object.freeze({});
+const _defaultCode = new Code();
 
 const CodeReducer = (state = _defaultCode, action) => {
   switch(action.type) {

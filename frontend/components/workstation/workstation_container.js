@@ -4,7 +4,7 @@ import { updateToggle } from '../../actions/toggle_actions';
 import { updateCode, removeCode, addArg } from '../../actions/code_actions';
 const mapStateToProps = (state, ownProps) => ({
   toggles: state.toggles,
-  code: state.codes
+  code: state.code
 });
 
 const mapDispatchToProps = dispatch => ({

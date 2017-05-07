@@ -1,34 +1,40 @@
+import { Code } from './code';
+
+const createInputDOM = () => {
+  return document.createElement("input");
+};
+
 export const blockCategories = {
     'motion': [
-      { name: 'steps', blockType: 'basic', input: 1 },
-      { name: 'move', blockType: 'basic', input: 0},
-      { name: 'jump', blockType: 'basic', input: 0},
+      { name: 'steps', blockType: 'basic', inputs: [createInputDOM()] },
+      { name: 'move', blockType: 'basic', inputs: []},
+      { name: 'jump', blockType: 'basic', inputs: []},
 
     ],
     'operator': [
-      { name: '!==', blockType: 'comparator', input: 1},
-      { name: '===', blockType: 'comparator', input: 1},
-      { name: '<', blockType: 'comparator', input: 1},
-      { name: '>', blockType: 'comparator', input: 1}
+      { name: '!==', blockType: 'comparator', inputs: [createInputDOM()]},
+      { name: '===', blockType: 'comparator', inputs: [createInputDOM()]},
+      { name: '<', blockType: 'comparator', inputs: [createInputDOM()]},
+      { name: '>', blockType: 'comparator', inputs: [createInputDOM()]}
     ],
 
     'conditional': [
-      { name: 'ifelse', blockType: 'dble_conditional', input: 0},
-      { name: 'if', blockType: 'conditional', input: 0},
+      { name: 'ifelse', blockType: 'dble_conditional', inputs: []},
+      { name: 'if', blockType: 'conditional', inputs: []},
     ]
 }
 
 export const findBlock = (name) => {
  let blocks = {
-  'steps': { name: 'steps', blockType: 'basic', input: 1 },
-  'move': { name: 'move', blockType: 'basic', input: 0},
-  'jump': { name: 'jump', blockType: 'basic', input: 0},
-  '!==': { name: '!==', blockType: 'comparator', input: 1},
-   '===': { name: '===', blockType: 'comparator', input: 1},
-  '<': { name: '<', blockType: 'comparator', input: 1},
-  '>': { name: '>', blockType: 'comparator', input: 1},
-  'ifelse': { name: 'ifelse', blockType: 'dble_conditional', input: 0},
-  'if': { name: 'if', blockType: 'conditional', input: 0}
+  'steps': { name: 'steps', blockType: 'basic', inputs: [createInputDOM()] },
+  'move': { name: 'move', blockType: 'basic', inputs: []},
+  'jump': { name: 'jump', blockType: 'basic', inputs: []},
+  '!==': { name: '!==', blockType: 'comparator', inputs: [createInputDOM()]},
+   '===': { name: '===', blockType: 'comparator', inputs: [createInputDOM()]},
+  '<': { name: '<', blockType: 'comparator', inputs: [createInputDOM()]},
+  '>': { name: '>', blockType: 'comparator', inputs: [createInputDOM()]},
+  'ifelse': { name: 'ifelse', blockType: 'dble_conditional', inputs: []},
+  'if': { name: 'if', blockType: 'conditional', inputs: []}
 }
 
 return blocks[name];
@@ -45,6 +51,8 @@ export const blockLabels = {
   'ifelse': ['If', 'Else'],
   'if': ['If']
 };
+
+
 
 export const createCode = (name, code) => {
   let fnList =

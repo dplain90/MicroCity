@@ -1,4 +1,4 @@
-export class Editor {
+class Editor {
   constructor(editorContainer) {
     this.editor = editorContainer;
   }
@@ -29,7 +29,7 @@ export class Editor {
     this.editor = new createjs.Container();
     let editorBox = new createjs.Shape();
     editorBox.graphics.beginStroke("white").beginFill("#C2C0C0").drawRect(200, 5, 400, 290);
-    editorContainer.setBounds(150, 0, 150, stage.height);
+    this.editor.setBounds(150, 0, 150, stage.height);
     this.editor.addChild(editorBox);
     return this.editor;
   }
@@ -41,3 +41,4 @@ export class Editor {
 //   let newY = (blockCount * 20);
 //   return { x: 210, y: newY };
 // }
+export default Editor;

@@ -31,6 +31,8 @@ class Grid extends React.Component {
   }
 
   componentDidMount() {
+
+    debugger
     this.stage = new createjs.Stage("gridCanvas");
     this.avatarSheet = generateAvatar();
     this.avatar = new createjs.Sprite(this.avatarSheet, "idle");

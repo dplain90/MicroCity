@@ -1,6 +1,7 @@
 import React from 'react';
 import PaletteContainer from './palette/palette_container';
-import Code from '../../blocks/code';
+import * as CodeModule from '../../blocks/code';
+
 import Editor from '../../blocks/editor';
 import EditorContainer from './editor/editor_container';
 import { calcNextBlockPos } from '../../blocks/block_util';
@@ -22,7 +23,7 @@ class WorkStation extends React.Component {
 
       this.addCodeBlock = this.addCodeBlock.bind(this);
       this.removeInputBar = removeInputBar.bind(this);
-      this.code = new Code();
+      // this.code = new CodeModule.Code();
 
       this.state = {
         category: 'motion'
@@ -31,13 +32,14 @@ class WorkStation extends React.Component {
 
   componentDidMount() {
     this.stage = new createjs.Stage("workstationCanvas");
-    this.set = BlockSet.createSet(this.state.category, 20, { x: 0, y: 140}, this.code);
+    this.set = BlockSet.createSet(this.state.category, 20, { x: 0, y: 140}, this.props.code);
     this.addContainers();
     this.editorContainer = Editor.createEditor(this.stage);
     this.stage.addChild(this.editorContainer);
     this.editor = new Editor(this.editorContainer);
 
     createjs.Ticker.addEventListener("tick", this.handleTick);
+    // this.props.updateCode(this.props.code);
   }
 
   handleTick(event){
@@ -45,7 +47,7 @@ class WorkStation extends React.Component {
   }
 
   addContainers(){
-    containers = this.stage.containers;
+    let containers = this.set.containers;
     for (var i = 0; i < containers.length; i++) {
       let container = containers[i];
       container.on("mousedown", this.cloneBlock);
