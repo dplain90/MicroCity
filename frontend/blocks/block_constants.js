@@ -7,7 +7,7 @@ const createInputDOM = () => {
 
 export const blockCategories = {
     'motion': [
-      { name: 'steps', blockType: 'comparator', inputs: [createInputDOM()] },
+      { name: 'steps', blockType: 'basic', inputs: [createInputDOM()] },
       { name: 'move', blockType: 'basic', inputs: []},
       { name: 'jump', blockType: 'basic', inputs: []},
 
@@ -27,9 +27,9 @@ export const blockCategories = {
 
 export const findBlock = (name) => {
  let blocks = {
-  'steps': { name: 'steps', blockType: 'basic_bottom', inputs: [createInputDOM()] },
-  'move': { name: 'move', blockType: 'basic_bottom', inputs: []},
-  'jump': { name: 'jump', blockType: 'basic_bottom', inputs: []},
+  'steps': { name: 'steps', blockType: 'basic', inputs: [createInputDOM()] },
+  'move': { name: 'move', blockType: 'basic', inputs: []},
+  'jump': { name: 'jump', blockType: 'basic', inputs: []},
   '!==': { name: '!==', blockType: 'comparator', inputs: [createInputDOM()]},
    '===': { name: '===', blockType: 'comparator', inputs: [createInputDOM()]},
   '<': { name: '<', blockType: 'comparator', inputs: [createInputDOM()]},

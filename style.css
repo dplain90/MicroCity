@@ -173,7 +173,7 @@ header {
   justify-content: flex-start;
   border: 3px solid white;
   border-radius: 8px;
-  height: 350px;
+  height: 450px;
 }
 .paletteContainer {
  flex: 0.5;

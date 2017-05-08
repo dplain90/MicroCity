@@ -1,7 +1,9 @@
 import React from 'react';
-import Code from '../../blocks/code';
+import { Code, CodeEngine } from '../../blocks/code';
 import { generateAvatar } from '../../../images/avatar/avatar';
-import { generateTileSheet } from '../../../images/tiles';
+import Tile from '../../../images/tiles';
+import { Level, levelData } from '../../blocks/level';
+
 class Grid extends React.Component {
   constructor(props){
     super(props);
@@ -10,6 +12,7 @@ class Grid extends React.Component {
     this.handleRun = this.handleRun.bind(this);
     this.handleTick = this.handleTick.bind(this);
     this.generateTiles = this.generateTiles.bind(this);
+    this.level = new Level(levelData);
     // this.generateBlock = this.generateBlock.bind(this);
 
     this.state = {
@@ -35,21 +38,30 @@ class Grid extends React.Component {
     this.avatarSheet = generateAvatar();
     this.avatar = new createjs.Sprite(this.avatarSheet, "idle");
     this.avatar.y = 170;
+
     this.robot = new createjs.Bitmap("/images/robot.png");
     this.key = new createjs.Bitmap("/images/objects/keyYellow.png");
     this.key.y = 10;
     this.key.x = 150;
-    this.key.scaleX = .25;
-    this.key.scaleY = .25;
+    this.key.scaleX = .50;
+    this.key.scaleY = .50;
     // this.code = new Code(this.stage, this.robot);
-    this.robot.scaleX = .25;
-    this.robot.scaleY = .25;
+    this.robot.scaleX = 3;
+    this.robot.scaleY = 3;
     // let blockTest = this.generateBlock(190, 150, 22+16);
     // this.stage.addChild(blockTest, this.generateBasicBlockTop(190, 150));
-    this.generateTiles();
+    let levelObjs = this.level.createDisplayObjects(levelData);
+    for (var i = 0; i < levelObjs.length; i++) {
+      if(levelObjs[i] !== undefined) {
+        this.stage.addChild(levelObjs[i]);
+      }
+    }
+
+    let test = Tile.create(200, 50);
+    this.stage.addChild(test);
     this.stage.addChild(this.avatar, this.key);
     // this.stage.addChild(this.avatar, this.key, this.generateBasicBlock(190, 150, 10+26));
-    this.stage.update();
+    // this.stage.update();
 
 
      createjs.Ticker.addEventListener("tick", this.handleTick);
@@ -59,12 +71,7 @@ class Grid extends React.Component {
 
   handleRun(e) {
     e.preventDefault();
-
-    // if(this.state.code !== this.props.code){
-    //
-    // }
-    console.log(this.state.code);
-    this.queue = this.code.run(this.state.code);
+    this.queue = CodeEngine.run();
   }
 
 
@@ -95,25 +102,37 @@ class Grid extends React.Component {
 
   handleTick(event){
 // if (this.queue.length > 0) this.setState({ code: [] });
-
+  let myAvatar = this.level.avatar;
     // console.log(this.avatar.hitTest(150,170));
-    let distanceFromKey = this.avatar.localToLocal(0, 0, this.key)
-    if(distanceFromKey.x === 0){
-      let winText = new createjs.Text("LEVEL COMPLETED!", "20px Arial", "#ff7700");
-      this.stage.addChild(winText);
-      this.stage.update();
+    // let distanceFromKey = this.avatar.localToLocal(0, 0, this.key)
+    // console.log(distanceFromKey);
+    // if(distanceFromKey.x === 0){
+    //   let winText = new createjs.Text("LEVEL COMPLETED!", "20px Arial", "#ff7700");
+    //   this.stage.addChild(winText);
+    //   this.stage.update();
+    // }
+    if(myAvatar.touchingBadGuy()){
+      myAvatar.reset();
     }
-
     if(this.queue.length === 0) {
+      myAvatar.handleTick({x: 0, y: 0});
+      // myAvatar.handleTick({x: 0, y: 0});
       this.avatar.gotoAndStop('idle');
     } else {
       let movement = this.queue.shift();
       if(movement.length === 1) {
-        this.avatar.gotoAndPlay(movement[0]);
+        if(movement[0] === 'jump') {
+           myAvatar.jumping = true } else {
+           myAvatar.jumping = false;
+         }
+        myAvatar.obj.gotoAndPlay(movement[0]);
+        // this.avatar.gotoAndPlay(movement[0]);
       } else {
         if(movement[0] === 'x'){
+          myAvatar.handleTick({x: 1, y: 0});
           this.avatar.x += movement[1];
         } else {
+          myAvatar.handleTick({x: 0, y: 1});
           this.avatar.y += movement[1];
         }
       }

@@ -1,22 +1,34 @@
 class Code {
   constructor() {
     this.run = this.run.bind(this);
+    this.blocks = [];
     this.queue = [];
     this.motion = new Motion(this);
     this.conditional = new Conditional(this);
     this.operator = new Operator(this);
+    this.run = this.run.bind(this);
   }
 
-  run(blocks){
-    for (let i = 0; i < blocks.length; i++) {
-      let { fn, args } = blocks[i];
-        if(args.length > 0) {
-          fn(...args);
-        } else {
-          fn();
-        }
+  removeBlock(blk_id){
+    let newBlockSet = []
+    for (var i = 0; i < this.blocks.length; i++) {
+      if (this.blocks[i].block_id !== blk_id){ newBlockSet.push(this.blocks[i]);
+      }
     }
-    return this.motion.queue;
+    this.blocks = newBlockSet;
+  }
+
+  run(){
+    for (let i = 0; i < this.blocks.length; i++) {
+
+     this.blocks[i].fn();
+        // if(args.length > 0) {
+        //   fn(...args);
+        // } else {
+          // fn();
+        // }
+    }
+    return this.queue;
   }
 }
 
@@ -63,15 +75,16 @@ class Conditional {
 class Motion {
     constructor(code) {
       this.queue = code.queue;
+      this.steps = this.steps.bind(this);
+      this.move = this.move.bind(this);
+      this.leap = this.leap.bind(this);
+      this.jump = this.jump.bind(this);
+      this.climb = this.climb.bind(this);
     }
   // constructor(stage, obj){
   //   super(stage, obj);
   //   this.blockType = 'basic';
-  //   this.steps = this.steps.bind(this);
-  //   this.move = this.move.bind(this);
-  //   this.leap = this.leap.bind(this);
-  //   this.jump = this.jump.bind(this);
-  //   this.climb = this.climb.bind(this);
+  //
   //   this.steps.args = ['num'];
   // }
 
@@ -109,4 +122,5 @@ class Motion {
   }
 }
 
-export default Code;
+const CodeEngine = new Code();
+export { Code, CodeEngine } ;
