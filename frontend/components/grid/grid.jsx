@@ -35,19 +35,19 @@ class Grid extends React.Component {
 
   componentDidMount() {
     this.stage = new createjs.Stage("gridCanvas");
-    this.avatarSheet = generateAvatar();
-    this.avatar = new createjs.Sprite(this.avatarSheet, "idle");
-    this.avatar.y = 170;
+    // this.avatarSheet = generateAvatar();
+    // this.avatar = new createjs.Sprite(this.avatarSheet, "idle");
+    // this.avatar.y = 170;
 
-    this.robot = new createjs.Bitmap("/images/robot.png");
-    this.key = new createjs.Bitmap("/images/objects/keyYellow.png");
-    this.key.y = 10;
-    this.key.x = 150;
-    this.key.scaleX = .50;
-    this.key.scaleY = .50;
-    // this.code = new Code(this.stage, this.robot);
-    this.robot.scaleX = 3;
-    this.robot.scaleY = 3;
+    // this.robot = new createjs.Bitmap("/images/robot.png");
+    // this.key = new createjs.Bitmap("/images/objects/keyYellow.png");
+    // this.key.y = 10;
+    // this.key.x = 150;
+    // this.key.scaleX = .50;
+    // this.key.scaleY = .50;
+    // // this.code = new Code(this.stage, this.robot);
+    // this.robot.scaleX = 3;
+    // this.robot.scaleY = 3;
     // let blockTest = this.generateBlock(190, 150, 22+16);
     // this.stage.addChild(blockTest, this.generateBasicBlockTop(190, 150));
     let levelObjs = this.level.createDisplayObjects(levelData);
@@ -56,10 +56,10 @@ class Grid extends React.Component {
         this.stage.addChild(levelObjs[i]);
       }
     }
-
-    let test = Tile.create(200, 50);
-    this.stage.addChild(test);
-    this.stage.addChild(this.avatar, this.key);
+    this.stage.update();
+    // let test = Tile.create(200, 50);
+    // this.stage.addChild(test);
+    // this.stage.addChild(this.avatar, this.key);
     // this.stage.addChild(this.avatar, this.key, this.generateBasicBlock(190, 150, 10+26));
     // this.stage.update();
 
@@ -115,6 +115,7 @@ class Grid extends React.Component {
 
     if(this.queue.length === 0) {
       myAvatar.handleTick({x: 0, y: 0});
+      myAvatar.obj.gotoAndStop('idle');
 
     } else {
       myAvatar.isReset = false;

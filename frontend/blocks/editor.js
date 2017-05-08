@@ -28,26 +28,36 @@ class Editor {
       let loop = this.loops[i];
       let container = loop.container.getBounds();
       debugger
-      if(obj.y + 10 >= container.y && obj.y <= container.y + container.height && newBlk.block_id !== loop.block_id) {
-        debugger
+      console.log(loop.container.localToLocal(0, 0, obj));
+
+      console.log(container.y + obj.offSet);
+      debugger
+      if(obj.y + obj.offSet >= container.y && obj.y - obj.offSet <= container.y + container.height && newBlk.block_id !== loop.block_id) {
         loop.addCallback(newBlk.fn);
+        debugger
+        newBlk.container.x = loop.container.x + 45;
+        newBlk.container.y = loop.container.y + (loop.callback.length * 30);
       }
     }
 
   }
+
 
   addBlock(fnName) {
     let newBlk = this.set.addBlock(fnName);
     newBlk.block_id = newBlk.container.id;
     if(newBlk.type === 'loop') this.loops.push(newBlk);
     this.editor.addChild(newBlk.container);
+
     this.code.blocks.push(newBlk);
+    // newBlk.off("mousedown");
     return newBlk;
   }
 
   removeBlock(blk) {
     if(this.editor.contains(blk)) {
       this.editor.removeChild(blk);
+      this.set.removeBlock(blk);
       this.code.removeBlock(blk.id);
     }
 

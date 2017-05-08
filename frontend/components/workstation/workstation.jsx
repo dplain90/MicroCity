@@ -97,8 +97,7 @@ class WorkStation extends React.Component {
     let offset = e.stageY - (e.stageY * .70);
     let offset2 = e.stageY / 30;
     let third = (e.stageY * .5);
-    console.log(e.stageX / e.currentTarget.x);
-    console.log(e.stageY / e.currentTarget.y);
+
     e.currentTarget.x = e.stageX - 30 ;
     e.currentTarget.y = e.stageY - 30 - e.currentTarget.offSet;
 
@@ -129,7 +128,7 @@ class WorkStation extends React.Component {
     let blk = e.currentTarget;
     Block.turnOffListeners(blk, ["mouseup", "pressmove", "mousedown"]);
 
-    if(this.editor.onEditor(blk)) {
+    if(this.editor.onEditor(blk) && !this.editor.editor.contains(blk) ) {
       this.stage.removeChild(blk);
       let newBlk = this.editor.addBlock(e.currentTarget.fnName);
       this.editor.checkForLoop(blk, newBlk);

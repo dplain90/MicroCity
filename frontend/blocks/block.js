@@ -26,6 +26,20 @@ import { Code } from './code';
     return set;
   }
 
+
+  removeBlock(blk) {
+    let newContainers = [];
+    let newBlocks = [];
+    for (var i = 0; i < this.blocks.length; i++) {
+      if(this.containers[i] !== blk){
+        newContainers.push(this.containers[i]);
+        newBlocks.push(this.blocks[i]);
+      }
+    }
+     this.blocks = newBlocks;
+     this.containers = newContainers;
+  }
+
   addBlock(fnName) {
     let { name, blockType, inputs } = findBlock(fnName);
     let blkLength = this.blocks.length;

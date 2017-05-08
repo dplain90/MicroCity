@@ -44,16 +44,15 @@ let enemyData = {
 
 const levelData = {
 groundBlocks: [
-  {num: 6, x: 18.5, y: 200},
-  {num: 3, x: 40, y: 300},
-  {num: 10, x: 10, y: 350}
+  {num: 20, x: 0, y: 200}
+  // {num: 5, x: 40, y: 300},
+  // {num: 10, x: 10, y: 350}
 ],
 
 objects: [
-  { type: 'bad', x: 60, y: 200, frame: 1, data: enemyData },
-  { type: 'bad', x: 80, y: 300, frame: 2, data: enemyData },
-  { type: 'avatar', x: 50, y: 300, frame: null, data: avatarData },
-  { type: 'key', x: 90, y: 320, frame: null, data: avatarData }
+  { type: 'bad', x: 600, y: 150, frame: 1, data: enemyData },
+  { type: 'avatar', x: 600, y: 4, frame: null, data: avatarData },
+  { type: 'key', x: 350, y: 150, frame: null, data: avatarData }
 ]
 }
 
@@ -203,9 +202,8 @@ class Avatar {
     }
   }
 
-
   touchingGround(){
-    if(this.jumping){
+    if(this.obj.jumping){
       return true
     } else {
       let planes = this.level.planes;
