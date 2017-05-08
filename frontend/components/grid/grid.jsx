@@ -103,38 +103,27 @@ class Grid extends React.Component {
   handleTick(event){
 // if (this.queue.length > 0) this.setState({ code: [] });
   let myAvatar = this.level.avatar;
-    // console.log(this.avatar.hitTest(150,170));
-    // let distanceFromKey = this.avatar.localToLocal(0, 0, this.key)
-    // console.log(distanceFromKey);
-    // if(distanceFromKey.x === 0){
-    //   let winText = new createjs.Text("LEVEL COMPLETED!", "20px Arial", "#ff7700");
-    //   this.stage.addChild(winText);
-    //   this.stage.update();
-    // }
-    if(myAvatar.touchingBadGuy()){
-      myAvatar.reset();
-    }
+  if(myAvatar.win){
+     myAvatar.isReset = true;
+     let winText = new createjs.Text("LEVEL COMPLETED!", "20px Arial", "#ff7700");
+     this.stage.addChild(winText);
+  }
+
+  if(myAvatar.isReset){
+    myAvatar.obj.gotoAndStop('idle');
+  }
+
     if(this.queue.length === 0) {
       myAvatar.handleTick({x: 0, y: 0});
-      // myAvatar.handleTick({x: 0, y: 0});
-      this.avatar.gotoAndStop('idle');
+
     } else {
+      myAvatar.isReset = false;
       let movement = this.queue.shift();
-      if(movement.length === 1) {
-        if(movement[0] === 'jump') {
-           myAvatar.jumping = true } else {
-           myAvatar.jumping = false;
-         }
-        myAvatar.obj.gotoAndPlay(movement[0]);
-        // this.avatar.gotoAndPlay(movement[0]);
+      if(movement['animation'] !== undefined) {
+        myAvatar.handleAnimation(movement.animation);
+        myAvatar.obj.gotoAndPlay(movement.animation);
       } else {
-        if(movement[0] === 'x'){
-          myAvatar.handleTick({x: 1, y: 0});
-          this.avatar.x += movement[1];
-        } else {
-          myAvatar.handleTick({x: 0, y: 1});
-          this.avatar.y += movement[1];
-        }
+        myAvatar.handleTick(movement);
       }
     }
 

@@ -10,6 +10,7 @@ export const blockCategories = {
       { name: 'steps', blockType: 'basic', inputs: [createInputDOM()] },
       { name: 'move', blockType: 'basic', inputs: []},
       { name: 'jump', blockType: 'basic', inputs: []},
+      { name: 'times', blockType: 'loop', inputs: []}
 
     ],
     'operator': [
@@ -29,6 +30,7 @@ export const findBlock = (name) => {
  let blocks = {
   'steps': { name: 'steps', blockType: 'basic', inputs: [createInputDOM()] },
   'move': { name: 'move', blockType: 'basic', inputs: []},
+    'times': { name: 'times', blockType: 'loop', inputs: []},
   'jump': { name: 'jump', blockType: 'basic', inputs: []},
   '!==': { name: '!==', blockType: 'comparator', inputs: [createInputDOM()]},
    '===': { name: '===', blockType: 'comparator', inputs: [createInputDOM()]},
@@ -44,6 +46,7 @@ return blocks[name];
 
 export const blockLabels = {
   'steps': ['Step', 'times'],
+  'times': ['Times'],
   'move': ['Forward'],
   'jump': ['Jump'],
   '!==': ['Not Equal'],
@@ -61,6 +64,7 @@ export const createCode = (name, code) => {
     'steps': code.motion.steps,
     'move': code.motion.move,
     'jump': code.motion.jump,
+    'times': code.loop.times,
     '!==': code.operator.notEql,
     '===': code.operator.eql,
     '<': code.operator.lessThan,

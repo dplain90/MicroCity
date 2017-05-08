@@ -21,7 +21,6 @@ import { Code } from './code';
     let set = this.blocks.map( (block, idx) => {
       let { name, blockType, inputs } = block;
       let y = idx * y_increment;
-
       return new Block(name, blockType, inputs, x, y, code);
     });
     return set;
@@ -30,7 +29,7 @@ import { Code } from './code';
   addBlock(fnName) {
     let { name, blockType, inputs } = findBlock(fnName);
     let blkLength = this.blocks.length;
-    let y = 0;
+    let y = this.y;
 
     if(blkLength > 0) y = this.blocks[blkLength - 1].y;
     y += this.y_increment;
@@ -51,6 +50,7 @@ import { Code } from './code';
 class Block {
   constructor(name, type, inputs, x, y, code){
     this.fn = createCode(name, code);
+    this.code = code;
     this.inputs = inputs;
     this.name = name;
     this.type = type;
@@ -72,6 +72,13 @@ class Block {
         this.offset = {x: 36, y: 23};
         this.imageBlockSetup("/images/blocks/basicBlockFinal.gif");
 
+        break;
+      case 'loop':
+        this.offset = {x: 36, y: 23};
+        this.imageBlockSetup("/images/blocks/basicBlockFinal.gif");
+        this.callback = [];
+        this.num = 2;
+        this.fn = this.handleLoopFn();
         break;
       case 'basic_bottom':
         this.offset = {x: 15, y: 10};
@@ -96,11 +103,26 @@ class Block {
     let container = new createjs.Container();
     container.x = this.x;
     container.y = this.y;
+    container.setBounds(this.x, this.y, 50, 30);
+    container.offSet = this.y;
     container.fnName = this.name;
     container.hasInput = this.inputs.length > 0 ? true : false;
     return container;
   }
 
+  handleLoopFn(){
+    let callbacks = this.callback;
+    let num = this.num;
+    return () =>
+    {
+      let codeFn = createCode(this.name, this.code);
+      return codeFn(num, callbacks);
+    }
+  }
+
+  addCallback(fn){
+    this.callback.push(fn);
+  }
   createLabel(name){
 
     let label = new createjs.Text(name.toUpperCase(), "6.5px Audiowide, cursive", "#fff");
@@ -108,10 +130,6 @@ class Block {
     label.x = this.x + this.offset.x;
     label.textAlign = "center";
     this.container.addChildAt(label, 1);
-    // this.container.setBounds(this.x, this.y, 50, 50);
-    //  let bounds = this.container.getBounds();
-    // this.imageHeight = this.imageBlock.image.height * .70;
-    // this.imageWidth = this.imageBlock.image.width * .70;
     return label;
   }
 

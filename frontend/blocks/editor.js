@@ -3,7 +3,9 @@ import Code from './code';
 class Editor {
   constructor(editorContainer, code) {
     this.editor = editorContainer;
-    this.set = new BlockSet([], 20, 100, 0,
+    this.loops = [];
+    window.loops = this.loops;
+    this.set = new BlockSet([], 20, 120, -20,
       code);
     this.onEditor = this.onEditor.bind(this);
     this.code = code;
@@ -21,9 +23,23 @@ class Editor {
     return (blkX > nearX && blkX < farX && blkY > topY && blkY < bottomY);
   }
 
+  checkForLoop(obj, newBlk){
+    for (var i = 0; i < this.loops.length; i++) {
+      let loop = this.loops[i];
+      let container = loop.container.getBounds();
+      debugger
+      if(obj.y + 10 >= container.y && obj.y <= container.y + container.height && newBlk.block_id !== loop.block_id) {
+        debugger
+        loop.addCallback(newBlk.fn);
+      }
+    }
+
+  }
+
   addBlock(fnName) {
     let newBlk = this.set.addBlock(fnName);
     newBlk.block_id = newBlk.container.id;
+    if(newBlk.type === 'loop') this.loops.push(newBlk);
     this.editor.addChild(newBlk.container);
     this.code.blocks.push(newBlk);
     return newBlk;
@@ -41,8 +57,9 @@ class Editor {
     this.editor = new createjs.Container();
     let editorBox = new createjs.Shape();
     editorBox.graphics.beginStroke("white").beginFill("#C2C0C0").drawRect(200, 5, 300, 290);
-    this.editor.setBounds(150, 0, 150, stage.height);
     this.editor.addChild(editorBox);
+    this.editor.setBounds(100, -50, 300, 290);
+
     return this.editor;
   }
 }

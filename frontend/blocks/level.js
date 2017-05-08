@@ -52,7 +52,8 @@ groundBlocks: [
 objects: [
   { type: 'bad', x: 60, y: 200, frame: 1, data: enemyData },
   { type: 'bad', x: 80, y: 300, frame: 2, data: enemyData },
-  { type: 'avatar', x: 50, y: 300, frame: null, data: avatarData }
+  { type: 'avatar', x: 50, y: 300, frame: null, data: avatarData },
+  { type: 'key', x: 90, y: 320, frame: null, data: avatarData }
 ]
 }
 
@@ -72,7 +73,7 @@ class Level {
   createDisplayObjects() {
     this.createGround();
     this.createObjects();
-    return this.ground.concat(this.barriers, this.badGuys, [this.avatar.obj]);
+    return this.ground.concat(this.barriers, this.badGuys, [this.avatar.obj], [this.key]);
   }
 
 
@@ -93,6 +94,14 @@ class Level {
     let avatarObj = new createjs.Sprite(avatarSheet);
     this.avatar = new Avatar(avatarObj, this);
   }
+
+  createKey(x, y){
+    this.key = new createjs.Bitmap("/images/objects/keyYellow.png");
+    this.key.y = y;
+    this.key.x = x;
+    this.key.scaleX = .50;
+    this.key.scaleY = .50;
+  }
   createObjects() {
     for (var i = 0; i < this.objects.length; i++) {
       let { type, x, y, frame, data }  = this.objects[i];
@@ -102,6 +111,9 @@ class Level {
         case 'bad':
           let badGuy = this.createObj(x, y, frame, data);
           this.badGuys.push(badGuy);
+          break;
+        case 'key':
+          this.createKey(x, y);
           break;
         case 'barrier':
           let barrier = this.createObj(x, y, data);
@@ -137,23 +149,47 @@ class Avatar {
     this.start_y = this.obj.y;
     this.level = level;
     this.jumping = false;
-    this.fail = false;
+    this.isReset = true;
     this.win = false;
   }
 
   reset(){
-    console.log('made it');
     this.obj.x = this.start_x;
     this.obj.y = this.start_y;
   }
 
+  handleAnimation(animation) {
+    if(animation === 'jump') {
+       this.obj.jumping = true
+     } else {
+       this.obj.jumping = false;
+     }
+  }
+
   handleTick(pos){
     let { x, y } = pos;
+
     if(this.touchingGround()){
       this.obj.x += x;
       this.obj.y += y;
     } else {
       this.obj.y += 1;
+    }
+    this.touchingBadGuy();
+    this.touchingKey();
+  }
+
+  isTouching(pos){
+    let {x, y} = pos;
+    return Math.abs(x) <= 10 && Math.abs(y) <= 40;
+  }
+
+  touchingKey() {
+    let key = this.level.key
+    let distanceFromKey = this.obj.localToLocal(0, 0, key);
+    if(this.isTouching(distanceFromKey)){
+      this.win = true;
+      console.log('winning');
     }
   }
 
@@ -161,9 +197,7 @@ class Avatar {
     for (var i = 0; i < this.level.badGuys.length; i++) {
       let badGuy = this.level.badGuys[i];
       let distanceFromBadGuy = this.obj.localToLocal(0, 0, badGuy);
-      console.log(Math.abs(distanceFromBadGuy.x));
-      console.log(Math.abs(distanceFromBadGuy.y));
-      if(Math.abs(distanceFromBadGuy.x) <= 10 && Math.abs(distanceFromBadGuy.y) <= 40){
+      if(this.isTouching(distanceFromBadGuy)){
         this.reset();
       }
     }

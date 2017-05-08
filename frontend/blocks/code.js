@@ -6,6 +6,7 @@ class Code {
     this.motion = new Motion(this);
     this.conditional = new Conditional(this);
     this.operator = new Operator(this);
+    this.loop = new Loop(this);
     this.run = this.run.bind(this);
   }
 
@@ -20,7 +21,7 @@ class Code {
 
   run(){
     for (let i = 0; i < this.blocks.length; i++) {
-
+      debugger
      this.blocks[i].fn();
         // if(args.length > 0) {
         //   fn(...args);
@@ -53,6 +54,29 @@ class Operator {
     return var1 > var2;
   }
 }
+
+class Loop {
+  constructor(code) {
+    this.queue = code.queue;
+    this.runCallbacks = this.runCallbacks.bind(this);
+    this.times = this.times.bind(this);
+  }
+
+  times(num, callbacks){
+    for (var i = 0; i < num; i++) {
+      this.runCallbacks(callbacks);
+    }
+  }
+
+  runCallbacks(callbacks){
+    for (var i = 0; i < callbacks.length; i++) {
+      let callback = callbacks[i];
+      callback();
+    }
+  }
+
+}
+
 
 class Conditional {
   constructor(code) {
@@ -89,9 +113,14 @@ class Motion {
   // }
 
   move(axis = 'x', steps = 30, dir = 1, anim = 'move'){
-      this.queue.push([anim]);
+      this.queue.push( {animation: anim});
     for (var i = 0; i < steps; i++) {
-      this.queue.push( [axis, dir] );
+      let otheraxis;
+      if(axis === 'x') {
+        this.queue.push( {x: dir, y: 0} );
+      } else {
+        this.queue.push( {x: 0, y: dir} );
+      }
     }
   }
 
@@ -106,17 +135,17 @@ class Motion {
 
   leap(dir){
     for (var i = 0; i < 2; i++) {
-      this.queue.push(['jump']);
-      this.queue.push(['y', 10 * dir]);
-      this.queue.push(['y', 10 * dir]);
-      this.queue.push(['y', 10 * dir]);
-      this.queue.push(['x', 10]);
+      this.queue.push({animation: 'jump'});
+      this.queue.push({x: 0, y: 10 * dir});
+      this.queue.push({x: 0, y: 10 * dir});
+      this.queue.push({x: 0, y: 10 * dir});
+      this.queue.push({x: 10, y: 0});
     }
   }
 
   steps(num = 9){
     if(num > 0) {
-      this.queue.push( [ 'x', 10] );
+      this.queue.push( { x: 10, y: 0} );
       this.steps(num - 1);
     }
   }

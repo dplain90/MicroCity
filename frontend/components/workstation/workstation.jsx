@@ -21,7 +21,7 @@ class WorkStation extends React.Component {
       this.addContainers = this.addContainers.bind(this);
       this.handleClick = this.handleClick.bind(this);
       this.handleTick = this.handleTick.bind(this);
-
+      this.dragEditorCallback = this.dragEditorCallback.bind(this);
       this.addCodeBlock = this.addCodeBlock.bind(this);
       this.removeInputBar = removeInputBar.bind(this);
       // this.code = new CodeModule.Code();
@@ -30,6 +30,13 @@ class WorkStation extends React.Component {
             { type: "pressmove", callback: this.dragCallback },
             { type: "pressup", callback: this.dropCallback }
           ];
+
+      this.editorListeners = [
+            { type: "stagemousedown", callback: this.dragEditorCallback },
+            { type: "pressmove", callback: this.dragEditorCallback },
+            { type: "pressup", callback: this.dropCallback }
+          ];
+
       this.state = {
         category: 'motion'
       };
@@ -37,6 +44,7 @@ class WorkStation extends React.Component {
 
   componentDidMount() {
     this.stage = new createjs.Stage("workstationCanvas");
+    this.stage.mouseMoveOutside = true;
     this.set = BlockSet.createSet(this.state.category, 20, 0, 50, this.props.code);
 
     this.addContainers();
@@ -86,10 +94,31 @@ class WorkStation extends React.Component {
   }
 
   dragCallback(e){
-    e.currentTarget.x = e.stageX - 30;
-    e.currentTarget.y = e.stageY - 47;
+    let offset = e.stageY - (e.stageY * .70);
+    let offset2 = e.stageY / 30;
+    let third = (e.stageY * .5);
+    console.log(e.stageX / e.currentTarget.x);
+    console.log(e.stageY / e.currentTarget.y);
+    e.currentTarget.x = e.stageX - 30 ;
+    e.currentTarget.y = e.stageY - 30 - e.currentTarget.offSet;
+
+    // e.currentTarget.x = e.stageX;
+    //
+    // e.currentTarget.y = e.stageY;
+
+
     this.stage.update();
   }
+
+
+  dragEditorCallback(e) {
+    e.currentTarget.x = e.stageX - 150;
+    e.currentTarget.y = e.stageY - 30 - e.currentTarget.offSet;
+    this.stage.update();
+
+  }
+  // - 30;
+  // - 47;
   // this.addCodeBlock(blk.id, blk.fnName);
   // if(this.editorContainer.contains(blk)){
   //   this.editorContainer.removeChild(blk);
@@ -103,7 +132,9 @@ class WorkStation extends React.Component {
     if(this.editor.onEditor(blk)) {
       this.stage.removeChild(blk);
       let newBlk = this.editor.addBlock(e.currentTarget.fnName);
-      newBlk.addListeners(this.listeners);
+      this.editor.checkForLoop(blk, newBlk);
+
+      newBlk.addListeners(this.editorListeners);
       this.stage.update();
     } else {
       if(blk.hasInput) this.removeInputBar(blk.id);
