@@ -2,61 +2,67 @@ import { blockCategories, blockLabels, createCode, findBlock } from './block_con
 import { Code } from './code';
 
  class BlockSet {
-  constructor(blocks, y_increment, start_x, start_y, code){
+
+  constructor({category, y_increment, start_pos: {x: x, y: y}, code, parent}){
     this.code = code;
-    this.x = start_x;
-    this.y = start_y;
-    this.blocks = blocks;
+    this.x = x;
+    this.y = y;
+
+    if(blockCategories[category] === undefined) {
+      this.blocks = [];
+    } else {
+      this.blocks = blockCategories[category];
+    }
+
+    this.parentContainer = parent;
     this.y_increment = y_increment;
     this.generateSet = this.generateSet.bind(this);
-    this.set = this.generateSet();
-    this.containers = this.set.map((block) => block.container);
-
+    this.generateSet();
   }
 
   generateSet() {
-    let y_increment = this.y_increment;
-    let code = this.code;
-    let x = this.x;
-    let set = this.blocks.map( (block, idx) => {
-      let { name, blockType, inputs } = block;
-      let y = idx * y_increment;
-      return new Block(name, blockType, inputs, x, y, code);
-    });
-    return set;
+    this.set = new Set();
+    for (var i = 0; i < this.blocks.length; i++) {
+      let { name, blockType, inputs } = this.blocks[i];
+      let y = i * this.y_increment;
+      let newBlock = new Block(name, blockType, inputs, this.x, y, this.code);
+      debugger
+      this.parentContainer.addChild(newBlock.container);
+      this.set.add(newBlock);
+    }
   }
 
-
-  removeBlock(blk) {
-    let newContainers = [];
-    let newBlocks = [];
-    for (var i = 0; i < this.blocks.length; i++) {
-      if(this.containers[i] !== blk){
-        newContainers.push(this.containers[i]);
-        newBlocks.push(this.blocks[i]);
-      }
+  recalibrate(){
+    let set = Array.from(this.set);
+    for (var i = 0; i < set.length; i++) {
+      let y = i * this.y_increment;
+      set[i].setPos({x: this.x, y: y});
     }
-     this.blocks = newBlocks;
-     this.containers = newContainers;
+  }
+
+  removeBlock(blk, stage) {
+    this.parentContainer.removeChild(blk.container);
+    debugger
+
+    this.set.delete(blk);
+    this.recalibrate();
+  }
+
+  calculateY(){
+    let y = this.y;
+    if(this.set.size > 0) {
+      y = Array.from(this.set).pop().y + this.y_increment;
+    }
+    return y;
   }
 
   addBlock(fnName) {
     let { name, blockType, inputs } = findBlock(fnName);
-    let blkLength = this.blocks.length;
-    let y = this.y;
-
-    if(blkLength > 0) y = this.blocks[blkLength - 1].y;
-    y += this.y_increment;
+    let y = this.calculateY();
     let newBlk = new Block(name, blockType, inputs, this.x, y, this.code);
-
-    this.containers.push(newBlk.container);
-    this.blocks.push(newBlk);
+    this.set.add(newBlk);
+    this.parentContainer.addChild(newBlk.container);
     return newBlk;
-  }
-
-  static createSet(category, y_increment, x, y, code) {
-    let blocks = blockCategories[category]
-    return new BlockSet(blocks, y_increment, x, y, code);
   }
 
 }
@@ -76,6 +82,11 @@ class Block {
     this.generateDisplayBlock();
   }
 
+  setPos({x, y}){
+    this.x = this.container.x = x;
+    this.y = this.container.y = y;
+  }
+
   generateDisplayBlock() {
     switch(this.type){
       case 'comparator':
@@ -90,7 +101,7 @@ class Block {
       case 'loop':
         this.offset = {x: 36, y: 23};
         this.imageBlockSetup("/images/blocks/basicBlockFinal.gif");
-        this.callback = [];
+        this.callback = new Set();
         this.num = 2;
         this.fn = this.handleLoopFn();
         break;
@@ -115,11 +126,12 @@ class Block {
 
   createContainer(){
     let container = new createjs.Container();
-    container.x = this.x;
-    container.y = this.y;
+    container.x = container.originX = this.x;
+    container.y = container.originY = this.y;
     container.setBounds(this.x, this.y, 50, 30);
     container.offSet = this.y;
     container.fnName = this.name;
+    container.parentBlock = this;
     container.hasInput = this.inputs.length > 0 ? true : false;
     return container;
   }
@@ -134,8 +146,9 @@ class Block {
     }
   }
 
-  addCallback(fn){
-    this.callback.push(fn);
+
+  addCallback(blk){
+    this.callback.add(blk);
   }
   createLabel(name){
 
@@ -155,11 +168,6 @@ class Block {
     let workstation = document.getElementsByClassName("workstation")[0];
     workstation.append(input);
     return easelInput;
-    // These need to happen elsewhere!
-    // let inputBar = document.createElement("input");
-    // inputBar.addEventListener("change", grid.handleInput);
-    // let workstation = document.getElementsByClassName("workstation")[0];
-    // workstation.append(inputBar);
   }
 
   removeInput(){

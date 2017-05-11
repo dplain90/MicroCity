@@ -17,26 +17,14 @@ class WorkStation extends React.Component {
       // this.createContainers = this.createContainers.bind(this);
       this.cloneBlock = this.cloneBlock.bind(this);
       this.dragCallback = this.dragCallback.bind(this);
-      this.dropCallback = this.dropCallback.bind(this);
-      this.addContainers = this.addContainers.bind(this);
+      // this.dropCallback = this.dropCallback.bind(this);
+      this.addCloneListener = this.addCloneListener.bind(this);
       this.handleClick = this.handleClick.bind(this);
       this.handleTick = this.handleTick.bind(this);
-      this.dragEditorCallback = this.dragEditorCallback.bind(this);
+      // this.dragEditorCallback = this.dragEditorCallback.bind(this);
       this.addCodeBlock = this.addCodeBlock.bind(this);
       this.removeInputBar = removeInputBar.bind(this);
       // this.code = new CodeModule.Code();
-      this.listeners = [
-            { type: "stagemousedown", callback: this.dragCallback },
-            { type: "pressmove", callback: this.dragCallback },
-            { type: "pressup", callback: this.dropCallback }
-          ];
-
-      this.editorListeners = [
-            { type: "stagemousedown", callback: this.dragEditorCallback },
-            { type: "pressmove", callback: this.dragEditorCallback },
-            { type: "pressup", callback: this.dropCallback }
-          ];
-
       this.state = {
         category: 'motion'
       };
@@ -45,12 +33,17 @@ class WorkStation extends React.Component {
   componentDidMount() {
     this.stage = new createjs.Stage("workstationCanvas");
     this.stage.mouseMoveOutside = true;
-    this.set = BlockSet.createSet(this.state.category, 20, 0, 50, this.props.code);
+    this.editor = new Editor(this.props.code, this.stage);
 
-    this.addContainers();
-    this.editorContainer = Editor.createEditor(this.stage);
-    this.stage.addChild(this.editorContainer);
-    this.editor = new Editor(this.editorContainer, this.props.code);
+    this.paletteSet = new BlockSet({
+      category: this.state.category,
+      y_increment: 20,
+      start_pos: { x: 0, y: 50 },
+      code: this.props.code,
+      parent: this.stage
+    });
+
+    this.addCloneListener();
     this.stage.update();
     createjs.Ticker.addEventListener("tick", this.handleTick);
 
@@ -58,26 +51,15 @@ class WorkStation extends React.Component {
   }
 
   handleTick(event){
-
-
      this.stage.update();
   }
 
-  addContainers(){
-    let containers = this.set.containers;
-    let blocks = this.set.set;
-
-    for (var i = 0; i < containers.length; i++) {
-      let container = containers[i];
-      let block = blocks[i];
-      container.on("mousedown", this.cloneBlock);
-      this.stage.addChild(container);
-      this.stage.update();
-
+  addCloneListener(){
+    let set = this.paletteSet.set;
+    for (let block of set) {
+       block.container.on("mousedown", this.cloneBlock);
     }
-
   }
-
 
   handleInput(e) {
     this.props.addArg(e.currentTarget.id, e.currentTarget.value);
@@ -85,7 +67,12 @@ class WorkStation extends React.Component {
 
   cloneBlock(e) {
     let clone = Block.cloneBlock(e.currentTarget, this.props.code);
-    clone.addListeners(this.listeners);
+    const listeners = [
+          { type: "stagemousedown", callback: this.dragCallback },
+          { type: "pressmove", callback: this.dragCallback },
+          { type: "pressup", callback: this.editor.droppedCallback }
+        ];
+    clone.addListeners(listeners);
 
     // blockClone.hasInput = e.currentTarget.hasInput;
     // if(blockClone.hasInput) addInputBar(blockClone, this);
@@ -101,46 +88,7 @@ class WorkStation extends React.Component {
     e.currentTarget.x = e.stageX - 30 ;
     e.currentTarget.y = e.stageY - 30 - e.currentTarget.offSet;
 
-    // e.currentTarget.x = e.stageX;
-    //
-    // e.currentTarget.y = e.stageY;
-
-
     this.stage.update();
-  }
-
-
-  dragEditorCallback(e) {
-    e.currentTarget.x = e.stageX - 150;
-    e.currentTarget.y = e.stageY - 30 - e.currentTarget.offSet;
-    this.stage.update();
-
-  }
-  // - 30;
-  // - 47;
-  // this.addCodeBlock(blk.id, blk.fnName);
-  // if(this.editorContainer.contains(blk)){
-  //   this.editorContainer.removeChild(blk);
-  //   this.props.removeCode(blk.id);
-  // }
-
-  dropCallback(e){
-    let blk = e.currentTarget;
-    Block.turnOffListeners(blk, ["mouseup", "pressmove", "mousedown"]);
-
-    if(this.editor.onEditor(blk) && !this.editor.editor.contains(blk) ) {
-      this.stage.removeChild(blk);
-      let newBlk = this.editor.addBlock(e.currentTarget.fnName);
-      this.editor.checkForLoop(blk, newBlk);
-
-      newBlk.addListeners(this.editorListeners);
-      this.stage.update();
-    } else {
-      if(blk.hasInput) this.removeInputBar(blk.id);
-      this.stage.removeChild(blk);
-      this.editor.removeBlock(blk);
-      this.stage.update();
-    }
   }
 
   addCodeBlock(id, fnName){
@@ -163,7 +111,6 @@ class WorkStation extends React.Component {
     return (
       <div className="workstation">
         <canvas id="workstationCanvas" width="350px" height="350px">
-
         </canvas>
       </div>
     );

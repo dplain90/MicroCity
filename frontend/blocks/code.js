@@ -1,7 +1,6 @@
 class Code {
   constructor() {
     this.run = this.run.bind(this);
-    this.blocks = [];
     this.queue = [];
     this.motion = new Motion(this);
     this.conditional = new Conditional(this);
@@ -20,9 +19,10 @@ class Code {
   }
 
   run(){
-    for (let i = 0; i < this.blocks.length; i++) {
+    let blocks = Array.from(this.blocks.set);
+    for (let i = 0; i < blocks.length; i++) {
       debugger
-     this.blocks[i].fn();
+     blocks[i].fn();
         // if(args.length > 0) {
         //   fn(...args);
         // } else {

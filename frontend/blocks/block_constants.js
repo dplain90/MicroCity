@@ -24,7 +24,7 @@ export const blockCategories = {
       { name: 'ifelse', blockType: 'dble_conditional', inputs: []},
       { name: 'if', blockType: 'conditional', inputs: []},
     ]
-}
+};
 
 export const findBlock = (name) => {
  let blocks = {
@@ -74,4 +74,4 @@ export const createCode = (name, code) => {
   };
 
   return fnList[name];
-}
+};
