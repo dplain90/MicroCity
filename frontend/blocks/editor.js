@@ -70,13 +70,35 @@ class Editor {
   }
 
   addArrow(x, y, stage) {
+    let arrowContainer = new createjs.Container();
     let arrow = new createjs.Shape();
-    stage.addChild(arrow);
+    let arrowHead = new createjs.Shape();
+
+    stage.addChild(arrow, arrowHead);
     return (e) => {
       arrow.graphics.clear();
-      arrow.graphics.beginStroke("blue").moveTo(x, y).bezierCurveTo(x + 40, y + ((e.stageY - y) / 3), x + 40, y + ((e.stageY - y) / 2), e.stageX, e.stageY);
+      arrowHead.graphics.clear();
+      arrow.graphics.beginStroke("blue").moveTo(x, y).bezierCurveTo(x + 60, y + ((e.stageY - y) / 3), x + 40, y + ((e.stageY - y) / 2), e.stageX + 10, e.stageY - 10);
+
+      let yDiff = (e.stageY - 10) - (y + ((e.stageY - y) / 3));
+      let xDiff = (e.stageX + 10) - (x + 40);
+      let direction = Math.atan2(yDiff, xDiff) / Math.PI * 180;
+
+      arrowHead.graphics.beginFill("black").dp(e.stageX + 10 , e.stageY - 10, 8, 3);
+      console.log(arrowHead.rotation);
+      arrowHead.regX = e.stageX + 10;
+      arrowHead.regY = e.stageY - 10;
+       arrowHead.rotation = direction;
+      arrowHead.x = e.stageX + 10;
+      arrowHead.y = e.stageY - 10;
+      console.log(e.stageY);
+      console.log(arrowHead.regY);
+
+
       stage.update();
       //
+
+      // arrow.graphics.beginStroke("blue").moveTo(x, y).bezierCurveTo(x + 60, y + ((e.stageY - y) / 3), x + 40, y + ((e.stageY - y) / 2), e.stageX, e.stageY);
 
       // stage.on("stagemousemove", (e) => {
       //   arrow.graphics.clear();

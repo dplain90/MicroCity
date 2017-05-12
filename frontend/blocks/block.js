@@ -33,20 +33,6 @@ import { Code } from './code';
     }
   }
 
-  // calcFns(){
-  //   let arraySet = Array.from(this.set);
-  //   let finalFns = [];
-  //   for (let i = 0; i < arraySet.length; i++) {
-  //     if(arraySet[i].callbacks typeof BlockSet){
-  //
-  //
-  //     } else {
-  //
-  //
-  //     }
-  //   }
-  // }
-
   recalibrate(){
     let set = Array.from(this.set);
     let y = 0;
@@ -54,8 +40,6 @@ import { Code } from './code';
       if(set[i].callbacks instanceof BlockSet){
         set[i].callbacks.recalibrate();
       }
-        // y = set[i].callbacks.calculateY();
-      // } else {
       y += (i * this.y_increment);
       set[i].setPos({x: this.x, y: y});
     }
@@ -66,23 +50,17 @@ import { Code } from './code';
   removeBlock(blk) {
     this.parentContainer.removeChild(blk.container);
     this.set.delete(blk);
-    // this.recalibrate();
   }
 
   calculateY(){
     let y = this.y;
     if(this.set.size > 0) {
       let lastChild = Array.from(this.set).pop();
-        console.log(y);
-        // if(lastChild.parentContainer typeof Block){
-
-        // } else {
         if(this.isCallback === true) {
           y += this.y_increment;
         } else {
           y += lastChild.y + this.y_increment;
         }
-        // }
       }
     return y;
   }
