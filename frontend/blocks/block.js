@@ -27,22 +27,23 @@ import { Code } from './code';
       let y = i * this.y_increment;
       let newBlock = new Block(name, blockType, inputs, this.x, y, this.code, this);
 
-
+      // debugger
       this.parentContainer.addChild(newBlock.container);
+
       this.set.add(newBlock);
     }
   }
 
   recalibrate(){
-    let set = Array.from(this.set);
-    let y = 0;
-    for (let i = 0; i < set.length; i++) {
-      if(set[i].callbacks instanceof BlockSet){
-        set[i].callbacks.recalibrate();
-      }
-      y += (i * this.y_increment);
-      set[i].setPos({x: this.x, y: y});
-    }
+    // let set = Array.from(this.set);
+    // let y = 0;
+    // for (let i = 0; i < set.length; i++) {
+    //   if(set[i].callbacks instanceof BlockSet){
+    //     set[i].callbacks.recalibrate();
+    //   }
+    //   y += (i * this.y_increment);
+    //   set[i].setPos({x: this.x, y: y});
+    // }
   }
 
 
@@ -53,16 +54,36 @@ import { Code } from './code';
   }
 
   calculateY(){
-    let y = this.y;
+    let y;
     if(this.set.size > 0) {
-      let lastChild = Array.from(this.set).pop();
-        if(this.isCallback === true) {
-          y += this.y_increment;
+       y = Array.from(this.set).pop().container.offSet + this.y_increment;
+       debugger
+    } else {
+
+      if(this.isCallback === true) {
+
+        if((this.parentContainer.offSet / 30) >= 1){
+          y = 30 * (this.parentContainer.offSet / 30);
+          debugger
         } else {
-          y += lastChild.y + this.y_increment;
+          y = 30 ;
+          debugger
         }
-      }
+      } else {
+       y = this.y + this.y_increment;
+     }
+    }
     return y;
+    // let y = this.y;
+    // if(this.set.size > 0) {
+    //   let lastChild = Array.from(this.set).pop();
+    //     if(this.isCallback === true) {
+    //       y += this.y_increment;
+    //     } else {
+    //       y += lastChild.y + this.y_increment;
+    //     }
+    //   }
+    // return y;
   }
 
   addBlock(fnName) {
@@ -70,18 +91,20 @@ import { Code } from './code';
     let y = this.calculateY();
     let newBlk = new Block(name, blockType, inputs, this.x, y, this.code, this);
     this.set.add(newBlk);
-    this.parentContainer.addChild(newBlk.container);
-    console.log(newBlk.y);
+    // this.parentContainer.addChild(newBlk.container);
+
+    // if(this.parentContainer
     return newBlk;
   }
 
 }
 
 class Block {
-  constructor(name, type, inputs, x, y, code, parentSet){
+  constructor(name, type, inputs, x, y, code, parentSet, clone){
     // this.handleLoopClick = this.handleLoopClick.bind(this);
     // this.drawArrow = this.drawArrow.bind(this);
     this.callbacks;
+    clone === true ? this.isClone = true : this.isClone = false;
     this.parentSet = parentSet;
     this.fn = createCode(name, code);
     this.code = code;
@@ -94,6 +117,7 @@ class Block {
     this.createContainer = this.createContainer.bind(this);
     this.imageBlockSetup = this.imageBlockSetup.bind(this);
     this.createLabel = this.createLabel.bind(this);
+    // this.addFilters = this.addFilters.bind(this);
     this.generateDisplayBlock();
   }
 
@@ -102,7 +126,11 @@ class Block {
     this.y = this.container.y = y;
   }
 
+
   generateDisplayBlock() {
+    this.imgBlock = new Image();
+    this.imgBlock.onload = this.imageBlockSetup;
+    this.container = this.createContainer();
     switch(this.type){
       case 'comparator':
         this.offset = {x: 15, y: 10};
@@ -110,19 +138,22 @@ class Block {
         break;
       case 'basic':
         this.offset = {x: 36, y: 23};
-        this.imageBlockSetup("/images/blocks/basicBlockFinal.gif");
+        this.imgBlock.src = "/images/blocks/basicBlockFinal.gif";
+        // this.imageBlockSetup("/images/blocks/basicBlockFinal.gif");
         break;
       case 'loop':
         this.offset = {x: 36, y: 23};
-        this.imageBlockSetup("/images/blocks/basicBlockFinal.gif");
+	       this.imgBlock.src = "/images/blocks/basicBlockFinal.gif";
+
         this.callbacks = new BlockSet({
           category: '',
           y_increment: 20,
-          start_pos: { x: 67, y: this.y + 40},
+          start_pos: { x: 67, y: 0 + this.container.offSet },
           code: this.code,
           parent: this.container
         });
         this.callbacks.isCallback = true;
+
 
         // y + 40
         // this.container.addEventListener("click", this.handleLoopClick);
@@ -160,9 +191,6 @@ class Block {
     container.hasInput = this.inputs.length > 0 ? true : false;
     return container;
   }
-
-
-
 
   handleLoopFn(){
     let callbacks = Array.from(this.callbacks.set);
@@ -222,15 +250,30 @@ class Block {
       let blockY = block.y;
       if(blockY <= y && blockY >= this.y && block !== this) {
         let fnName = block.name;
-        blockSet.removeBlock(block);
 
-        this.callbacks.addBlock(fnName);
+        // let box = new createjs.Shape();
+        // box.graphics.beginLinearGradientFill(["#000000", "rgba(0, 0, 0, 0)"], [0, 1], x, y, 100, 100)
+        // box.graphics.drawRect(x, y, 100, 100);
+        // box.cache(x, y, 100, 100);
+
+        blockSet.removeBlock(block);
+        // let image = this.container.children[0];
+
+        let newBlk = this.callbacks.addBlock(fnName);
+        this.container.addChild(newBlk.container);
+        window.myBlk = newBlk;
+        // image.filters = [
+        //   new createjs.AlphaMaskFilter(box.cacheCanvas)
+        // ];
+        // image.cache(this.x, this.y, image.width, image.height);
+        // debugger
       }
     }
 
-    this.callbacks.recalibrate();
+    // this.callbacks.recalibrate();
     this.fn = this.handleLoopFn();
     // blockSet.recalibrate();
+    debugger
   }
 
   static turnOffListeners(block, listeners){
@@ -242,22 +285,56 @@ class Block {
   static cloneBlock(container, code, parentSet){
     let { x, y } = container;
     let { name, blockType, inputs } = findBlock(container.fnName);
-    return new Block(name, blockType, inputs, x+5, y+5, code, parentSet);
+    return new Block(name, blockType, inputs, x+5, y+5, code, parentSet, true);
+
   }
 
 
-  imageBlockSetup(image_url){
-    this.container = this.createContainer();
-    let imageBlock = new createjs.Bitmap(image_url);
-    this.imageBlock = imageBlock;
-    imageBlock.x = this.x;
-    imageBlock.y = this.y;
-    imageBlock.scaleX = .80;
-    imageBlock.scaleY = .80;
+  imageBlockSetup(){
+    this.imageBlock = new createjs.Bitmap(this.imgBlock).set({scaleX: 0.8, scaleY: 0.8});
 
-    this.container.addChild(imageBlock);
+     this.imageBlock.x = this.x;
+     this.imageBlock.y = this.y;
+     let imageBound = this.imageBlock.getTransformedBounds();
+     console.log(imageBound.height);
+     let box = new createjs.Shape();
+     box.graphics.beginLinearGradientFill(["#000000", "rgba(0, 0, 0, 0)"], [0, 1], imageBound.x, imageBound.y, imageBound.width + 20, imageBound.height + 5)
+     box.graphics.drawRect(imageBound.x, imageBound.y, imageBound.width + 20, imageBound.height + 5);
+     box.cache(imageBound.x, imageBound.y, imageBound.width + 20, imageBound.height + 5);
+     if(this.isClone === true){
+       this.imageBlock.filters = [ new createjs.ColorFilter(0.75, 0.25, 1, 1) ];
+     }
+
+    // new createjs.ColorFilter(0.75, 0.25, 1, 1)
+    // new createjs.AlphaMaskFilter(box.cacheCanvas)
+
+
+  this.imageBlock.cache(0, 0, imageBound.width + 20, this.imgBlock.height);
+
+  this.container.on("rollover", (e) => {
+
+    this.imageBlock.filters = [
+      new createjs.ColorFilter(0.25, 0.75, 1, 1) ];
+    this.imageBlock.updateCache();
+    this.container.cursor = "pointer";
+  });
+
+  this.container.on("rollout", (e) => {
+    this.imageBlock.filters = [ ];
+    this.imageBlock.updateCache();
+
+		});
+
+    this.container.addChild(this.imageBlock);
     this.innerDisplays();
-    return imageBlock;
+    let parent = this.parentSet.parentContainer;
+    if(parent.isMainStage === true) {
+      parent.addChild(this.container);
+      parent.update();
+    } else {
+      parent.addChild(this.container);
+    }
+    return this.imageBlock;
   }
 
   basicBlock() {

@@ -32,9 +32,11 @@ class WorkStation extends React.Component {
 
   componentDidMount() {
     this.stage = new createjs.Stage("workstationCanvas");
+    this.stage.enableMouseOver(10);
     this.stage.mouseMoveOutside = true;
+    this.stage.isMainStage = true;
     this.editor = new Editor(this.props.code, this.stage);
-
+    window.stage = this.stage;
     this.paletteSet = new BlockSet({
       category: this.state.category,
       y_increment: 20,
@@ -67,6 +69,7 @@ class WorkStation extends React.Component {
 
   cloneBlock(e) {
     let clone = Block.cloneBlock(e.currentTarget, this.props.code, this.paletteSet);
+    // clone.addFilters([new createjs.ColorFilter(0.75, 0.25, 1, 1)]);
     const listeners = [
           { type: "stagemousedown", callback: this.dragCallback },
           { type: "pressmove", callback: this.dragCallback },
@@ -76,7 +79,7 @@ class WorkStation extends React.Component {
 
     // blockClone.hasInput = e.currentTarget.hasInput;
     // if(blockClone.hasInput) addInputBar(blockClone, this);
-    this.stage.addChild(clone.container);
+    // this.stage.addChild(clone.container);
     this.stage.update();
   }
 

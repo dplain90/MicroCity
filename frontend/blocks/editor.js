@@ -70,35 +70,32 @@ class Editor {
   }
 
   addArrow(x, y, stage) {
-    let arrowContainer = new createjs.Container();
-    let arrow = new createjs.Shape();
-    let arrowHead = new createjs.Shape();
+    this.arrow = new createjs.Shape();
+    this.arrowHead = new createjs.Shape();
 
-    stage.addChild(arrow, arrowHead);
+    stage.addChild(this.arrow, this.arrowHead);
     return (e) => {
-      arrow.graphics.clear();
-      arrowHead.graphics.clear();
-      arrow.graphics.beginStroke("blue").moveTo(x, y).bezierCurveTo(x + 60, y + ((e.stageY - y) / 3), x + 40, y + ((e.stageY - y) / 2), e.stageX + 10, e.stageY - 10);
+      this.arrow.graphics.clear();
+      this.arrowHead.graphics.clear();
+      this.arrow.graphics.beginStroke("black").moveTo(x, y).bezierCurveTo(x + 60, y + ((e.stageY - y) / 3), x + 40, y + ((e.stageY - y) / 2), e.stageX + 10, e.stageY - 10);
 
       let yDiff = (e.stageY - 10) - (y + ((e.stageY - y) / 3));
       let xDiff = (e.stageX + 10) - (x + 40);
       let direction = Math.atan2(yDiff, xDiff) / Math.PI * 180;
 
-      arrowHead.graphics.beginFill("black").dp(e.stageX + 10 , e.stageY - 10, 8, 3);
-      console.log(arrowHead.rotation);
-      arrowHead.regX = e.stageX + 10;
-      arrowHead.regY = e.stageY - 10;
-       arrowHead.rotation = direction;
-      arrowHead.x = e.stageX + 10;
-      arrowHead.y = e.stageY - 10;
-      console.log(e.stageY);
-      console.log(arrowHead.regY);
+      this.arrowHead.graphics.beginFill("black").dp(e.stageX + 10 , e.stageY - 10, 8, 3);
+      this.arrowHead.regX = e.stageX + 10;
+      this.arrowHead.regY = e.stageY - 10;
+       this.arrowHead.rotation = direction;
+      this.arrowHead.x = e.stageX + 10;
+      this.arrowHead.y = e.stageY - 10;
+
 
 
       stage.update();
       //
 
-      // arrow.graphics.beginStroke("blue").moveTo(x, y).bezierCurveTo(x + 60, y + ((e.stageY - y) / 3), x + 40, y + ((e.stageY - y) / 2), e.stageX, e.stageY);
+      // this.arrow.graphics.beginStroke("blue").moveTo(x, y).bezierCurveTo(x + 60, y + ((e.stageY - y) / 3), x + 40, y + ((e.stageY - y) / 2), e.stageX, e.stageY);
 
       // stage.on("stagemousemove", (e) => {
       //   arrow.graphics.clear();
@@ -128,6 +125,8 @@ class Editor {
 
       // stage.removeEventListener("stagemousemove", arrowListener);
       stage.removeAllEventListeners();
+      this.arrow.graphics.clear();
+      this.arrowHead.graphics.clear();
       stage.update();
       e.currentTarget.addEventListener("pressmove", this.dragCallback);
       e.currentTarget.addEventListener("pressup", this.droppedCallback);
