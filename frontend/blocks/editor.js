@@ -4,6 +4,7 @@ class Editor {
   constructor(code, stage) {
     this.editor = new createjs.Container();
     this.stage = stage;
+    this.addArrow = this.addArrow.bind(this);
     this.code = code;
     this.loops = [];
     this.set = new BlockSet({
@@ -16,6 +17,7 @@ class Editor {
     this.code.blocks = this.set
     this.onEditor = this.onEditor.bind(this);
     this.addBlock = this.addBlock.bind(this);
+    this.drawArrow = this.drawArrow.bind(this);
     this.hasChild = this.hasChild.bind(this);
     this.addEditorBox = this.addEditorBox.bind(this);
     this.dragCallback = this.dragCallback.bind(this);
@@ -46,31 +48,89 @@ class Editor {
   dragCallback(e) {
     e.currentTarget.x = e.stageX - 150;
     e.currentTarget.y = e.stageY - 30 - e.currentTarget.offSet;
-
-    console.log(this.editor.localToLocal(13, 0, e.currentTarget));
     this.stage.update();
   }
 
+
+
   checkForLoop(obj, newBlk){
-    for (var i = 0; i < this.loops.length; i++) {
+    // for (var i = 0; i < this.loops.length; i++) {
+    //
+    //   let loop = this.loops[i];
+    //   let container = loop.container.getBounds();
+    //
+    //   if(obj.y + obj.offSet >= container.y && obj.y - obj.offSet <= container.y + container.height && newBlk.block_id !== loop.block_id) {
+    //     loop.addCallback(newBlk.container);
+    //
+    //     newBlk.container.x = newBlk.originX = loop.container.x + 45;
+    //     newBlk.container.y = newBlk.originY = loop.container.y + (loop.callback.length * 20);
+    //
+    //   }
+    // }
+  }
 
-      let loop = this.loops[i];
-      let container = loop.container.getBounds();
+  addArrow(x, y, stage) {
+    let arrow = new createjs.Shape();
+    stage.addChild(arrow);
+    return (e) => {
+      arrow.graphics.clear();
+      arrow.graphics.beginStroke("blue").moveTo(x, y).bezierCurveTo(x + 40, y + ((e.stageY - y) / 3), x + 40, y + ((e.stageY - y) / 2), e.stageX, e.stageY);
+      stage.update();
+      //
 
-      if(obj.y + obj.offSet >= container.y && obj.y - obj.offSet <= container.y + container.height && newBlk.block_id !== loop.block_id) {
-        loop.addCallback(newBlk.container);
+      // stage.on("stagemousemove", (e) => {
+      //   arrow.graphics.clear();
+      //   arrow.graphics.beginStroke("blue").moveTo(x, y).bezierCurveTo(x + 40, y + ((e.stageY - y) / 3), x + 40, y + ((e.stageY - y) / 2), e.stageX, e.stageY);
+      //   stage.update();
+      // });
 
-        newBlk.container.x = newBlk.originX = loop.container.x + 45;
-        newBlk.container.y = newBlk.originY = loop.container.y + (loop.callback.length * 20);
 
-      }
-    }
+    };
+  }
+
+  drawArrow(e){
+    // debugger
+    // Block.turnOffListeners(e.currentTarget, ["mouseup", "pressmove", "mousedown", "click"]);
+    // e.currentTarget.off("pressmove", this.dragCallback);
+    // e.currentTarget.off("pressup", this.droppedCallback);
+    e.currentTarget.removeAllEventListeners();
+    let callback = this.addArrow(e.currentTarget.x + 170, e.currentTarget.y + 28 + e.currentTarget.offSet, this.stage);
+     this.stage.enableMouseOver(10);
+  let arrowListener = this.stage.on("stagemousemove", callback);
+
+    let stage = this.stage;
+    let set = this.set;
+    this.stage.on("stagemouseup", (evt) => {
+      let endPos = { x: evt.stageX, y: evt.stageY }
+      e.currentTarget.parentBlock.addCallbacks(endPos, set);
+
+      // stage.removeEventListener("stagemousemove", arrowListener);
+      stage.removeAllEventListeners();
+      stage.update();
+      e.currentTarget.addEventListener("pressmove", this.dragCallback);
+      e.currentTarget.addEventListener("pressup", this.droppedCallback);
+    });
+
+    // let arrow = new createjs.Shape();
+    // arrow.graphics.beginStroke("blue").moveTo(-5, +5).lineTo(e.stageX, e.stageY).lineTo(-5, -5);
+    //
+    // let degree = 340 / Math.PI * 180;
+    // arrow.x = e.currentTarget.x + 80;
+    // arrow.y = e.currentTarget.y + 30;
+    // arrow.rotation = degree;
+    //
+    // this.container.addChildAt(arrow,0);
   }
 
   addBlock(fnName) {
     let newBlk = this.set.addBlock(fnName);
     newBlk.block_id = newBlk.container.id;
-    if(newBlk.type === 'loop') this.loops.push(newBlk);
+    if(newBlk.type === 'loop') {
+      debugger
+      newBlk.container.addEventListener("click", this.drawArrow);
+      this.loops.push(newBlk);
+    }
+
     this.stage.update();
     return newBlk;
   }
@@ -86,6 +146,7 @@ class Editor {
     const editorBox = new createjs.Shape();
     editorBox.graphics.beginStroke("white").beginFill("#C2C0C0").drawRect(200, 5, 300, 290);
     this.editor.addChild(editorBox);
+
     this.editor.setBounds(100, -50, 300, 290);
   }
 

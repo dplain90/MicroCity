@@ -66,7 +66,7 @@ class WorkStation extends React.Component {
   }
 
   cloneBlock(e) {
-    let clone = Block.cloneBlock(e.currentTarget, this.props.code);
+    let clone = Block.cloneBlock(e.currentTarget, this.props.code, this.paletteSet);
     const listeners = [
           { type: "stagemousedown", callback: this.dragCallback },
           { type: "pressmove", callback: this.dragCallback },

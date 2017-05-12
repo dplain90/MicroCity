@@ -25,50 +25,86 @@ import { Code } from './code';
     for (var i = 0; i < this.blocks.length; i++) {
       let { name, blockType, inputs } = this.blocks[i];
       let y = i * this.y_increment;
-      let newBlock = new Block(name, blockType, inputs, this.x, y, this.code);
-      debugger
+      let newBlock = new Block(name, blockType, inputs, this.x, y, this.code, this);
+
+
       this.parentContainer.addChild(newBlock.container);
       this.set.add(newBlock);
     }
   }
 
+  // calcFns(){
+  //   let arraySet = Array.from(this.set);
+  //   let finalFns = [];
+  //   for (let i = 0; i < arraySet.length; i++) {
+  //     if(arraySet[i].callbacks typeof BlockSet){
+  //
+  //
+  //     } else {
+  //
+  //
+  //     }
+  //   }
+  // }
+
   recalibrate(){
     let set = Array.from(this.set);
-    for (var i = 0; i < set.length; i++) {
-      let y = i * this.y_increment;
+    let y = 0;
+    for (let i = 0; i < set.length; i++) {
+      if(set[i].callbacks instanceof BlockSet){
+        set[i].callbacks.recalibrate();
+      }
+        // y = set[i].callbacks.calculateY();
+      // } else {
+      y += (i * this.y_increment);
       set[i].setPos({x: this.x, y: y});
     }
   }
 
-  removeBlock(blk, stage) {
-    this.parentContainer.removeChild(blk.container);
-    debugger
 
+
+  removeBlock(blk) {
+    this.parentContainer.removeChild(blk.container);
     this.set.delete(blk);
-    this.recalibrate();
+    // this.recalibrate();
   }
 
   calculateY(){
     let y = this.y;
     if(this.set.size > 0) {
-      y = Array.from(this.set).pop().y + this.y_increment;
-    }
+      let lastChild = Array.from(this.set).pop();
+        console.log(y);
+        // if(lastChild.parentContainer typeof Block){
+
+        // } else {
+        if(this.isCallback === true) {
+          y += this.y_increment;
+        } else {
+          y += lastChild.y + this.y_increment;
+        }
+        // }
+      }
     return y;
   }
 
   addBlock(fnName) {
     let { name, blockType, inputs } = findBlock(fnName);
     let y = this.calculateY();
-    let newBlk = new Block(name, blockType, inputs, this.x, y, this.code);
+    let newBlk = new Block(name, blockType, inputs, this.x, y, this.code, this);
     this.set.add(newBlk);
     this.parentContainer.addChild(newBlk.container);
+    console.log(newBlk.y);
     return newBlk;
   }
 
 }
 
 class Block {
-  constructor(name, type, inputs, x, y, code){
+  constructor(name, type, inputs, x, y, code, parentSet){
+    // this.handleLoopClick = this.handleLoopClick.bind(this);
+    // this.drawArrow = this.drawArrow.bind(this);
+    this.callbacks;
+    this.parentSet = parentSet;
     this.fn = createCode(name, code);
     this.code = code;
     this.inputs = inputs;
@@ -76,6 +112,7 @@ class Block {
     this.type = type;
     this.y = y;
     this.x = x;
+    this.addCallbacks = this.addCallbacks.bind(this);
     this.createContainer = this.createContainer.bind(this);
     this.imageBlockSetup = this.imageBlockSetup.bind(this);
     this.createLabel = this.createLabel.bind(this);
@@ -96,12 +133,21 @@ class Block {
       case 'basic':
         this.offset = {x: 36, y: 23};
         this.imageBlockSetup("/images/blocks/basicBlockFinal.gif");
-
         break;
       case 'loop':
         this.offset = {x: 36, y: 23};
         this.imageBlockSetup("/images/blocks/basicBlockFinal.gif");
-        this.callback = new Set();
+        this.callbacks = new BlockSet({
+          category: '',
+          y_increment: 20,
+          start_pos: { x: 67, y: this.y + 40},
+          code: this.code,
+          parent: this.container
+        });
+        this.callbacks.isCallback = true;
+
+        // y + 40
+        // this.container.addEventListener("click", this.handleLoopClick);
         this.num = 2;
         this.fn = this.handleLoopFn();
         break;
@@ -124,11 +170,12 @@ class Block {
     }
   }
 
+
   createContainer(){
     let container = new createjs.Container();
     container.x = container.originX = this.x;
     container.y = container.originY = this.y;
-    container.setBounds(this.x, this.y, 50, 30);
+    // container.setBounds(this.x, this.y, 50, 30);
     container.offSet = this.y;
     container.fnName = this.name;
     container.parentBlock = this;
@@ -136,8 +183,11 @@ class Block {
     return container;
   }
 
+
+
+
   handleLoopFn(){
-    let callbacks = this.callback;
+    let callbacks = Array.from(this.callbacks.set);
     let num = this.num;
     return () =>
     {
@@ -150,6 +200,9 @@ class Block {
   addCallback(blk){
     this.callback.add(blk);
   }
+
+
+
   createLabel(name){
 
     let label = new createjs.Text(name.toUpperCase(), "6.5px Audiowide, cursive", "#fff");
@@ -184,16 +237,34 @@ class Block {
     }
   }
 
+  addCallbacks({x, y}, blockSet){
+    let setArray = Array.from(blockSet.set);
+    for (var i = 0; i < setArray.length; i++) {
+      let block = setArray[i];
+      let blockY = block.y;
+      if(blockY <= y && blockY >= this.y && block !== this) {
+        let fnName = block.name;
+        blockSet.removeBlock(block);
+
+        this.callbacks.addBlock(fnName);
+      }
+    }
+
+    this.callbacks.recalibrate();
+    this.fn = this.handleLoopFn();
+    // blockSet.recalibrate();
+  }
+
   static turnOffListeners(block, listeners){
     for (var i = 0; i < listeners.length; i++) {
       block.off(listeners[i]);
     }
   }
 
-  static cloneBlock(container, code){
+  static cloneBlock(container, code, parentSet){
     let { x, y } = container;
     let { name, blockType, inputs } = findBlock(container.fnName);
-    return new Block(name, blockType, inputs, x+5, y+5, code);
+    return new Block(name, blockType, inputs, x+5, y+5, code, parentSet);
   }
 
 

@@ -21,7 +21,7 @@ class Code {
   run(){
     let blocks = Array.from(this.blocks.set);
     for (let i = 0; i < blocks.length; i++) {
-      debugger
+
      blocks[i].fn();
         // if(args.length > 0) {
         //   fn(...args);
@@ -70,7 +70,7 @@ class Loop {
 
   runCallbacks(callbacks){
     for (var i = 0; i < callbacks.length; i++) {
-      let callback = callbacks[i];
+      let callback = callbacks[i].fn;
       callback();
     }
   }
