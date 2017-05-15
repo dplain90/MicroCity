@@ -13,7 +13,6 @@ class WorkStation extends React.Component {
   constructor(props){
     super(props);
       this.handleInput = this.handleInput.bind(this);
-
       // this.createContainers = this.createContainers.bind(this);
       this.cloneBlock = this.cloneBlock.bind(this);
       this.dragCallback = this.dragCallback.bind(this);
@@ -23,7 +22,7 @@ class WorkStation extends React.Component {
       this.handleTick = this.handleTick.bind(this);
       // this.dragEditorCallback = this.dragEditorCallback.bind(this);
       this.addCodeBlock = this.addCodeBlock.bind(this);
-      this.removeInputBar = removeInputBar.bind(this);
+      // this.removeInputBar = this.removeInputBar.bind(this);
       // this.code = new CodeModule.Code();
       this.state = {
         category: 'motion'
@@ -45,7 +44,16 @@ class WorkStation extends React.Component {
       parent: this.stage
     });
 
-    this.addCloneListener();
+    this.numeratorSet = new BlockSet({
+      category: 'numerator',
+      y_increment: 15,
+      start_pos: { x: 35, y: 50},
+      code: this.props.code,
+      parent: this.stage
+    });
+
+    this.addCloneListener(this.paletteSet);
+    this.addCloneListener(this.numeratorSet);
     this.stage.update();
     createjs.Ticker.addEventListener("tick", this.handleTick);
 
@@ -56,10 +64,10 @@ class WorkStation extends React.Component {
      this.stage.update();
   }
 
-  addCloneListener(){
-    let set = this.paletteSet.set;
+  addCloneListener(blockSet){
+    let set = blockSet.set;
     for (let block of set) {
-       block.container.on("mousedown", this.cloneBlock);
+       block.container.on("mousedown", this.cloneBlock(blockSet));
     }
   }
 
@@ -67,22 +75,24 @@ class WorkStation extends React.Component {
     this.props.addArg(e.currentTarget.id, e.currentTarget.value);
   }
 
-  cloneBlock(e) {
-    let clone = Block.cloneBlock(e.currentTarget, this.props.code, this.paletteSet);
-    // clone.addFilters([new createjs.ColorFilter(0.75, 0.25, 1, 1)]);
-    const listeners = [
-          { type: "stagemousedown", callback: this.dragCallback },
-          { type: "pressmove", callback: this.dragCallback },
-          { type: "pressup", callback: this.editor.droppedCallback }
-        ];
-    clone.addListeners(listeners);
-
-    // blockClone.hasInput = e.currentTarget.hasInput;
-    // if(blockClone.hasInput) addInputBar(blockClone, this);
-    // this.stage.addChild(clone.container);
-    this.stage.update();
+  cloneBlock(blockSet) {
+    return (e) => {
+      let clone = Block.cloneBlock(e.currentTarget, this.props.code, blockSet);
+      const listeners = [
+            { type: "stagemousedown", callback: this.dragCallback },
+            { type: "pressmove", callback: this.dragCallback },
+            { type: "pressup", callback: this.editor.droppedCallback }
+          ];
+      clone.addListeners(listeners);
+      this.stage.update();
+    }
   }
 
+
+  // clone.addFilters([new createjs.ColorFilter(0.75, 0.25, 1, 1)]);
+  // blockClone.hasInput = e.currentTarget.hasInput;
+  // if(blockClone.hasInput) addInputBar(blockClone, this);
+  // this.stage.addChild(clone.container);
   dragCallback(e){
     let offset = e.stageY - (e.stageY * .70);
     let offset2 = e.stageY / 30;

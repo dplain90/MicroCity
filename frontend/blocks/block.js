@@ -74,16 +74,6 @@ import { Code } from './code';
      }
     }
     return y;
-    // let y = this.y;
-    // if(this.set.size > 0) {
-    //   let lastChild = Array.from(this.set).pop();
-    //     if(this.isCallback === true) {
-    //       y += this.y_increment;
-    //     } else {
-    //       y += lastChild.y + this.y_increment;
-    //     }
-    //   }
-    // return y;
   }
 
   addBlock(fnName) {
@@ -136,13 +126,20 @@ class Block {
         this.offset = {x: 15, y: 10};
         this.comparatorBlock();
         break;
+      case 'numerator':
+        this.offset = {x: 22, y: 18};
+        this.labelColor = "#000";
+        this.imgBlock.src = "/images/blocks/numerator.gif";
+        break;
       case 'basic':
         this.offset = {x: 36, y: 23};
         this.imgBlock.src = "/images/blocks/basicBlockFinal.gif";
+        this.labelColor = "#fff";
         // this.imageBlockSetup("/images/blocks/basicBlockFinal.gif");
         break;
       case 'loop':
         this.offset = {x: 36, y: 23};
+        this.labelColor = "#fff";
 	       this.imgBlock.src = "/images/blocks/basicBlockFinal.gif";
 
         this.callbacks = new BlockSet({
@@ -180,6 +177,8 @@ class Block {
   }
 
 
+
+
   createContainer(){
     let container = new createjs.Container();
     container.x = container.originX = this.x;
@@ -210,8 +209,7 @@ class Block {
 
 
   createLabel(name){
-
-    let label = new createjs.Text(name.toUpperCase(), "6.5px Audiowide, cursive", "#fff");
+    let label = new createjs.Text(name.toUpperCase(), "6.5px Audiowide, cursive", this.labelColor);
     label.y = this.y + this.offset.y;
     label.x = this.x + this.offset.x;
     label.textAlign = "center";
@@ -273,7 +271,7 @@ class Block {
     // this.callbacks.recalibrate();
     this.fn = this.handleLoopFn();
     // blockSet.recalibrate();
-    debugger
+
   }
 
   static turnOffListeners(block, listeners){
@@ -291,12 +289,16 @@ class Block {
 
 
   imageBlockSetup(){
-    this.imageBlock = new createjs.Bitmap(this.imgBlock).set({scaleX: 0.8, scaleY: 0.8});
 
+    if(this.type === 'numerator'){
+      this.imageBlock = new createjs.Bitmap(this.imgBlock).set({scaleX: 0.3, scaleY: 0.3});
+    } else {
+    this.imageBlock = new createjs.Bitmap(this.imgBlock).set({scaleX: 0.8, scaleY: 0.8});
+    }
      this.imageBlock.x = this.x;
      this.imageBlock.y = this.y;
      let imageBound = this.imageBlock.getTransformedBounds();
-     console.log(imageBound.height);
+
      let box = new createjs.Shape();
      box.graphics.beginLinearGradientFill(["#000000", "rgba(0, 0, 0, 0)"], [0, 1], imageBound.x, imageBound.y, imageBound.width + 20, imageBound.height + 5)
      box.graphics.drawRect(imageBound.x, imageBound.y, imageBound.width + 20, imageBound.height + 5);
@@ -308,9 +310,11 @@ class Block {
     // new createjs.ColorFilter(0.75, 0.25, 1, 1)
     // new createjs.AlphaMaskFilter(box.cacheCanvas)
 
-
-  this.imageBlock.cache(0, 0, imageBound.width + 20, this.imgBlock.height);
-
+    if(this.type === 'numerator') {
+      this.imageBlock.cache(0, 0, imageBound.width + 80, this.imgBlock.height);
+    } else {
+      this.imageBlock.cache(0, 0, imageBound.width + 20, this.imgBlock.height);
+  }
   this.container.on("rollover", (e) => {
 
     this.imageBlock.filters = [
