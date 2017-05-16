@@ -45,13 +45,16 @@ let enemyData = {
 const levelData = {
 groundBlocks: [
   {num: 20, x: 0, y: 200},
-  {num: 10, x: 300, y: 300}
+  {num: 10, x: 300, y: 300},
+  {num: 5, x: 200, y: 300}
   // {num: 10, x: 10, y: 350}
 ],
 
 objects: [
-  { type: 'bad', x: 200, y: 150, frame: 1, data: enemyData },
-  { type: 'bad', x: 300, y: 150, frame: 2, data: enemyData },
+  // { type: 'bad', x: 200, y: 150, frame: 1, data: enemyData },
+  // { type: 'bad', x: 150, y: 150, frame: 3, data: enemyData },
+  // { type: 'bad', x: 175, y: 150, frame: 2, data: enemyData },
+  // { type: 'bad', x: 300, y: 150, frame: 2, data: enemyData },
   { type: 'avatar', x: 600, y: 4, frame: null, data: avatarData },
   { type: 'key', x: 350, y: 250, frame: null, data: avatarData }
 ]

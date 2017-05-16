@@ -34,6 +34,9 @@ import { Code } from './code';
     }
   }
 
+  toArray() {
+    return Array.from(this.set);
+  }
   recalibrate(){
     // let set = Array.from(this.set);
     // let y = 0;
@@ -64,10 +67,8 @@ import { Code } from './code';
 
         if((this.parentContainer.offSet / 30) >= 1){
           y = 30 * (this.parentContainer.offSet / 30);
-          debugger
         } else {
           y = 30 ;
-          debugger
         }
       } else {
        y = this.y + this.y_increment;
@@ -75,6 +76,7 @@ import { Code } from './code';
     }
     return y;
   }
+
 
   addBlock(fnName) {
     let { name, blockType, inputs } = findBlock(fnName);
@@ -239,6 +241,13 @@ class Block {
       let { type, callback } = listeners[i];
       this.container.on(type, callback);
     }
+  }
+
+  addNumerator(numBlk){
+    this.container.addChild(numBlk.container);
+    numBlk.container.x = 130;
+    numBlk.container.y = -5;
+    this.num = parseInt(numBlk.name);
   }
 
   addCallbacks({x, y}, blockSet){

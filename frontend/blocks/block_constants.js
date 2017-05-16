@@ -75,7 +75,7 @@ export const blockLabels = {
   '8': ['8'],
   '9': ['9'],
   'steps': ['Step'],
-  'times': ['Times'],
+  'times': ['Repeat'],
   'move': ['Forward'],
   'jump': ['Jump'],
   '!==': ['Not Equal'],
