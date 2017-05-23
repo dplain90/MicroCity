@@ -12,7 +12,20 @@ class Block extends createjs.Container {
     let imgBlk = new createjs.Bitmap(block.img).set({scaleX, scaleY});
     let label = new createjs.Text(name.toUpperCase(), font, color);
     block.addChild(imgBlk, label);
+    let { x, y, height, width } = block.getTransformedBounds();
+    label.textAlign = 'center';
+    label.textBaseline = 'middle';
+    label.x = width / 2;
+    label.y = height / 2;
+    debugger
    }
+
+  findMid(bounds) {
+    let { x, y, height, width } = bounds;
+    const midY = y + (height / 2);
+    const midX = x + (width / 2);
+    return {x: midX, y: midY};
+  }
 
   remove(){
     if(this.prev !== null) this.prev.next = this.next;

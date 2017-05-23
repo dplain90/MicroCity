@@ -34,7 +34,6 @@ class BlockList {
     newBlock.prev = this.tail.prev;
     newBlock.next = this.tail;
     this.tail.prev = newBlock;
-    debugger
     this.stage.addChild(newBlock);
     return newBlock;
   }
@@ -53,7 +52,6 @@ class BlockList {
     let currentBlock = this.head.next;
     while(currentBlock !== this.tail) {
       callback.call(currentBlock);
-      debugger
       currentBlock = currentBlock.next;
     }
   }
