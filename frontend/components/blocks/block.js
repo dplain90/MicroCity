@@ -12,19 +12,24 @@ class Block extends createjs.Container {
     let imgBlk = new createjs.Bitmap(block.img).set({scaleX, scaleY});
     let label = new createjs.Text(name.toUpperCase(), font, color);
     block.addChild(imgBlk, label);
-    let { x, y, height, width } = block.getTransformedBounds();
+    let bounds = block.getTransformedBounds();
+    Block.centerLabel(bounds, label);
+    Block.setMid(block, bounds);
+   }
+
+  static centerLabel(bounds, label){
+    let { width, height } = bounds;
     label.textAlign = 'center';
     label.textBaseline = 'middle';
     label.x = width / 2;
     label.y = height / 2;
-    debugger
-   }
+  }
 
-  findMid(bounds) {
+  static setMid(block, bounds) {
     let { x, y, height, width } = bounds;
-    const midY = y + (height / 2);
-    const midX = x + (width / 2);
-    return {x: midX, y: midY};
+    const midY = height / 2;
+    const midX = width / 2;
+    block.mid = {x: midX, y: midY};
   }
 
   remove(){
@@ -35,8 +40,8 @@ class Block extends createjs.Container {
   }
 
   dragCallback(e){
-    this.x = e.stageX
-    this.y = e.stageY
+    this.x = e.stageX - this.mid.x;
+    this.y = e.stageY - this.mid.y;
     this.stage.update();
   }
 }

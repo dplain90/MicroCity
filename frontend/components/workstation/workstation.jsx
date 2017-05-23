@@ -80,24 +80,24 @@ class WorkStation extends React.Component {
     this.stage.addChild(this.newBlock);
     this.editor = new Editor(this.props.code, this.stage);
     window.stage = this.stage;
-    this.paletteSet = new BlockSet({
-      category: this.state.category,
-      y_increment: 20,
-      start_pos: { x: 0, y: 50 },
-      code: this.props.code,
-      parent: this.stage
-    });
+    // this.paletteSet = new BlockSet({
+    //   category: this.state.category,
+    //   y_increment: 20,
+    //   start_pos: { x: 0, y: 50 },
+    //   code: this.props.code,
+    //   parent: this.stage
+    // });
+    //
+    // this.numeratorSet = new BlockSet({
+    //   category: 'numerator',
+    //   y_increment: 15,
+    //   start_pos: { x: 35, y: 50},
+    //   code: this.props.code,
+    //   parent: this.stage
+    // });
 
-    this.numeratorSet = new BlockSet({
-      category: 'numerator',
-      y_increment: 15,
-      start_pos: { x: 35, y: 50},
-      code: this.props.code,
-      parent: this.stage
-    });
-
-    this.addCloneListener(this.paletteSet);
-    this.addCloneListener(this.numeratorSet);
+    // this.addCloneListener(this.paletteSet);
+    // this.addCloneListener(this.numeratorSet);
     this.stage.update();
     createjs.Ticker.addEventListener("tick", this.handleTick);
 
