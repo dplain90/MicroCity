@@ -1,7 +1,7 @@
 import React from 'react';
 import PaletteContainer from './palette/palette_container';
 import { Block, BlockSet } from '../../blocks/block';
-
+import BasicBlock from '../blocks/types/basic';
 import Editor from '../../blocks/editor';
 import EditorContainer from './editor/editor_container';
 import { calcNextBlockPos } from '../../blocks/block_util';
@@ -25,10 +25,22 @@ class WorkStation extends React.Component {
   }
 
   componentDidMount() {
+    let sampleData = {
+      x: 10,
+      y: 10,
+      name: 'Test',
+      color: '#fff',
+      scaleX: .8,
+      scaleY: .8,
+      font: "6.5px Audiowide, cursive"
+    };
+
+    this.newBlock = new BasicBlock(sampleData);
     this.stage = new createjs.Stage("workstationCanvas");
     this.stage.enableMouseOver(10);
     this.stage.mouseMoveOutside = true;
     this.stage.isMainStage = true;
+    this.stage.addChild(this.newBlock);
     this.editor = new Editor(this.props.code, this.stage);
     window.stage = this.stage;
     this.paletteSet = new BlockSet({
