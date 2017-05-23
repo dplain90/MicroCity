@@ -5,7 +5,7 @@ import BasicBlock from '../blocks/types/basic';
 import Editor from '../../blocks/editor';
 import EditorContainer from './editor/editor_container';
 import { calcNextBlockPos } from '../../blocks/block_util';
-
+import BlockList from '../blocks/block_list';
 import { generateEditor } from '../../util/editor_util';
 import { findBlock } from '../../blocks/block_constants';
 import { populateBlocks, addInputBar, removeInputBar } from '../../blocks/populateBlocks';
@@ -35,8 +35,45 @@ class WorkStation extends React.Component {
       font: "6.5px Audiowide, cursive"
     };
 
+    let sampleBlocks = {
+    1:{
+        x: 10,
+        y: 40,
+        name: 'Test2',
+        type: 'basic',
+        color: '#fff',
+        scaleX: .8,
+        scaleY: .8,
+        font: "6.5px Audiowide, cursive"
+      },
+
+    2: {
+        x: 10,
+        y: 50,
+        name: 'Test3',
+        type: 'basic',
+        color: '#fff',
+        scaleX: .8,
+        scaleY: .8,
+        font: "6.5px Audiowide, cursive"
+      },
+    3: {
+      x: 10,
+      y: 60,
+      name: 'Test4',
+      type: 'basic',
+      color: '#fff',
+      scaleX: .8,
+      scaleY: .8,
+      font: "6.5px Audiowide, cursive"
+    }
+  };
+
+
+    // this.blockList.each((block) => { this.stage.addChild(block) });
     this.newBlock = new BasicBlock(sampleData);
     this.stage = new createjs.Stage("workstationCanvas");
+    this.blockList = new BlockList(sampleBlocks, this.stage);
     this.stage.enableMouseOver(10);
     this.stage.mouseMoveOutside = true;
     this.stage.isMainStage = true;
