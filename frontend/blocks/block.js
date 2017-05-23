@@ -2,7 +2,6 @@ import { blockCategories, blockLabels, createCode, findBlock } from './block_con
 import { Code } from './code';
 
  class BlockSet {
-
   constructor({category, y_increment, start_pos: {x: x, y: y}, code, parent}){
     this.code = code;
     this.x = x;
@@ -26,10 +25,7 @@ import { Code } from './code';
       let { name, blockType, inputs } = this.blocks[i];
       let y = i * this.y_increment;
       let newBlock = new Block(name, blockType, inputs, this.x, y, this.code, this);
-
-      // debugger
       this.parentContainer.addChild(newBlock.container);
-
       this.set.add(newBlock);
     }
   }
@@ -37,19 +33,18 @@ import { Code } from './code';
   toArray() {
     return Array.from(this.set);
   }
+
   recalibrate(){
-    // let set = Array.from(this.set);
-    // let y = 0;
-    // for (let i = 0; i < set.length; i++) {
-    //   if(set[i].callbacks instanceof BlockSet){
-    //     set[i].callbacks.recalibrate();
-    //   }
-    //   y += (i * this.y_increment);
-    //   set[i].setPos({x: this.x, y: y});
-    // }
+    let set = Array.from(this.set);
+
+    let y = this.y_increment;
+    for (let i = 0; i < set.length; i++) {
+      y += (i * this.y_increment);
+      debugger
+      set[i].setPos({x: this.x, y: y});
+    }
+    debugger
   }
-
-
 
   removeBlock(blk) {
     this.parentContainer.removeChild(blk.container);
@@ -147,31 +142,18 @@ class Block {
         this.callbacks = new BlockSet({
           category: '',
           y_increment: 20,
-          start_pos: { x: 67, y: 0 + this.container.offSet },
+          start_pos: { x: 67, y: 30 + this.container.offSet },
           code: this.code,
           parent: this.container
         });
+        console.log(this.container);
         this.callbacks.isCallback = true;
-
-
-        // y + 40
-        // this.container.addEventListener("click", this.handleLoopClick);
         this.num = 2;
         this.fn = this.handleLoopFn();
         break;
       case 'basic_bottom':
         this.offset = {x: 15, y: 10};
         this.basicBottomBlock();
-        break;
-      case 'dble_conditional':
-        // this.offset = [{x: 5, y: 10}, {x:0, y:60}, {x:5, y:60}];
-        // this.dblConditionalBlock();
-        this.offset = {x: 10, y: 5};
-        this.conditionalBlock();
-        break;
-      case 'conditional':
-        this.offset = {x: 10, y: 5};
-        this.conditionalBlock();
         break;
       default:
         return null;
@@ -258,26 +240,14 @@ class Block {
       if(blockY <= y && blockY >= this.y && block !== this) {
         let fnName = block.name;
 
-        // let box = new createjs.Shape();
-        // box.graphics.beginLinearGradientFill(["#000000", "rgba(0, 0, 0, 0)"], [0, 1], x, y, 100, 100)
-        // box.graphics.drawRect(x, y, 100, 100);
-        // box.cache(x, y, 100, 100);
-
         blockSet.removeBlock(block);
-        // let image = this.container.children[0];
 
         let newBlk = this.callbacks.addBlock(fnName);
         this.container.addChild(newBlk.container);
-        window.myBlk = newBlk;
-        // image.filters = [
-        //   new createjs.AlphaMaskFilter(box.cacheCanvas)
-        // ];
-        // image.cache(this.x, this.y, image.width, image.height);
-        // debugger
       }
     }
 
-    // this.callbacks.recalibrate();
+    this.callbacks.recalibrate();
     this.fn = this.handleLoopFn();
     // blockSet.recalibrate();
 
@@ -428,41 +398,7 @@ class Block {
     this.container = this.createContainer();
     let conditional = new createjs.Bitmap("/images/blocks/microchip_conditional.gif");
     this.container.addChild(conditional);
-    // let x = this.x;
-    // let y = this.y;
 
-    // conditional
-    //   .graphics
-    //   .beginStroke("red")
-    //   .beginFill("black")
-    //   .moveTo(x, y)
-    //   .lineTo(x-15, y) //top left to start of downward bezel
-    //   .arcTo(x-15, y+8, x-15, y+8-4, 4)
-    //   .arcTo(x-35, y+8, x-35, y+8-4, 4)
-    //   .arcTo(x-35, y, x-35, y+4, 4)
-    //   .lineTo(x-50, y)
-    //   .arcTo(x-50, y+8, x-50, y+8-4, 4)
-    //   .lineTo(x-50, y+48+incr)
-    //   .arcTo(x-35, y+48+incr, x-35, y+52+incr, 4)
-    //   .arcTo(x-35, y+48+8+incr, x-35, y+48-4+incr, 4)
-    //   .arcTo(x-15, y+48+8+incr, x-15, y+48-4+incr, 4)
-    //   .arcTo(x-15, y+48+incr, x-15, y+52+incr, 4)
-    //   .lineTo(x+31, y+48+incr)
-    //   .arcTo(x+31, y+40+incr, x+31, y+44+incr, 4)
-    //   .lineTo(x+31, y+30+incr)
-    //   .arcTo(x+23, y+30+incr, x+19, y+30+incr, 4)
-    //   .lineTo(x-15, y+30+incr)
-    //   .arcTo(x-15, y+38+incr, x-15, y+38-4+incr, 4)
-    //   .arcTo(x-35, y+38+incr, x-35, y+38-4+incr, 4)
-    //   .arcTo(x-35, y+30+incr, x-35, y+34+incr, 4)
-    //   .lineTo(x-35, y+22)
-    //   .lineTo(x+31, y+22)
-    //   .arcTo(x+31, y+14, x+31, y+18, 4)
-    //   .lineTo(x+31, y)
-    //   .lineTo(x-15, y)
-    //   .endStroke();;
-    //
-    // this.innerDisplays();
     return conditional;
   }
 
@@ -470,30 +406,15 @@ class Block {
   comparatorBlock(){
     this.container = this.createContainer();
     let comparator = new createjs.Bitmap("/images/blocks/microchip_comparator.gif");
-    // comparator.scaleX = .25;
-    // comparator.scaleY = .25;
-    // let newBounds = comparator.getTransformedBounds();
+
     comparator.x = this.x ;
     comparator.y = this.y;
     comparator.scaleX = .30;
     comparator.scaleY = .30;
     this.imageBlock = comparator;
-    // let comparator = new createjs.Shape();
-    this.container.addChild(comparator);
-    // let x = this.x;
-    // let y = this.y;
-    // comparator.graphics
-    //   .beginStroke("black")
-    //   .beginFill("#FF0")
-    //   .lineTo(x+20, y)
-    //   .lineTo(x+30, y+10)
-    //   .lineTo(x+20, y+20)
-    //   .lineTo(x, y+20)
-    //   .lineTo(x-10, y+10)
-    //   .lineTo(x, y)
-    //   .lineTo(x+20, y);
 
-    // this.innerDisplays();
+    this.container.addChild(comparator);
+
     return comparator;
   }
 

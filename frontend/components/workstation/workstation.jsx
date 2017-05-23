@@ -5,7 +5,7 @@ import { Block, BlockSet } from '../../blocks/block';
 import Editor from '../../blocks/editor';
 import EditorContainer from './editor/editor_container';
 import { calcNextBlockPos } from '../../blocks/block_util';
-import * as BlockUtil from '../../blocks/block';
+
 import { generateEditor } from '../../util/editor_util';
 import { findBlock } from '../../blocks/block_constants';
 import { populateBlocks, addInputBar, removeInputBar } from '../../blocks/populateBlocks';
@@ -13,17 +13,12 @@ class WorkStation extends React.Component {
   constructor(props){
     super(props);
       this.handleInput = this.handleInput.bind(this);
-      // this.createContainers = this.createContainers.bind(this);
       this.cloneBlock = this.cloneBlock.bind(this);
       this.dragCallback = this.dragCallback.bind(this);
-      // this.dropCallback = this.dropCallback.bind(this);
       this.addCloneListener = this.addCloneListener.bind(this);
       this.handleClick = this.handleClick.bind(this);
       this.handleTick = this.handleTick.bind(this);
-      // this.dragEditorCallback = this.dragEditorCallback.bind(this);
       this.addCodeBlock = this.addCodeBlock.bind(this);
-      // this.removeInputBar = this.removeInputBar.bind(this);
-      // this.code = new CodeModule.Code();
       this.state = {
         category: 'motion'
       };
@@ -89,10 +84,6 @@ class WorkStation extends React.Component {
   }
 
 
-  // clone.addFilters([new createjs.ColorFilter(0.75, 0.25, 1, 1)]);
-  // blockClone.hasInput = e.currentTarget.hasInput;
-  // if(blockClone.hasInput) addInputBar(blockClone, this);
-  // this.stage.addChild(clone.container);
   dragCallback(e){
     let offset = e.stageY - (e.stageY * .70);
     let offset2 = e.stageY / 30;

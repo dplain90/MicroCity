@@ -10,7 +10,7 @@ class Editor {
     this.set = new BlockSet({
       category: '',
       y_increment: 20,
-      start_pos: { x: 110, y: 0 },
+      start_pos: { x: 110, y: -15 },
       code: this.code,
       parent: this.editor
     });
@@ -101,7 +101,7 @@ class Editor {
     this.stage.on("stagemouseup", (evt) => {
       let endPos = { x: evt.stageX, y: evt.stageY }
       e.currentTarget.parentBlock.addCallbacks(endPos, set);
- 
+
       stage.removeAllEventListeners();
       this.arrow.graphics.clear();
       this.arrowHead.graphics.clear();
