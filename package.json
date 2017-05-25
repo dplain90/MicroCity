@@ -24,6 +24,7 @@
     "babel-preset-react": "^6.24.1",
     "createjs-easeljs": "^0.8.2",
     "easel-js": "^1.0.0",
+    "preload-js": "^0.6.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",

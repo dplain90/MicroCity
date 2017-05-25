@@ -2,10 +2,11 @@ import React from 'react';
 import PaletteContainer from './palette/palette_container';
 import { Block, BlockSet } from '../../blocks/block';
 import BasicBlock from '../blocks/types/basic';
-import Editor from '../../blocks/editor';
+import Editor from '../block_list/editor';
+import Palette from '../block_list/palette';
 import EditorContainer from './editor/editor_container';
 import { calcNextBlockPos } from '../../blocks/block_util';
-import BlockList from '../blocks/block_list';
+import BlockList from '../block_list/block_list';
 import { generateEditor } from '../../util/editor_util';
 import { findBlock } from '../../blocks/block_constants';
 import { populateBlocks, addInputBar, removeInputBar } from '../../blocks/populateBlocks';
@@ -19,66 +20,75 @@ class WorkStation extends React.Component {
       this.handleClick = this.handleClick.bind(this);
       this.handleTick = this.handleTick.bind(this);
       this.addCodeBlock = this.addCodeBlock.bind(this);
+      this.stageTest = this.stageTest.bind(this);
       this.state = {
         category: 'motion'
       };
   }
 
   componentDidMount() {
+
+
     let sampleData = {
-      x: 10,
-      y: 10,
-      name: 'Test',
-      color: '#fff',
-      scaleX: .8,
-      scaleY: .8,
-      font: "6.5px Audiowide, cursive"
-    };
+      x: 5,
+      blocks: {
+        1:{
+          offset: 15,
+          name: 'forward',
+          type: 'basic',
+          color: '#fff',
+          scaleX: .8,
+          scaleY: .8,
+          font: "6.5px Audiowide, cursive"
+        },
 
-    let sampleBlocks = {
-    1:{
-        x: 10,
-        y: 40,
-        name: 'Test2',
+      2: {
+          offset: 15,
+          name: 'step',
+          type: 'basic',
+          color: '#fff',
+          scaleX: .8,
+          scaleY: .8,
+          font: "6.5px Audiowide, cursive"
+        },
+      3: {
+        offset: 15,
+        name: 'jump',
         type: 'basic',
         color: '#fff',
         scaleX: .8,
         scaleY: .8,
         font: "6.5px Audiowide, cursive"
-      },
-
-    2: {
-        x: 10,
-        y: 50,
-        name: 'Test3',
-        type: 'basic',
-        color: '#fff',
-        scaleX: .8,
-        scaleY: .8,
-        font: "6.5px Audiowide, cursive"
-      },
-    3: {
-      x: 10,
-      y: 60,
-      name: 'Test4',
-      type: 'basic',
-      color: '#fff',
-      scaleX: .8,
-      scaleY: .8,
-      font: "6.5px Audiowide, cursive"
+      }
+    },
+    manifest: {
+      "path": "images/blocks/",
+       "manifest": [
+          {"src": "basicBlockFinal.gif", "id":"forward"},
+          {"src": "basicBlockFinal.gif", "id":"step"},
+          {"src": "basicBlockFinal.gif", "id":"jump"}
+       ]
     }
   };
 
 
+  let editorData = {
+    x: 100,
+    width: 150,
+    height: 250
+  }
     // this.blockList.each((block) => { this.stage.addChild(block) });
-    this.newBlock = new BasicBlock(sampleData);
+    // this.newBlock = new BasicBlock(sampleData);
     this.stage = new createjs.Stage("workstationCanvas");
-    this.blockList = new BlockList(sampleBlocks, this.stage);
+    this.editor = new Editor(this.stage, editorData);
+    this.palette = new Palette(this.stage, sampleData);
+    window.editor = this.editor;
+    window.palette = this.palette;
     this.stage.enableMouseOver(10);
     this.stage.mouseMoveOutside = true;
     this.stage.isMainStage = true;
-    this.stage.addChild(this.newBlock);
-    this.editor = new Editor(this.props.code, this.stage);
+    // this.stage.addChild(this.newBlock);
+    // this.editor = new Editor(this.props.code, this.stage);
     window.stage = this.stage;
     // this.paletteSet = new BlockSet({
     //   category: this.state.category,
@@ -104,6 +114,12 @@ class WorkStation extends React.Component {
     // this.props.updateCode(this.props.code);
   }
 
+  stageTest(e){
+    console.log(e);
+    debugger
+
+      console.log(this.stage.getObjectsUnderPoint(e.mouseX, e.mouseY));
+  }
   handleTick(event){
      this.stage.update();
   }

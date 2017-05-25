@@ -1,0 +1,8 @@
+{
+       "path": "images/blocks/",
+        "manifest": [
+           {"src": "basicBlockFinal.gif", "id":"forward"},
+           {"src": "basicBlockFinal.gif", "id":"step"},
+           {"src": "basicBlockFinal.gif", "id":"jump"}
+        ]
+    }

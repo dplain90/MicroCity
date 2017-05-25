@@ -1,7 +1,8 @@
-import Block from './block';
-import BasicBlock from './types/basic';
+import Block from '../blocks/block';
+import BasicBlock from '../blocks/types/basic';
+
 class BlockList {
-  constructor(blocks, stage){
+  constructor(stage){
     this.head = new Block();
     this.tail = new Block();
     this.stage = stage;
@@ -12,38 +13,29 @@ class BlockList {
     this.isEmpty = this.isEmpty.bind(this);
     this.remove = this.remove.bind(this);
     this.includes = this.includes.bind(this);
-    this.createBlock = this.createBlock.bind(this);
-
-    Object.keys(blocks)
-      .forEach((key) => { this.append(blocks[key]) }, this);
   }
 
   first(){
-    if(this.isEmpty()) return null;
     return this.head.next;
   }
 
   last(){
-    if(this.isEmpty()) return null;
     return this.tail.prev;
   }
 
-  append(data){
-    let newBlock = this.createBlock(data);
-    this.tail.prev.next = newBlock;
-    newBlock.prev = this.tail.prev;
-    newBlock.next = this.tail;
-    this.tail.prev = newBlock;
-    this.stage.addChild(newBlock);
-    return newBlock;
+
+  append(block){
+    this.tail.prev.next = block;
+    this.tail.prev = block;
+    if(!this.stage.contains(block)) this.stage.addChild(block);
+    return block;
   }
 
   includes(block){
     let hasBlock = false;
-    let callback = (currentBlock) => {
-      if(currentBlock === block) hasBlock = true;
+    let callback = (current) => {
+      if(current === block) hasBlock = true;
     };
-
     this.each(callback);
     return hasBlock;
   }
@@ -66,18 +58,9 @@ class BlockList {
     this.each(callback);
   }
 
-  createBlock(data){
-    switch(data.type){
-      case 'basic':
-        return new BasicBlock(data);
-        break;
-      default:
-        return null;
-    }
-  }
 
   isEmpty(){
-    this.head.next === this.tail;
+    return this.head.next === this.tail;
   }
 
 }
