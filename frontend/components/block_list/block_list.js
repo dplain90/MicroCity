@@ -13,6 +13,7 @@ class BlockList {
     this.isEmpty = this.isEmpty.bind(this);
     this.remove = this.remove.bind(this);
     this.includes = this.includes.bind(this);
+    this.first = this.first.bind(this);
   }
 
   first(){
@@ -42,7 +43,7 @@ class BlockList {
 
   each(callback){
     let currentBlock = this.head.next;
-    while(currentBlock !== this.tail) {
+    while(currentBlock !== this.tail && currentBlock !== null) {
       callback.call(currentBlock);
       currentBlock = currentBlock.next;
     }

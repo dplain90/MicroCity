@@ -25,7 +25,7 @@ class Palette extends BlockList {
     switch(data.type){
       case 'basic':
         block = new BasicBlock(data);
-        block.addEventListener("mousedown", block.replace);
+        block.on("mousedown", block.replace);
         break;
       default:
         return null;

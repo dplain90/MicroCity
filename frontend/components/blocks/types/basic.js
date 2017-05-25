@@ -12,7 +12,7 @@ class BasicBlock extends Block {
 
   imgSetup(){
     Block.setup(this);
-    this.addEventListener("pressmove", this.dragCallback.bind(this));
+    this.on("pressmove", this.dragCallback);
   }
 
 }

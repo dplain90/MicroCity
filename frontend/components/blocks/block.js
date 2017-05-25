@@ -10,6 +10,7 @@ class Block extends createjs.Container {
     this.insert = this.insert.bind(this);
     this.remove = this.remove.bind(this);
     this.replace = this.replace.bind(this);
+    this.dragCallback = this.dragCallback.bind(this);
     this.mouseChildren = false;
   }
 
@@ -55,33 +56,42 @@ class Block extends createjs.Container {
   }
 
   insert(block){
-    block.remove();
-    if(this.next === null) {
-      block.prev = this.prev;
-      block.next = this;
-      this.prev.next = block;
-      this.prev = block;
-    } else {
-      block.next = this.next;
-      block.prev = this;
-      this.next.prev = block;
-      this.next = block;
-    }
+    //
+    // if(this.prev === null && typeof Block === this.next) {
+    //   block.prev = this;
+    //   block.next = this.next;
+    //   this.next.prev = block;
+    //   this.next = block;
+    // } else if(this.next === null && typeof
+    // //   this.prev.next = block;
+    // //   this.prev = block;
+    // // } else if(typeof Block === this.next){
+    // // } else {
+    // block.next = this.next;
+    // block.prev = this;
+    // this.next.prev = block;
+    // this.next = block;
   }
 
   replace(e){
-    let replacement = Object.assign(Object.create(this), this);
-    this.remove();
-    replacement.next.prev = replacement;
+    let replacement = Object.assign(Object.create(this), this, this.clone(true));
+
     replacement.prev.next = replacement;
+    replacement.next.prev = replacement;
+
     this.stage.addChild(replacement);
-    this.off("mousedown", this.replace);
+    replacement.mouseChildren = false;
+    replacement.on("mousedown", replacement.replace);
+    replacement.on("pressmove", replacement.dragCallback);
+
+    this.removeAllEventListeners("mousedown");
   }
 
   dragCallback(e){
     this.x = e.stageX - this.mid.x;
     this.y = e.stageY - this.mid.y;
-    this.stage.update();
+
+    e.currentTarget.stage.update();
   }
 
 }

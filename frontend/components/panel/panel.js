@@ -9,8 +9,10 @@ class Panel extends createjs.Container {
   setHitArea(color, fill){
     this.hitArea = new createjs.Shape();
     this.hitArea.graphics.beginStroke(color).beginFill(fill).drawRect(this.x, this.y, this.width, this.height);
+
     return this.hitArea.clone();
   }
+
 
 }
 
