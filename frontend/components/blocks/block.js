@@ -7,7 +7,6 @@ class Block extends createjs.Container {
     this.next = next;
     this.prev = prev;
     this.mid = {x: 0, y: 0};
-    this.insert = this.insert.bind(this);
     this.remove = this.remove.bind(this);
     this.replace = this.replace.bind(this);
     this.dragCallback = this.dragCallback.bind(this);
@@ -53,24 +52,6 @@ class Block extends createjs.Container {
     if(this.next !== null) this.next.prev = this.prev;
     this.next = this.prev = null;
     return this;
-  }
-
-  insert(block){
-    //
-    // if(this.prev === null && typeof Block === this.next) {
-    //   block.prev = this;
-    //   block.next = this.next;
-    //   this.next.prev = block;
-    //   this.next = block;
-    // } else if(this.next === null && typeof
-    // //   this.prev.next = block;
-    // //   this.prev = block;
-    // // } else if(typeof Block === this.next){
-    // // } else {
-    // block.next = this.next;
-    // block.prev = this;
-    // this.next.prev = block;
-    // this.next = block;
   }
 
   replace(e){

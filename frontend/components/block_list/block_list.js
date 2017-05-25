@@ -34,10 +34,9 @@ class BlockList {
 
   includes(block){
     let hasBlock = false;
-    let callback = (current) => {
-      if(current === block) hasBlock = true;
-    };
-    this.each(callback);
+    this.each(function(){
+      if(this === block) hasBlock = true;
+    });
     return hasBlock;
   }
 
