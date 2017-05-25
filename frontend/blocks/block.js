@@ -40,10 +40,9 @@ import { Code } from './code';
     let y = this.y_increment;
     for (let i = 0; i < set.length; i++) {
       y += (i * this.y_increment);
-      debugger
       set[i].setPos({x: this.x, y: y});
     }
-    debugger
+  
   }
 
   removeBlock(blk) {

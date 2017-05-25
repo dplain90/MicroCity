@@ -13,9 +13,7 @@ class EditorPanel extends Panel {
     block.x = panelX + (panelWidth - blockBounds.width)/ 2;
   }
 
-  onPanel(x, y){
-    
-  }
+
 }
 
 

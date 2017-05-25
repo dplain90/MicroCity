@@ -48,9 +48,9 @@ class Block extends createjs.Container {
   }
 
   remove(){
-    if(this.prev !== null) this.prev.next = this.next;
-    if(this.next !== null) this.next.prev = this.prev;
-    this.next = this.prev = null;
+    if(typeof Block !== this.prev ) this.prev.next = this.next;
+    if(typeof Block !== this.next ) this.next.prev = this.prev;
+    // debugger // this.next = this.prev = null;
     return this;
   }
 
@@ -61,6 +61,7 @@ class Block extends createjs.Container {
     replacement.next.prev = replacement;
 
     this.stage.addChild(replacement);
+
     replacement.mouseChildren = false;
     replacement.on("mousedown", replacement.replace);
     replacement.on("pressmove", replacement.dragCallback);

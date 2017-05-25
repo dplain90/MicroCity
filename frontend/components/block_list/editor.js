@@ -19,13 +19,21 @@ class Editor extends BlockList {
   dropCallback(evt){
     let { stageX: x, stageY: y, currentTarget: blk } = evt;
     let { x: localX, y: localY } = this.panel.globalToLocal(x, y);
-    let block = blk.stage.getObjectUnderPoint(x, y).parent;
+    let block;
+    if(blk === stage){
+      block = blk.getObjectUnderPoint(x,y).parent;
+    } else {
+      block = blk.stage.getObjectUnderPoint(x, y).parent;
+    }
+
+
     let closestBlock = this.findClosest(x, y, block);
-    debugger
+
     if(this.panel.hitTest(localX, localY)) {
       this.recalibrate();
       this.insertBlock(closestBlock, block);
     } else {
+      block.remove();
       this.stage.removeChild(block);
     }
 

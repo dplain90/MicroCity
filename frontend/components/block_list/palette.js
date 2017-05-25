@@ -5,7 +5,9 @@ class Palette extends BlockList {
     super(stage);
     let { manifest, blocks, x } = data;
     this.x = x;
+    this.newBlock = this.newBlock.bind(this);
     this.createBlock = this.createBlock.bind(this);
+    this.replace = this.replace.bind(this);
     this.queue = new createjs.LoadQueue(true);
     this.queue.loadManifest(manifest);
     this.setupBlocks = this.setupBlocks.bind(this);
@@ -18,19 +20,42 @@ class Palette extends BlockList {
     };
   }
 
-  createBlock(data){
-    let newProps = { next: this.tail, prev: this.tail.prev, x: this.x, img: this.queue.getResult(data.name) };
-    data = Object.assign({}, data, newProps);
+  replace(e){
+    // let replacement = Object.assign(Object.create(this), this, this.clone(true));
+    //
+    let formerBlk = e.currentTarget;
+    let replacement = this.newBlock(formerBlk.data);
+
+    formerBlk.prev.next = replacement;
+    formerBlk.next.prev = replacement;
+    replacement.next = formerBlk.next;
+    replacement.prev = formerBlk.prev;
+    replacement.x = formerBlk.x;
+    replacement.y = formerBlk.y;
+    this.stage.addChild(replacement);
+
+    replacement.mouseChildren = false;
+    formerBlk.removeAllEventListeners("mousedown");
+  }
+
+  newBlock(data){
     let block;
     switch(data.type){
       case 'basic':
         block = new BasicBlock(data);
-        block.on("mousedown", block.replace);
+        block.on("mousedown", this.replace);
         break;
       default:
         return null;
     }
-    this.append(block);
+
+    return block;
+  }
+
+  createBlock(data){
+    let newProps = { next: this.tail, prev: this.tail.prev, x: this.x, img: this.queue.getResult(data.name) };
+    data = Object.assign({}, data, newProps);
+    this.append(this.newBlock(data));
   }
 
 
