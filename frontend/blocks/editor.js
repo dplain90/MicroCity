@@ -52,7 +52,7 @@ class Editor {
   }
 
   checkForLoop(blk){
-    debugger
+
     if(blk.parentBlock.type === 'numerator') {
       let editorBlocks = this.set.toArray();
       let idx = 0;

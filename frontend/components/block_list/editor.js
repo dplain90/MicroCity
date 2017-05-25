@@ -1,17 +1,22 @@
 import BlockList from './block_list';
 import EditorPanel from '../panel/editor_panel';
 import Block from '../blocks/block';
-
+import CodeTree from '../code/code_tree';
+import ParentCode from '../code/parent_code';
 class Editor extends BlockList {
   constructor(stage, data){
     let { x, height, width } = data;
     super(stage);
     this.y = 0;
+    this.code = new CodeTree(this.head);
+    this.head.fn = () => { return [] };
+    this.head.fnParams = [];
     this.panel = new EditorPanel(height, width, x);
     this.dropCallback = this.dropCallback.bind(this);
     this.findClosest = this.findClosest.bind(this);
     this.insertBlock = this.insertBlock.bind(this);
     this.recalibrate = this.recalibrate.bind(this);
+    this.resetChildren = this.resetChildren.bind(this);
     stage.addChild(this.panel);
     stage.on("stagemouseup", this.dropCallback);
   }
@@ -20,9 +25,12 @@ class Editor extends BlockList {
     let { stageX: x, stageY: y, currentTarget: blk } = evt;
     let { x: localX, y: localY } = this.panel.globalToLocal(x, y);
     let block;
+
     if(blk === stage){
+      if(blk.getObjectUnderPoint(x,y) == null) return null;
       block = blk.getObjectUnderPoint(x,y).parent;
     } else {
+      console.log(blk.stage.getObjectUnderPoint(x,y));
       block = blk.stage.getObjectUnderPoint(x, y).parent;
     }
 
@@ -38,17 +46,26 @@ class Editor extends BlockList {
     }
 
     this.recalibrate();
+    this.resetChildren();
   }
 
   recalibrate(){
     let { x: panelX, width: panelW } = this.panel.getTransformedBounds();
 
     this.each(function() {
-      console.log(this);
-      console.log(this.y);
       Block.setY(this, 15);
-      console.log(this.y);
       EditorPanel.alignBlock(this, panelW, panelX);
+    });
+  }
+
+  resetChildren(){
+    ParentCode.clearChildren(this.code.root);
+    let rootNode = this.head;
+    this.each(function(){
+      let parent = this.codeParent;
+      if(parent === undefined || parent === rootNode){
+        ParentCode.addChild(rootNode, this);
+      }
     });
   }
 

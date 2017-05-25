@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
   toggles: state.toggles,
   level: state.level,
-  code: asArray(state.code),
+  code: state.code,
   difficulty: state.difficulty };
 };
 

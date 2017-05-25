@@ -1,5 +1,6 @@
+
 class Block extends createjs.Container {
-  constructor(x = 0, y = 0, next = null, prev = null) {
+  constructor(x = 0, y = 0, next = null, prev = null, codeChildren = new Set()) {
     super();
     this.x = x;
     this.y = y;
@@ -8,8 +9,8 @@ class Block extends createjs.Container {
     this.prev = prev;
     this.mid = {x: 0, y: 0};
     this.remove = this.remove.bind(this);
-    this.replace = this.replace.bind(this);
     this.dragCallback = this.dragCallback.bind(this);
+    this.codeChildren = codeChildren;
     this.mouseChildren = false;
   }
 
@@ -54,20 +55,6 @@ class Block extends createjs.Container {
     return this;
   }
 
-  replace(e){
-    let replacement = Object.assign(Object.create(this), this, this.clone(true));
-
-    replacement.prev.next = replacement;
-    replacement.next.prev = replacement;
-
-    this.stage.addChild(replacement);
-
-    replacement.mouseChildren = false;
-    replacement.on("mousedown", replacement.replace);
-    replacement.on("pressmove", replacement.dragCallback);
-
-    this.removeAllEventListeners("mousedown");
-  }
 
   dragCallback(e){
     this.x = e.stageX - this.mid.x;

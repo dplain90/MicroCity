@@ -1,13 +1,13 @@
 import { UPDATE_CODE, CLEAR_CODE, REMOVE_CODE, RECEIVE_ARG } from '../actions/code_actions';
 import { CodeEngine, Code } from '../blocks/code';
 
-const _defaultCode = CodeEngine;
+const _defaultCode = {};
 
 const CodeReducer = (state = _defaultCode, action) => {
   switch(action.type) {
     case UPDATE_CODE:
-      let updatedCode = Object.assign({}, action.code, state);
-      return updatedCode;
+      // let UpdatedCode = Object.assign({}, action.code);
+      return action.code;
     case CLEAR_CODE:
       return _defaultCode;
     case REMOVE_CODE:

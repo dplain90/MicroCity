@@ -27,19 +27,27 @@ class WorkStation extends React.Component {
   }
 
   componentDidMount() {
-
-
     let sampleData = {
       x: 5,
       blocks: {
         1:{
           offset: 15,
-          name: 'forward',
+          name: 'jump',
           type: 'basic',
           color: '#fff',
           scaleX: .8,
           scaleY: .8,
-          font: "6.5px Audiowide, cursive"
+          font: "6.5px Audiowide, cursive",
+          fn: function() {
+            let result = [{animation: 'jump'}];
+            [1, -1].forEach( (dir) => {
+                let frame = {x: 0, y: 10 * dir};
+                for (let i = 0; i < 3; i++) result.push(frame);
+                result.push({x: 10, y: 0});
+            });
+            return result;
+          },
+          fnParams: []
         },
 
       2: {
@@ -49,16 +57,30 @@ class WorkStation extends React.Component {
           color: '#fff',
           scaleX: .8,
           scaleY: .8,
-          font: "6.5px Audiowide, cursive"
+          font: "6.5px Audiowide, cursive",
+          fn: function(num) {
+            let result = [{animation: 'move'}];
+            let frame = { x: 5, y: 0 };
+            for (let i = 0; i < num; i++) result.push(frame);
+            return result;
+          },
+         fnParams: [2]
         },
       3: {
         offset: 15,
-        name: 'jump',
+        name: 'forward',
         type: 'basic',
         color: '#fff',
         scaleX: .8,
         scaleY: .8,
-        font: "6.5px Audiowide, cursive"
+        font: "6.5px Audiowide, cursive",
+        fn: function() {
+          let result = [{animation: 'move'}];
+          let frame = { x: 5, y: 0 };
+          for (let i = 0; i < 2; i++) result.push(frame);
+          return result;
+        },
+        fnParams: []
       }
     },
     manifest: {
@@ -76,7 +98,7 @@ class WorkStation extends React.Component {
     x: 100,
     width: 150,
     height: 250
-  }
+  };
     // this.blockList.each((block) => { this.stage.addChild(block) });
     // this.newBlock = new BasicBlock(sampleData);
     this.stage = new createjs.Stage("workstationCanvas");
@@ -110,13 +132,13 @@ class WorkStation extends React.Component {
     // this.addCloneListener(this.numeratorSet);
     this.stage.update();
     createjs.Ticker.addEventListener("tick", this.handleTick);
-
+    this.props.updateCode(this.editor.code);
     // this.props.updateCode(this.props.code);
   }
 
   stageTest(e){
     console.log(e);
-    debugger
+
 
       console.log(this.stage.getObjectsUnderPoint(e.mouseX, e.mouseY));
   }

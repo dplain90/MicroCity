@@ -1,5 +1,7 @@
 import BlockList from './block_list';
 import BasicBlock from '../blocks/types/basic';
+import Loop from '../blocks/types/loop';
+
 class Palette extends BlockList {
   constructor(stage, data){
     super(stage);
@@ -44,6 +46,9 @@ class Palette extends BlockList {
       case 'basic':
         block = new BasicBlock(data);
         block.on("mousedown", this.replace);
+        break;
+      case 'loop':
+        block = new Loop(data);
         break;
       default:
         return null;
