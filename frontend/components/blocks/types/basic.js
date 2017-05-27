@@ -17,6 +17,7 @@ class BasicBlock extends Block {
     this.on("pressmove", this.dragCallback);
   }
 
+
 }
 
 export default BasicBlock;

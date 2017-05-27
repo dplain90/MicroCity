@@ -101,7 +101,10 @@ header {
   justify-content: center;
   position: relative;
 }
-
+#workstationCanvas {
+  height: 350px;
+  width: 350px;
+}
 #gridCanvas {
   background-image: url('./background2.jpg');
   background-size: cover;
@@ -173,7 +176,7 @@ header {
   justify-content: flex-start;
   border: 3px solid white;
   border-radius: 8px;
-  height: 450px;
+  /*height: 450px;*/
 }
 .paletteContainer {
  flex: 0.5;

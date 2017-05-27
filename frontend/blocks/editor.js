@@ -65,58 +65,13 @@ class Editor {
     }
   }
 
-  addArrow(x, y, stage) {
-    this.arrow = new createjs.Shape();
-    this.arrowHead = new createjs.Shape();
-
-    stage.addChild(this.arrow, this.arrowHead);
-    return (e) => {
-      this.arrow.graphics.clear();
-      this.arrowHead.graphics.clear();
-      this.arrow.graphics.beginStroke("black").moveTo(x, y).bezierCurveTo(x + 60, y + ((e.stageY - y) / 3), x + 40, y + ((e.stageY - y) / 2), e.stageX + 10, e.stageY - 10);
-
-      let yDiff = (e.stageY - 10) - (y + ((e.stageY - y) / 3));
-      let xDiff = (e.stageX + 10) - (x + 40);
-      let direction = Math.atan2(yDiff, xDiff) / Math.PI * 180;
-
-      this.arrowHead.graphics.beginFill("black").dp(e.stageX + 10 , e.stageY - 10, 8, 3);
-      this.arrowHead.regX = e.stageX + 10;
-      this.arrowHead.regY = e.stageY - 10;
-       this.arrowHead.rotation = direction;
-      this.arrowHead.x = e.stageX + 10;
-      this.arrowHead.y = e.stageY - 10;
-
-      stage.update();
-    };
-  }
-
-  drawArrow(e){
-    e.currentTarget.removeAllEventListeners();
-    let callback = this.addArrow(e.currentTarget.x + 170, e.currentTarget.y + 28 + e.currentTarget.offSet, this.stage);
-     this.stage.enableMouseOver(10);
-  let arrowListener = this.stage.on("stagemousemove", callback);
-
-    let stage = this.stage;
-    let set = this.set;
-    this.stage.on("stagemouseup", (evt) => {
-      let endPos = { x: evt.stageX, y: evt.stageY }
-      e.currentTarget.parentBlock.addCallbacks(endPos, set);
-
-      stage.removeAllEventListeners();
-      this.arrow.graphics.clear();
-      this.arrowHead.graphics.clear();
-      stage.update();
-      e.currentTarget.addEventListener("pressmove", this.dragCallback);
-      e.currentTarget.addEventListener("pressup", this.droppedCallback);
-    });
-
-  }
+  
 
   addBlock(fnName) {
     let newBlk = this.set.addBlock(fnName);
     newBlk.block_id = newBlk.container.id;
     if(newBlk.type === 'loop') {
-      debugger
+
       newBlk.container.addEventListener("click", this.drawArrow);
       this.loops.push(newBlk);
     }

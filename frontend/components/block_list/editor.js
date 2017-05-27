@@ -3,6 +3,7 @@ import EditorPanel from '../panel/editor_panel';
 import Block from '../blocks/block';
 import CodeTree from '../code/code_tree';
 import ParentCode from '../code/parent_code';
+
 class Editor extends BlockList {
   constructor(stage, data){
     let { x, height, width } = data;
@@ -16,24 +17,46 @@ class Editor extends BlockList {
     this.findClosest = this.findClosest.bind(this);
     this.insertBlock = this.insertBlock.bind(this);
     this.recalibrate = this.recalibrate.bind(this);
+    this.addLoopChildren = this.addLoopChildren.bind(this);
     this.resetChildren = this.resetChildren.bind(this);
     stage.addChild(this.panel);
     stage.on("stagemouseup", this.dropCallback);
   }
 
+  addLoopChildren(loop){
+    let callback = (evt) => {
+      let stage = this.stage;
+      loop.removeAllEventListeners();
+      stage.removeAllEventListeners();
+      let { stageX: x, stageY: y } = evt;
+      let blk = loop.next
+      let blkEnd = blk.y + blk.height;
+      while(blk !== this.tail){
+        if(blk.codeParent === null) {
+          ParentCode.addChild(loop, blk);
+        } else {
+          ParentCode.changeParent(blk.codeParent, loop, blk);
+        }
+        if(blkEnd >= y) break;
+        blk = blk.next;
+        blkEnd = blk.y + blk.height;
+      }
+
+      loop.completeConnection();
+      stage.update();
+      loop.turnOnListeners();
+      stage.on("stagemouseup", this.dropCallback);
+    };
+
+    return callback.bind(this);
+  }
+
   dropCallback(evt){
     let { stageX: x, stageY: y, currentTarget: blk } = evt;
     let { x: localX, y: localY } = this.panel.globalToLocal(x, y);
-    let block;
+    let block = blk.stage.activeBlock;
 
-    if(blk === stage){
-      if(blk.getObjectUnderPoint(x,y) == null) return null;
-      block = blk.getObjectUnderPoint(x,y).parent;
-    } else {
-      console.log(blk.stage.getObjectUnderPoint(x,y));
-      block = blk.stage.getObjectUnderPoint(x, y).parent;
-    }
-
+    blk.stage.activeBlock = null;
 
     let closestBlock = this.findClosest(x, y, block);
 
@@ -42,11 +65,17 @@ class Editor extends BlockList {
       this.insertBlock(closestBlock, block);
     } else {
       block.remove();
+      // ParentCode.clearRelationship(block);
       this.stage.removeChild(block);
     }
 
-    this.recalibrate();
-    this.resetChildren();
+
+    // this.resetChildren();
+    if(block.onEditorCallback !== undefined && !block.editorCallbackComplete) {
+      block.onEditorCallback();
+      Object.assign(block.constructor.prototype, { editor: this });
+    }
+
   }
 
   recalibrate(){
@@ -71,15 +100,22 @@ class Editor extends BlockList {
 
   insertBlock(closestBlock, block){
     if(closestBlock === this.tail){
+      debugger
       closestBlock.prev.next = block;
       block.prev = closestBlock.prev;
       closestBlock.prev = block;
       block.next = closestBlock;
+      ParentCode.addChild(this.head, block);
+      this.recalibrate();
     } else {
       block.next = closestBlock.next;
       block.prev = closestBlock;
       closestBlock.next.prev = block;
       closestBlock.next = block;
+      this.recalibrate();
+      ParentCode.insertChild(closestBlock, block);
+      if(block.codeParent !== this.head) { block.codeParent.completeConnection();
+      }
     }
   }
 
@@ -91,6 +127,7 @@ class Editor extends BlockList {
     }
 
     this.each( function() {
+
       let { x: blockX, y: blockY } = this.localToGlobal(0, this.y);
       let { x: closestX, y: closestY } = closest.localToGlobal(0, closest.y);
       let currentDif = Math.abs(closestY - y);

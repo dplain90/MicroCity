@@ -31,13 +31,13 @@ class WorkStation extends React.Component {
       x: 5,
       blocks: {
         1:{
-          offset: 15,
+          offset: 10,
           name: 'jump',
           type: 'basic',
           color: '#fff',
-          scaleX: .8,
-          scaleY: .8,
-          font: "6.5px Audiowide, cursive",
+          scaleX: 0.5,
+          scaleY: 0.5,
+          font: "7.5px Audiowide, cursive",
           fn: function() {
             let result = [{animation: 'jump'}];
             [1, -1].forEach( (dir) => {
@@ -51,13 +51,13 @@ class WorkStation extends React.Component {
         },
 
       2: {
-          offset: 15,
+          offset: 10,
           name: 'step',
           type: 'basic',
           color: '#fff',
-          scaleX: .8,
-          scaleY: .8,
-          font: "6.5px Audiowide, cursive",
+          scaleX: 0.5,
+          scaleY: 0.5,
+          font: "7.5px Audiowide, cursive",
           fn: function(num) {
             let result = [{animation: 'move'}];
             let frame = { x: 5, y: 0 };
@@ -67,12 +67,12 @@ class WorkStation extends React.Component {
          fnParams: [2]
         },
       3: {
-        offset: 15,
+        offset: 10,
         name: 'forward',
         type: 'basic',
         color: '#fff',
-        scaleX: .8,
-        scaleY: .8,
+        scaleX: 0.5,
+        scaleY: 0.5,
         font: "6.5px Audiowide, cursive",
         fn: function() {
           let result = [{animation: 'move'}];
@@ -81,14 +81,29 @@ class WorkStation extends React.Component {
           return result;
         },
         fnParams: []
+      },
+      4: {
+        offset: 10,
+        name: 'repeat',
+        type: 'loop',
+        color: '#fff',
+        scaleX: 0.5,
+        scaleY: 0.5,
+        font: "7.5px Audiowide, cursive",
+        fn: function(num, increment) {
+          if(increment >= num) this.completed = true;
+          this.fnParams = [num, increment + 1];
+        },
+        fnParams: [5, 0]
       }
     },
     manifest: {
       "path": "images/blocks/",
        "manifest": [
-          {"src": "basicBlockFinal.gif", "id":"forward"},
-          {"src": "basicBlockFinal.gif", "id":"step"},
-          {"src": "basicBlockFinal.gif", "id":"jump"}
+          {"src": "microchip1.png", "id":"forward"},
+          {"src": "microchip1.png", "id":"step"},
+          {"src": "microchip1.png", "id":"jump"},
+          {"src": "microchip1.png", "id":"repeat"}
        ]
     }
   };
@@ -102,13 +117,17 @@ class WorkStation extends React.Component {
     // this.blockList.each((block) => { this.stage.addChild(block) });
     // this.newBlock = new BasicBlock(sampleData);
     this.stage = new createjs.Stage("workstationCanvas");
-    this.editor = new Editor(this.stage, editorData);
+    this.stage.snapToPixelEnabled = true;
+     this.stage.regX = this.stage.regY = -.5;
     this.palette = new Palette(this.stage, sampleData);
+    this.editor = new Editor(this.stage, editorData);
     window.editor = this.editor;
     window.palette = this.palette;
     this.stage.enableMouseOver(10);
     this.stage.mouseMoveOutside = true;
     this.stage.isMainStage = true;
+    let cxt = this.stage.canvas.getContext("2d");
+    cxt.webkitImageSmoothingEnabled = cxt.mozImageSmoothingEnabled = true;
     // this.stage.addChild(this.newBlock);
     // this.editor = new Editor(this.props.code, this.stage);
     window.stage = this.stage;
@@ -143,6 +162,7 @@ class WorkStation extends React.Component {
       console.log(this.stage.getObjectsUnderPoint(e.mouseX, e.mouseY));
   }
   handleTick(event){
+
      this.stage.update();
   }
 
@@ -201,7 +221,7 @@ class WorkStation extends React.Component {
   render(){
     return (
       <div className="workstation">
-        <canvas id="workstationCanvas" width="350px" height="350px">
+        <canvas id="workstationCanvas" width="450px" height="450px">
         </canvas>
       </div>
     );

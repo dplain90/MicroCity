@@ -71,8 +71,8 @@ class Grid extends React.Component {
 
   handleRun(e) {
     e.preventDefault();
-    debugger
     this.queue = this.state.code.getQueue();
+    console.log(this.queue);
   }
 
 

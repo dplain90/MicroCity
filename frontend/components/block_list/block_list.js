@@ -4,6 +4,7 @@ import ParentCode from '../code/parent_code';
 class BlockList {
   constructor(stage){
     this.head = new Block();
+    this.head.y = 5;
     this.tail = new Block();
     this.stage = stage;
     this.head.next = this.tail;

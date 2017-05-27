@@ -42,7 +42,7 @@ import { Code } from './code';
       y += (i * this.y_increment);
       set[i].setPos({x: this.x, y: y});
     }
-  
+
   }
 
   removeBlock(blk) {
@@ -54,7 +54,7 @@ import { Code } from './code';
     let y;
     if(this.set.size > 0) {
        y = Array.from(this.set).pop().container.offSet + this.y_increment;
-       debugger
+    
     } else {
 
       if(this.isCallback === true) {

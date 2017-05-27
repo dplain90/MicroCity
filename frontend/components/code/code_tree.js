@@ -15,7 +15,7 @@ class CodeTree {
   }
 
   processTree(blockNode){
-    let children = blockNode.codeChildren;
+    let children = Array.from(blockNode.codeChildren);
     let result = this.execute(blockNode);
     if(children.length < 1) {
       return result;
@@ -24,10 +24,13 @@ class CodeTree {
     while(!blockNode.completed) {
       for (var i = 0; i < children.length; i++) {
         let descendents = this.processTree(children[i]);
-        queue.concat(descendents);
+        queue = queue.concat(descendents);
       }
+      if(blockNode === this.root) blockNode.completed = true;
       this.execute(blockNode);
     }
+
+    blockNode.completed = false;
     return queue;
   }
 

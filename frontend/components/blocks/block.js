@@ -1,4 +1,4 @@
-
+import ParentCode from '../code/parent_code';
 class Block extends createjs.Container {
   constructor(x = 0, y = 0, next = null, prev = null, codeChildren = new Set()) {
     super();
@@ -22,6 +22,7 @@ class Block extends createjs.Container {
     block.addChild(imgBlk, label);
     let bounds = block.getTransformedBounds();
     block.height = bounds.height;
+    block.width = bounds.width;
     Block.centerLabel(bounds, label);
     Block.setMid(block, bounds);
     Block.setY(block, offset);
@@ -29,7 +30,7 @@ class Block extends createjs.Container {
 
   static setY(block, offset){
     let prev = block.prev;
-    if(prev !== undefined) block.y = prev.y + (prev.height / 2) + offset;
+    if(prev !== undefined) block.y = prev.y + prev.height;
     return block;
   }
 
@@ -51,7 +52,7 @@ class Block extends createjs.Container {
   remove(){
     if(typeof Block !== this.prev ) this.prev.next = this.next;
     if(typeof Block !== this.next ) this.next.prev = this.prev;
-    // debugger // this.next = this.prev = null;
+    ParentCode.removeChild(this);
     return this;
   }
 
@@ -59,8 +60,9 @@ class Block extends createjs.Container {
   dragCallback(e){
     this.x = e.stageX - this.mid.x;
     this.y = e.stageY - this.mid.y;
-
-    e.currentTarget.stage.update();
+    let stage = e.currentTarget.stage;
+    stage.activeBlock = e.currentTarget;
+    stage.update();
   }
 
 }

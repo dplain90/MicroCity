@@ -49,6 +49,7 @@ class Palette extends BlockList {
         break;
       case 'loop':
         block = new Loop(data);
+        block.on("mousedown", this.replace);
         break;
       default:
         return null;
