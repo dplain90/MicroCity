@@ -9,10 +9,8 @@ class Loop extends BasicBlock {
     if(codeChildren === undefined) codeChildren = new Set();
     this.editorCallbackComplete = false;
     this.codeChildren = codeChildren;
-    this.addArrow = this.addArrow.bind(this);
     this.drawConnector = this.drawConnector.bind(this);
     this.addConnector = this.addConnector.bind(this);
-    this.drawArrow = this.drawArrow.bind(this);
     this.onEditorCallback = this.onEditorCallback.bind(this);
     this.handleHoverOut = this.handleHoverOut.bind(this);
     this.handleHover = this.handleHover.bind(this);
@@ -165,55 +163,6 @@ class Loop extends BasicBlock {
     this.stage.on("stagemousemove", this.drawConnector(x, y));
     this.stage.on("stagemouseup", this.editor.addLoopChildren(this));
   }
-
-  addArrow(x, y, stage) {
-    this.arrow = new createjs.Shape();
-    this.arrowHead = new createjs.Shape();
-
-    this.stage.addChild(this.arrow, this.arrowHead);
-    return (e) => {
-      this.arrow.graphics.clear();
-      this.arrowHead.graphics.clear();
-      this.arrow.graphics.beginStroke("black").moveTo(x, y).bezierCurveTo(x + 60, y + ((e.stageY - y) / 3), x + 40, y + ((e.stageY - y) / 2), e.stageX + 10, e.stageY - 10);
-
-      let yDiff = (e.stageY - 10) - (y + ((e.stageY - y) / 3));
-      let xDiff = (e.stageX + 10) - (x + 40);
-      let direction = Math.atan2(yDiff, xDiff) / Math.PI * 180;
-
-      this.arrowHead.graphics.beginFill("black").dp(e.stageX + 10 , e.stageY - 10, 8, 3);
-      this.arrowHead.regX = e.stageX + 10;
-      this.arrowHead.regY = e.stageY - 10;
-       this.arrowHead.rotation = direction;
-      this.arrowHead.x = e.stageX + 10;
-      this.arrowHead.y = e.stageY - 10;
-
-      this.stage.update();
-    };
-  }
-
-  drawArrow(e){
-    e.currentTarget.removeAllEventListeners();
-    let callback = this.addArrow(e.currentTarget.x + 170, e.currentTarget.y + 28 + e.currentTarget.offSet, this.stage);
-     this.stage.enableMouseOver(10);
-  let arrowListener = this.stage.on("stagemousemove", callback);
-
-    let stage = this.stage;
-    let set = this.set;
-    this.stage.on("stagemouseup", (evt) => {
-      let endPos = { x: evt.stageX, y: evt.stageY }
-      e.currentTarget.parentBlock.addCallbacks(endPos, set);
-
-      stage.removeAllEventListeners();
-      this.arrow.graphics.clear();
-      this.arrowHead.graphics.clear();
-      stage.update();
-      e.currentTarget.addEventListener("pressmove", this.dragCallback);
-      e.currentTarget.addEventListener("pressup", this.droppedCallback);
-    });
-
-  }
-
-
 }
 
 export default Loop;

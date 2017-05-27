@@ -10,6 +10,9 @@ class Block extends createjs.Container {
     this.mid = {x: 0, y: 0};
     this.remove = this.remove.bind(this);
     this.dragCallback = this.dragCallback.bind(this);
+    this.isLast = this.isLast.bind(this);
+    this.removeLink = this.removeLink.bind(this);
+    this.getMid = this.getMid.bind(this);
     this.codeChildren = codeChildren;
     this.mouseChildren = false;
   }
@@ -49,13 +52,38 @@ class Block extends createjs.Container {
     block.mid = {x: midX, y: midY};
   }
 
+  getMid(){
+    let x = this.x + this.mid.x;
+    let y = this.y + this.mid.y;
+    return {x, y};
+  }
+
   remove(){
-    if(typeof Block !== this.prev ) this.prev.next = this.next;
-    if(typeof Block !== this.next ) this.next.prev = this.prev;
+    this.removeLink();
     ParentCode.removeChild(this);
     return this;
   }
 
+  removeLink(){
+    if(typeof Block !== this.prev ) this.prev.next = this.next;
+    if(typeof Block !== this.next ) this.next.prev = this.prev;
+  }
+
+  isLast(){
+    return this.next.next === null;
+  }
+
+  static isClosest(block, y){
+
+    let currentDif = block.getMid().y - y;
+
+    if(currentDif < 0) {
+       if(block.isLast()) return block;
+       return false;
+     } else {
+       return block.prev;
+    }
+  }
 
   dragCallback(e){
     this.x = e.stageX - this.mid.x;

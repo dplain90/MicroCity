@@ -18,7 +18,6 @@ class ParentCode {
   }
 
   static removeChild(child){
-    debugger
     if(child.codeParent !== null && child.codeParent !== undefined) {
       let parent = child.codeParent;
       let connector = child.connectContainer;

@@ -99,40 +99,33 @@ class Editor extends BlockList {
   }
 
   insertBlock(closestBlock, block){
-    if(closestBlock === this.tail){
-      debugger
-      closestBlock.prev.next = block;
-      block.prev = closestBlock.prev;
-      closestBlock.prev = block;
-      block.next = closestBlock;
-      ParentCode.addChild(this.head, block);
-      this.recalibrate();
-    } else {
-      block.next = closestBlock.next;
-      block.prev = closestBlock;
-      closestBlock.next.prev = block;
-      closestBlock.next = block;
-      this.recalibrate();
-      ParentCode.insertChild(closestBlock, block);
+    block.next = closestBlock.next;
+    block.prev = closestBlock;
+    closestBlock.next.prev = block;
+    closestBlock.next = block;
+      if(closestBlock === this.head){
+        ParentCode.addChild(this.head, block);
+        this.recalibrate();
+      } else {
+        this.recalibrate();
+        ParentCode.insertChild(closestBlock, block);
+      }
+
       if(block.codeParent !== this.head) { block.codeParent.completeConnection();
       }
     }
-  }
-
+  
   findClosest(x, y, block) {
-    let closest = this.head.next;
-    if(this.includes(block)) {
-      closest = block.prev;
-      block.remove();
-    }
+    let head = this.head
+    let closest = head;
+
+    if(this.includes(block)) block.removeLink();
 
     this.each( function() {
-
-      let { x: blockX, y: blockY } = this.localToGlobal(0, this.y);
-      let { x: closestX, y: closestY } = closest.localToGlobal(0, closest.y);
-      let currentDif = Math.abs(closestY - y);
-      let newDif = Math.abs(blockY - y);
-      if(newDif < currentDif && this !== block) closest = this;
+      if(closest === head) {
+        let result = Block.isClosest(this, y);
+        if(result) closest = result;
+      }
     });
     return closest;
   }
