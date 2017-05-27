@@ -178,6 +178,11 @@ header {
   border-radius: 8px;
   /*height: 450px;*/
 }
+
+.workstation input{
+  width: 20px;
+  height: 5px;
+}
 .paletteContainer {
  flex: 0.5;
 }

@@ -1,6 +1,8 @@
 import BasicBlock from './basic';
 import ParentCode from '../../code/parent_code';
 import Editor from '../../block_list/editor';
+import TextInput from './text_input';
+import SelectInput from './select_input';
 import { addPlusButton } from '../../mixins/buttons';
 class Loop extends BasicBlock {
   constructor(data){
@@ -17,15 +19,56 @@ class Loop extends BasicBlock {
     this.addLoopButton = this.addLoopButton.bind(this);
     this.turnOnListeners = this.turnOnListeners.bind(this);
     this.drawLoopButton = this.drawLoopButton.bind(this);
+    this.updateParams = this.updateParams.bind(this);
     this.reset = this.reset.bind(this);
     this.remove = this.remove.bind(this);
     this.completed = false;
+
+  let manifest = {
+    "path": "images/blocks/",
+     "manifest": [
+        {"src": "conditionBlock.png", "id":"textField"}
+     ]
+  };
+
+  this.queue = new createjs.LoadQueue(true);
+  this.queue.loadManifest(manifest);
+
   }
 
   onEditorCallback(){
     Object.assign(this.constructor.prototype, { addPlusButton: addPlusButton.bind(this)});
     this.addLoopButton();
     this.addPlusButton();
+
+    this.sampleInputData =   {
+       prev: this,
+        x: this.x,
+        img: this.queue.getResult('textField'),
+        offset: 10,
+        name: 'selectField',
+        type: 'textInput',
+        inputType: 'input',
+        color: '#fff',
+        scaleX: 0.5,
+        scaleY: 0.5,
+        font: "7.5px Audiowide, cursive",
+        fn: function() {
+          return null;
+        },
+        selectOptions: [{ value: 'test', text: 'test' }, { value: 'test2', text: 'test2'}, { value: 'test3', text: 'test3' }],
+        fnParams: []
+      };
+
+    let input = new TextInput(this.sampleInputData);
+    this.addChild(input);
+    input.y = 0;
+    input.x = this.width + 2;
+    this.stage.update();
+  }
+
+  updateParams(val) {
+    this.fnParams = [val];
   }
 
   remove(){
@@ -98,7 +141,7 @@ class Loop extends BasicBlock {
     this.line.graphics.clear();
     this.circle.graphics.clear();
     this.stage.removeChild(this.circle);
-    // this.drawLoopButton.call(lastChild);
+
     this.constructor.prototype.drawLoopButton.call(lastChild);
     lastChild.fillInnerRect.style = "#e1a412";
     let { width } = this.getTransformedBounds();
@@ -136,9 +179,7 @@ class Loop extends BasicBlock {
       let topRight = { x: e.stageX + 20, y: y };
       let bottomRight = {x: e.stageX + 20, y: e.stageY };
       let onPointer = {x: e.stageX, y: e.stageY};
-      console.log(topRight);
-      console.log(bottomRight);
-      console.log(onPointer);
+
       this.line.graphics.clear();
       this.circle.graphics.clear();
       y = this.y + this.height - 17;

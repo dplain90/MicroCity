@@ -1,7 +1,7 @@
 import BlockList from './block_list';
 import BasicBlock from '../blocks/types/basic';
 import Loop from '../blocks/types/loop';
-
+import TextInput from '../blocks/types/text_input';
 class Palette extends BlockList {
   constructor(stage, data){
     super(stage);
@@ -14,7 +14,7 @@ class Palette extends BlockList {
     this.queue.loadManifest(manifest);
     this.setupBlocks = this.setupBlocks.bind(this);
     this.queue.on("complete", this.setupBlocks(blocks), this);
-    
+
     // stage.testBlock['active'] = 3;
   }
 
@@ -52,6 +52,9 @@ class Palette extends BlockList {
       case 'loop':
         block = new Loop(data);
         block.on("mousedown", this.replace);
+        break;
+      case 'textInput':
+        block = new TextInput(data);
         break;
       default:
         return null;

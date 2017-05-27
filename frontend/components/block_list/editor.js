@@ -130,11 +130,11 @@ class Editor extends BlockList {
 
   recalibrate(){
     let { x: panelX, width: panelW } = this.panel.getTransformedBounds();
-
+    let editor = this;
     this.each(function() {
       this.hover = 0;
       Block.setY(this, 15);
-      EditorPanel.alignBlock(this, panelW, panelX);
+
     });
   }
 
@@ -150,6 +150,10 @@ class Editor extends BlockList {
   }
 
   insertBlock(closestBlock, block){
+    if(!this.includes(block)) {
+      let { x: panelX, width: panelW } = this.panel.getTransformedBounds();
+      EditorPanel.alignBlock(block, panelW, panelX);
+    }
     block.next = closestBlock.next;
     block.prev = closestBlock;
     closestBlock.next.prev = block;

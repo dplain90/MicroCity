@@ -25,6 +25,7 @@ class Block extends createjs.Container {
   static setup(block) {
     let { name, font, color, scaleX, scaleY, offset } = block.data;
     let imgBlk = new createjs.Bitmap(block.img).set({scaleX, scaleY});
+    block.imgBlk = imgBlk;
     let label = new createjs.Text(name.toUpperCase(), font, color);
     label.mouseEnabled = false;
     block.addChild(imgBlk, label);
@@ -93,12 +94,7 @@ class Block extends createjs.Container {
     // let onX = this.onAxis(this.farX(), block.farX(), this.width);
     let onX = (block.x + (block.width/2)) <= this.farX() && (block.x + (block.width/2)) >= this.x;
 
-    console.log(block.x + block.width/2);
-    console.log(block.x - block.width/2);
-    console.log((block.x + (block.width/2)) <= this.farX());
-    console.log(this.farX());
-    console.log((block.x - (block.width/2)) >= this.x);
-    console.log(this.x);
+
     let onY = this.onAxis(this.farY(), block.y + (block.height/2), this.height);
     return onX && onY;
   }
@@ -137,7 +133,7 @@ class Block extends createjs.Container {
     // stage.testBlock = e.currentTarget;
 
     stage.activeBlock['current'] = e.currentTarget;
-    console.log(editor.panel.hitArea);
+
     stage.update();
   }
 
