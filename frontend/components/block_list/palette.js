@@ -14,6 +14,8 @@ class Palette extends BlockList {
     this.queue.loadManifest(manifest);
     this.setupBlocks = this.setupBlocks.bind(this);
     this.queue.on("complete", this.setupBlocks(blocks), this);
+    
+    // stage.testBlock['active'] = 3;
   }
 
   setupBlocks(blocks){

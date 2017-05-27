@@ -7,12 +7,17 @@ class Block extends createjs.Container {
     this.height = 0;
     this.next = next;
     this.prev = prev;
+    this.hover = 0;
     this.mid = {x: 0, y: 0};
     this.remove = this.remove.bind(this);
     this.dragCallback = this.dragCallback.bind(this);
     this.isLast = this.isLast.bind(this);
     this.removeLink = this.removeLink.bind(this);
     this.getMid = this.getMid.bind(this);
+    this.farX = this.farX.bind(this);
+    this.calcHover = this.calcHover.bind(this);
+    this.intersects = this.intersects.bind(this);
+    this.farY = this.farY.bind(this);
     this.codeChildren = codeChildren;
     this.mouseChildren = false;
   }
@@ -52,6 +57,8 @@ class Block extends createjs.Container {
     block.mid = {x: midX, y: midY};
   }
 
+
+
   getMid(){
     let x = this.x + this.mid.x;
     let y = this.y + this.mid.y;
@@ -73,8 +80,46 @@ class Block extends createjs.Container {
     return this.next.next === null;
   }
 
-  static isClosest(block, y){
+  calcHover(block){
+    let y = this.y + this.hovered;
+    if(this.y > block.y) {
+      return 5;
+    } else {
+      return -5;
+    }
+  }
+  intersects(block){
 
+    // let onX = this.onAxis(this.farX(), block.farX(), this.width);
+    let onX = (block.x + (block.width/2)) <= this.farX() && (block.x + (block.width/2)) >= this.x;
+
+    console.log(block.x + block.width/2);
+    console.log(block.x - block.width/2);
+    console.log((block.x + (block.width/2)) <= this.farX());
+    console.log(this.farX());
+    console.log((block.x - (block.width/2)) >= this.x);
+    console.log(this.x);
+    let onY = this.onAxis(this.farY(), block.y + (block.height/2), this.height);
+    return onX && onY;
+  }
+
+  onAxis(ownFar, far, size){
+
+    let diff = far - ownFar;
+
+    return Math.abs(diff) < size;
+
+  }
+
+  farY(){
+    return this.y + (this.height / 2);
+  }
+
+  farX(){
+    return this.x + this.width;
+  }
+
+  static isClosest(block, y){
     let currentDif = block.getMid().y - y;
 
     if(currentDif < 0) {
@@ -89,7 +134,10 @@ class Block extends createjs.Container {
     this.x = e.stageX - this.mid.x;
     this.y = e.stageY - this.mid.y;
     let stage = e.currentTarget.stage;
-    stage.activeBlock = e.currentTarget;
+    // stage.testBlock = e.currentTarget;
+
+    stage.activeBlock['current'] = e.currentTarget;
+    console.log(editor.panel.hitArea);
     stage.update();
   }
 

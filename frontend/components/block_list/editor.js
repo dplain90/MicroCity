@@ -19,9 +19,59 @@ class Editor extends BlockList {
     this.recalibrate = this.recalibrate.bind(this);
     this.addLoopChildren = this.addLoopChildren.bind(this);
     this.resetChildren = this.resetChildren.bind(this);
+    this.turnOnHover = this.turnOnHover.bind(this);
+    this.handleHover = this.handleHover.bind(this);
+    // stage.testBlock = { val: null };
     stage.addChild(this.panel);
     stage.on("stagemouseup", this.dropCallback);
+    let turnOnHover = this.turnOnHover;
+    stage.activeBlock = new Proxy({ current: null}, {
+        set: function(target, property, value, receiver) {
+          target[property] = value;
+          turnOnHover(value);
+          return true;
+        }
+      });
+
   }
+
+  handleHover(block) {
+    return (e) => {
+      let current = block;
+      this.each(function() {
+
+        if(this.intersects(current)){
+          let newHover = this.calcHover(current);
+          if(this.hover === 0){
+            this.hover = newHover;
+            this.y += this.hover;
+          } else {
+            if(this.hover !== newHover) {
+              this.y += (newHover * 2);
+              this.hover = newHover;
+            }
+          }
+
+        } else {
+          if(this.hover !== 0) {
+             this.y += this.hover * -1;
+             this.hover = 0;
+          }
+        }
+      });
+    };
+  }
+
+  turnOnHover(value) {
+    if(value === null){
+      this.stage.removeAllEventListeners("stagemousemove");
+    } else {
+      if(!this.stage.hasEventListener("stagemousemove")) {
+        this.stage.on("stagemousemove", this.handleHover(value));
+      }
+    }
+  }
+
 
   addLoopChildren(loop){
     let callback = (evt) => {
@@ -54,9 +104,9 @@ class Editor extends BlockList {
   dropCallback(evt){
     let { stageX: x, stageY: y, currentTarget: blk } = evt;
     let { x: localX, y: localY } = this.panel.globalToLocal(x, y);
-    let block = blk.stage.activeBlock;
-
-    blk.stage.activeBlock = null;
+    let block = blk.stage.activeBlock['current'];
+    debugger
+    blk.stage.activeBlock['current'] = null;
 
     let closestBlock = this.findClosest(x, y, block);
 
@@ -82,6 +132,7 @@ class Editor extends BlockList {
     let { x: panelX, width: panelW } = this.panel.getTransformedBounds();
 
     this.each(function() {
+      this.hover = 0;
       Block.setY(this, 15);
       EditorPanel.alignBlock(this, panelW, panelX);
     });
@@ -114,7 +165,7 @@ class Editor extends BlockList {
       if(block.codeParent !== this.head) { block.codeParent.completeConnection();
       }
     }
-  
+
   findClosest(x, y, block) {
     let head = this.head
     let closest = head;
