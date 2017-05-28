@@ -11,18 +11,24 @@ class Grid extends React.Component {
     this.queue = [];
     this.runButton = this.runButton.bind(this);
     this.handleRun = this.handleRun.bind(this);
+    this.handleReset = this.handleReset.bind(this);
     this.handleTick = this.handleTick.bind(this);
-    this.generateTiles = this.generateTiles.bind(this);
-    this.level = new Level(levelData);
+
+    this.nextLevelButton = this.nextLevelButton.bind(this);
+    this.nextLevel = this.nextLevel.bind(this);
+
     // this.generateBlock = this.generateBlock.bind(this);
 
     this.state = {
       runStatus: false,
-      code: this.props.code
+      code: this.props.code,
+      completed: false,
+      level: {
+        number: 1
+      }
     }
 
   }
-
 
   componentWillReceiveProps(newProps) {
 
@@ -32,10 +38,15 @@ class Grid extends React.Component {
     if(newProps.code !== this.props.code) {
       this.setState({code: newProps.code});
     }
-  }
 
+    if(newProps.level !== this.props.level) {
+      this.stage.removeAllChildren();
+      this.level = new LevelGenerator(newProps.level, this.stage);
+    }
+  }
   componentDidMount() {
     this.stage = new createjs.Stage("gridCanvas");
+    // this.level = new Level(this.props.level, level);
     // this.avatarSheet = generateAvatar();
     // this.avatar = new createjs.Sprite(this.avatarSheet, "idle");
     // this.avatar.y = 170;
@@ -51,21 +62,10 @@ class Grid extends React.Component {
     // this.robot.scaleY = 3;
     // let blockTest = this.generateBlock(190, 150, 22+16);
     // this.stage.addChild(blockTest, this.generateBasicBlockTop(190, 150));
-    let level = new LevelGenerator(level1, this.stage);
-    debugger
-    let levelObjs = this.level.createDisplayObjects(levelData);
-    for (var i = 0; i < levelObjs.length; i++) {
-      if(levelObjs[i] !== undefined) {
-        this.stage.addChild(levelObjs[i]);
-      }
-    }
-    this.stage.update();
-    // let test = Tile.create(200, 50);
-    // this.stage.addChild(test);
-    // this.stage.addChild(this.avatar, this.key);
-    // this.stage.addChild(this.avatar, this.key, this.generateBasicBlock(190, 150, 10+26));
-    // this.stage.update();
+    this.level = new LevelGenerator(this.props.levelData, this.stage);
 
+
+    this.stage.update();
 
      createjs.Ticker.addEventListener("tick", this.handleTick);
      createjs.Ticker.setInterval(10);
@@ -78,17 +78,8 @@ class Grid extends React.Component {
     console.log(this.queue);
   }
 
-
-  generateTiles(){
-    this.tileSheet = generateTileSheet();
-    for (var i = 0; i < 9; i++) {
-      let tile = new createjs.Sprite(this.tileSheet);
-      tile.scaleX = .25;
-      tile.scaleY = .25;
-      tile.x = (18.5*i);
-      tile.y = 200;
-      // this.stage.addChild(tile);
-    }
+  nextLevel(e) {
+    this.props.completedLevel(this.state.level.number);
   }
 
   runButton(){
@@ -104,33 +95,16 @@ class Grid extends React.Component {
     }
   }
 
+  nextLevelButton(){
+    if(this.state.completed) {
+    return (
+      <button className="levelCompleted" onClick={this.nextLevel} > Next Level
+      </button>
+      );
+    }
+  }
   handleTick(event){
 // if (this.queue.length > 0) this.setState({ code: [] });
-  let myAvatar = this.level.avatar;
-  if(myAvatar.win){
-     myAvatar.isReset = true;
-     let winText = new createjs.Text("LEVEL COMPLETED!", "20px Arial", "#ff7700");
-     this.stage.addChild(winText);
-  }
-
-  if(myAvatar.isReset){
-    myAvatar.obj.gotoAndStop('idle');
-  }
-
-    if(this.queue.length === 0) {
-      myAvatar.handleTick({x: 0, y: 0});
-      myAvatar.obj.gotoAndStop('idle');
-
-    } else {
-      myAvatar.isReset = false;
-      let movement = this.queue.shift();
-      if(movement['animation'] !== undefined) {
-        myAvatar.handleAnimation(movement.animation);
-        myAvatar.obj.gotoAndPlay(movement.animation);
-      } else {
-        myAvatar.handleTick(movement);
-      }
-    }
 
 
 
@@ -139,10 +113,18 @@ class Grid extends React.Component {
 
   }
 
+  handleReset(e){
+    e.preventDefault();
+    this.queue = [];
+    this.level.reset();
+  }
+
   render(){
     return (
       <div className="grid">
         { this.runButton() }
+        { this.nextLevelButton() }
+        <button onClick={this.handleReset}>Reset</button>
         <canvas id="gridCanvas" width="500px" height="500px">
 
         </canvas>
@@ -153,3 +135,30 @@ class Grid extends React.Component {
   }
 }
 export default Grid;
+
+
+// let myAvatar = this.level.avatar;
+// if(myAvatar.win){
+//    myAvatar.isReset = true;
+//    let winText = new createjs.Text("LEVEL COMPLETED!", "20px Arial", "#ff7700");
+//    this.stage.addChild(winText);
+// }
+//
+// if(myAvatar.isReset){
+//   myAvatar.obj.gotoAndStop('idle');
+// }
+//
+//   if(this.queue.length === 0) {
+//     myAvatar.handleTick({x: 0, y: 0});
+//     myAvatar.obj.gotoAndStop('idle');
+//
+//   } else {
+//     myAvatar.isReset = false;
+//     let movement = this.queue.shift();
+//     if(movement['animation'] !== undefined) {
+//       myAvatar.handleAnimation(movement.animation);
+//       myAvatar.obj.gotoAndPlay(movement.animation);
+//     } else {
+//       myAvatar.handleTick(movement);
+//     }
+//   }

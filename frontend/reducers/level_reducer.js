@@ -1,18 +1,12 @@
-import { UPDATE_LEVEL} from '../actions/code_actions';
-import { levelDirectory } from '../util/level_util';
+import { UPDATE_LEVEL, RECEIVE_LEVEL} from '../actions/code_actions';
+import { level1 } from '../data/levels/level_1.js';
 
-const _defaultLevel= Object.freeze({
-  completed: false,
-  description: "",
-  title: "",
-  number: 1
-});
+const _defaultLevel= Object.freeze(level1);
 
 const LevelReducer = (state = _defaultLevel, action) => {
   switch(action.type) {
-    case UPDATE_LEVEL:
-      updatedLevel = Object.assign({}, state, action.level);
-      return updatedLevel;
+    case RECEIVE_LEVEL:
+      return action.level;
     default:
       return state;
   }
