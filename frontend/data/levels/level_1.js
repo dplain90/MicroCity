@@ -12,6 +12,10 @@ export const level1 = {
     {
       type: 'avatar',
       objData: { x: 30, y: 0, frame: 0, scaleX: 0.8, scaleY: 0.8, id: "avatar2" }
+    },
+    {
+      type: 'tile',
+      objData: { x: 60, y: 60, frame: 0, scaleX: 0.8, scaleY: 0.8, id: "tile", rotation: 90 }
     }
   ],
 
@@ -25,7 +29,11 @@ export const level1 = {
       {
         "src": "frontend/data/sprites/avatar.json",
         "type": "spritesheet",
-        "id": "avatar2" }
+        "id": "avatar2" },
+      {
+        "src": "frontend/data/objects/tile.json",
+        "type": "spritesheet",
+        "id": "tile" }
     ]
 
 };

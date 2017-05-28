@@ -23,9 +23,9 @@ class ObjectGenerator {
         let spriteSheet = {spriteSheet: this.queue.getResult(obj.objData.id)};
 
         let objData = Object.assign({}, objs[key], spriteSheet);
-
-        this.createObject(objData);
         
+        this.createObject(objData);
+
       }, this);
     };
   }

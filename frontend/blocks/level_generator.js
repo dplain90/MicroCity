@@ -1,6 +1,6 @@
 import ObjectGenerator from './object_generator';
 import Avatar from './avatar';
-
+import Tile from './tile';
 class Level extends ObjectGenerator {
   constructor(data, stage){
 
@@ -15,12 +15,16 @@ class Level extends ObjectGenerator {
     switch(data.type){
       case 'avatar':
         object = new Avatar(data);
-        window.avatar = object; 
+        window.avatar = object;
+        break;
+      case 'tile':
+        object = new Tile(data);
+        window.tile = object;
         break;
       default:
         return null;
     }
-    debugger
+
     this.stage.addChild(object);
     this.stage.update();
     object.setupBounds();
