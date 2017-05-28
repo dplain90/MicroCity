@@ -5,6 +5,7 @@ class BlockList {
   constructor(stage){
     this.head = new Block();
     this.head.y = 5;
+    this.head.idx = -1;
     this.tail = new Block();
     this.stage = stage;
     this.head.next = this.tail;
@@ -25,7 +26,15 @@ class BlockList {
     return this.tail.prev;
   }
 
-
+  getIdx(block){
+    let currentBlock = this.head;
+    let i = -1;
+    while(currentBlock !== block){
+      i+=1;
+      currentBlock = currentBlock.next;
+    }
+    return i;
+  }
   append(block){
     this.tail.prev.next = block;
     this.tail.prev = block;
@@ -43,6 +52,7 @@ class BlockList {
 
   each(callback){
     let currentBlock = this.head.next;
+    let i = 0;
     while(currentBlock !== this.tail && currentBlock !== null) {
       callback.call(currentBlock);
       currentBlock = currentBlock.next;

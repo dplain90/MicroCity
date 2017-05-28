@@ -180,8 +180,17 @@ header {
 }
 
 .workstation input{
-  width: 20px;
-  height: 5px;
+  font-size: 7px;
+  text-align: center;
+  background-color: #f4dc95;
+  font-family: 'Audiowide', cursive;
+  /*width: 20px;
+  height: 5px;*/
+}
+
+.workstation input:focus{
+   outline-width: 0;
+
 }
 .paletteContainer {
  flex: 0.5;

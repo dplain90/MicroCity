@@ -37,9 +37,12 @@ class Block extends createjs.Container {
     Block.setY(block, offset);
    }
 
-  static setY(block, offset){
+  static setY(block, offset, i){
     let prev = block.prev;
     if(prev !== undefined) block.y = prev.y + prev.height;
+    if(block.inputField !== undefined){
+      block.inputField.calibrateHeight(i);
+    }
     return block;
   }
 
@@ -133,7 +136,9 @@ class Block extends createjs.Container {
     // stage.testBlock = e.currentTarget;
 
     stage.activeBlock['current'] = e.currentTarget;
-
+    if(e.currentTarget.inputField !== undefined){
+      e.currentTarget.inputField.hide();
+    }
     stage.update();
   }
 

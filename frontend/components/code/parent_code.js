@@ -65,7 +65,8 @@ class ParentCode {
   static insertChild(closestBlock, child){
     let children;
     if(this.isParent(closestBlock)){
-      children = Array.from(closestBlock.codeChildren).unshift(child);
+      children = Array.from(closestBlock.codeChildren);
+      children.unshift(child);
       closestBlock.codeChildren = new Set(children);
       child.codeParent = closestBlock;
     } else {

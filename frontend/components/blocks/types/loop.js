@@ -60,10 +60,10 @@ class Loop extends BasicBlock {
         fnParams: []
       };
 
-    let input = new TextInput(this.sampleInputData);
-    this.addChild(input);
-    input.y = 0;
-    input.x = this.width + 2;
+    this.inputField = new TextInput(this.sampleInputData);
+    this.addChild(this.inputField);
+    this.inputField.y = 0;
+    this.inputField.x = this.width + 2;
     this.stage.update();
   }
 
@@ -74,6 +74,10 @@ class Loop extends BasicBlock {
   remove(){
     ParentCode.clearChildren(this);
     if(this.line) this.line.graphics.clear();
+    if(this.inputField !== undefined){
+      this.inputField.removeDOM();
+    }
+
     this.editor.head.constructor.prototype.remove.call(this);
   }
 
@@ -144,7 +148,7 @@ class Loop extends BasicBlock {
 
     this.constructor.prototype.drawLoopButton.call(lastChild);
     lastChild.fillInnerRect.style = "#e1a412";
-    let { width } = this.getTransformedBounds();
+    let width = this.width;
     let loopY = this.y + this.height - 15 + 1.07 - 0.10 ;
     let lastY = lastChild.y + (lastChild.height - 15 + 0.47);
     let x = this.x + (width - 19) - 0.25 + 0.47;

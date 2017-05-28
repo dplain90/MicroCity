@@ -9,6 +9,7 @@ class Tile {
     const tileData = {
       images: [ "./images/tiles.jpg"],
       frames: [
+        [217, 793, 74, 73],
         [21, 244, 73, 72],
         [217, 708, 73, 70],
         [414, 344, 71, 69],
@@ -19,8 +20,9 @@ class Tile {
     let tileSheet = new createjs.SpriteSheet(tileData);
     let tile = new createjs.Sprite(tileSheet);
 
-    tile.scaleX = .25;
-    tile.scaleY = .25;
+    tile.scaleX = .75;
+    tile.scaleY = .75;
+    tile.rotation = 90;
     tile.x = x;
     tile.y = y;
     return tile;

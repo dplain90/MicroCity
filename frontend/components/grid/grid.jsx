@@ -3,7 +3,8 @@ import { Code, CodeEngine } from '../../blocks/code';
 import { generateAvatar } from '../../../images/avatar/avatar';
 import Tile from '../../../images/tiles';
 import { Level, levelData } from '../../blocks/level';
-
+import LevelGenerator from '../../blocks/level_generator';
+import { level1 } from '../../data/levels/level_1';
 class Grid extends React.Component {
   constructor(props){
     super(props);
@@ -50,6 +51,8 @@ class Grid extends React.Component {
     // this.robot.scaleY = 3;
     // let blockTest = this.generateBlock(190, 150, 22+16);
     // this.stage.addChild(blockTest, this.generateBasicBlockTop(190, 150));
+    let level = new LevelGenerator(level1, this.stage);
+    debugger
     let levelObjs = this.level.createDisplayObjects(levelData);
     for (var i = 0; i < levelObjs.length; i++) {
       if(levelObjs[i] !== undefined) {

@@ -105,17 +105,19 @@ class Editor extends BlockList {
     let { stageX: x, stageY: y, currentTarget: blk } = evt;
     let { x: localX, y: localY } = this.panel.globalToLocal(x, y);
     let block = blk.stage.activeBlock['current'];
-    debugger
-    blk.stage.activeBlock['current'] = null;
 
+    blk.stage.activeBlock['current'] = null;
+    if(block.inputField !== undefined){
+      block.inputField.unhide();
+    }
     let closestBlock = this.findClosest(x, y, block);
 
     if(this.panel.hitTest(localX, localY)) {
       this.recalibrate();
       this.insertBlock(closestBlock, block);
+
     } else {
       block.remove();
-      // ParentCode.clearRelationship(block);
       this.stage.removeChild(block);
     }
 
@@ -124,6 +126,7 @@ class Editor extends BlockList {
     if(block.onEditorCallback !== undefined && !block.editorCallbackComplete) {
       block.onEditorCallback();
       Object.assign(block.constructor.prototype, { editor: this });
+      this.recalibrate();
     }
 
   }
@@ -133,9 +136,9 @@ class Editor extends BlockList {
     let editor = this;
     this.each(function() {
       this.hover = 0;
-      Block.setY(this, 15);
-
+      Block.setY(this, 15, editor.getIdx(this));
     });
+    this.stage.update();
   }
 
   resetChildren(){
@@ -150,10 +153,9 @@ class Editor extends BlockList {
   }
 
   insertBlock(closestBlock, block){
-    if(!this.includes(block)) {
-      let { x: panelX, width: panelW } = this.panel.getTransformedBounds();
-      EditorPanel.alignBlock(block, panelW, panelX);
-    }
+    let { x: panelX, width: panelW } = this.panel.getTransformedBounds();
+    EditorPanel.alignBlock(block, panelW, panelX);
+
     block.next = closestBlock.next;
     block.prev = closestBlock;
     closestBlock.next.prev = block;

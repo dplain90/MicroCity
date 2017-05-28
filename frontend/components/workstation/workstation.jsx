@@ -98,21 +98,6 @@ class WorkStation extends React.Component {
           this.fnParams = [num, increment + 1];
           }
         }
-      },
-      5: {
-        offset: 10,
-        name: 'textField',
-        type: 'textInput',
-        inputType: 'input',
-        color: '#fff',
-        scaleX: 0.5,
-        scaleY: 0.5,
-        font: "7.5px Audiowide, cursive",
-        fn: function() {
-          return null;
-        },
-        fnParams: [],
-
       }
     },
     manifest: {
