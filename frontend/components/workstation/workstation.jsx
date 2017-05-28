@@ -91,8 +91,12 @@ class WorkStation extends React.Component {
         scaleY: 0.5,
         font: "7.5px Audiowide, cursive",
         fn: function(num, increment) {
-          if(increment >= num) this.completed = true;
+          if(increment >= num) {
+            this.completed = true;
+            this.fnParams = [num, 0];
+          } else {
           this.fnParams = [num, increment + 1];
+          }
         }
       },
       5: {

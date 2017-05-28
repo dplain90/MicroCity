@@ -12,7 +12,7 @@ class TextInput extends Condition {
   }
 
   handleChange(e){
-    this.parent.updateParams(parseInt(e.currentTarget.value));
+    this.parent.updateParams([parseInt(e.currentTarget.value), 0]);
   }
 }
 

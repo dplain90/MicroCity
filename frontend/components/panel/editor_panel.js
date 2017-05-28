@@ -9,8 +9,7 @@ class EditorPanel extends Panel {
   }
 
   static alignBlock(block, panelWidth, panelX){
-    let blockBounds = block.getTransformedBounds();
-    block.x = panelX + (panelWidth - blockBounds.width)/ 2;
+    block.x = panelX + (panelWidth - block.width)/ 2;
   }
 
 

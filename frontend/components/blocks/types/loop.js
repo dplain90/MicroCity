@@ -68,7 +68,7 @@ class Loop extends BasicBlock {
   }
 
   updateParams(val) {
-    this.fnParams = [val];
+    this.fnParams = val;
   }
 
   remove(){
