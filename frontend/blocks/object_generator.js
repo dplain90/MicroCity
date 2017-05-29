@@ -17,7 +17,6 @@ class ObjectGenerator {
   }
 
   setupObjects(objs) {
-    debugger
     return () => {
       Object.keys(objs).forEach((key) => {
 

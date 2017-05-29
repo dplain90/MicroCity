@@ -10,11 +10,18 @@ class Level extends ObjectGenerator {
     this.won = this.won.bind(this);
     this.lost = this.lost.bind(this);
     this.createObject = this.createObject.bind(this);
+    this.handleCondition = this.handleCondition.bind(this);
+    this.tileAhead = this.tileAhead.bind(this);
+    this.offBoard = this.offBoard.bind(this);
+    this.projectOffBoard = this.projectOffBoard.bind(this);
     this.gameEnders = [];
     this.allChildren = [];
+    this.processCondition = this.processCondition.bind(this);
+    this.tracePath = this.tracePath.bind(this);
     this.test = new createjs.Shape();
     let inside = new createjs.Shape();
     this.stage = stage;
+    this.history = [];
     // this.stage.update();
   }
 
@@ -23,16 +30,79 @@ class Level extends ObjectGenerator {
     this.avatar.gotoAndStop('idle');
   }
 
+  processCondition(callback){
+    let pt = this.tracePath();
+    callback.call(this, pt.x, pt.y);
+  }
+
+  tracePath(){
+    let point = {x: this.avatar.x, y: this.avatar.y};
+    this.history.forEach((frame) => {
+        let { x: xIncr, y: yIncr } = frame.movement;
+        point.x += xIncr;
+        point.y += yIncr;
+      }
+    );
+    console.log(point);
+    return point;
+  }
+
   lost(){
-    let lostStatus = false;
-    this.gameEnders.forEach((ender) => {
-      if(this.avatar.touching(ender)) lostStatus = true;
-    }, this);
-    return lostStatus;
+    if(this.offBoard(this.avatar.x, this.avatar.y)) {
+      this.lineStroke.style = "#f00000";
+      return true;
+    } else {
+      return false;
+    }
   }
 
   reset(){
     this.allChildren.forEach((child) => child.reset());
+    this.lineStroke.style = "#29ffc6";
+  }
+
+  offBoard(offX, offY){
+    console.log(this.stage.getObjectUnderPoint(offX,offY) === null);
+    console.log(offX);
+    console.log(offY);
+    return this.stage.getObjectUnderPoint(offX, offY) === null;
+  }
+
+  tileAhead(tileX, tileY){
+    if(this.history.length === 0) return false;
+
+    let lastHistory = this.history[0];
+    let myNextX = lastHistory.movement.x;
+    let myNextY = lastHistory.movement.y;
+    debugger
+    // if(myNextX === 0 && myNextY === 0){
+    // } else if (myNextX === 0) {
+    //
+    //    myNextY = tileY + 75;
+    //  } else {
+    //    myNextX = tileX + 75;
+    //  }
+
+
+    // let lastHistory = this.history.pop();
+    // let nextX = x + (75 * xIncr);
+    // let nextY = y + (75 * yIncr);
+    let outcome = this.projectOffBoard(tileX, myNextX, tileY, myNextY);
+
+    // return this.offBoard(nextX, nextY);
+    return outcome;
+  }
+
+  projectOffBoard(nextX, incrementX, nextY, incrementY){
+    // console.log(nextX);
+    if(incrementX === 0 && incrementY === 0){
+    }
+    else if(incrementX > 0){
+      nextX += 150;
+    } else {
+      nextY -= 75;
+    }
+    return this.stage.getObjectUnderPoint(nextX, nextY) === null;
   }
 
   checkWinStatus(){
@@ -43,6 +113,9 @@ class Level extends ObjectGenerator {
     } else {
       return { status: 'ongoing' };
     }
+  }
+
+  handleCondition(frame){
   }
 
   handleTick(frame){
@@ -76,6 +149,21 @@ class Level extends ObjectGenerator {
         this.stage.addChild(object);
         // this.allChildren.push(object);
         break;
+      case 'line':
+        let line = new createjs.Shape();
+        let hit = new createjs.Shape();
+        this.lineStroke = line.graphics.f().beginLinearGradientStroke(["#0cebeb","#29ffc6"], [0, 0.8], 0, 0, 300, 300).command;
+
+        line.graphics.ss(2, "round", "round");
+        hit.graphics.beginFill("white").beginStroke("white");
+        data.objData.points.forEach((pt) => {
+          hit.graphics.lineTo(pt.x, pt.y);
+          line.graphics.lineTo(pt.x, pt.y);
+        });
+
+        this.boundaries = line;
+        this.boundaries.hitArea = hit;
+        this.stage.addChild(line);
       default:
         return null;
     }

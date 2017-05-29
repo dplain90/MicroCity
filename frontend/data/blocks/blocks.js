@@ -1,5 +1,5 @@
-import { jump, step, forward, repeat } from './functions';
-
+import { jump, step, forward, repeat, whileLoop } from './functions';
+import { textInput, selectInput } from './inputs';
 export const Blocks =
   {
     x: 5,
@@ -46,7 +46,21 @@ export const Blocks =
       scaleX: 0.5,
       scaleY: 0.5,
       font: "7.5px Audiowide, cursive",
-      fn: repeat
+      fn: repeat,
+      fnParams: [0, 0],
+      input: textInput
+    },
+    5: {
+      offset: 10,
+      name: 'while',
+      type: 'loop',
+      color: '#fff',
+      scaleX: 0.5,
+      scaleY: 0.5,
+      font: "7.5px Audiowide, cursive",
+      fn: whileLoop,
+      fnParams: "",
+      input: selectInput
     }
   },
   manifest: {
@@ -56,6 +70,7 @@ export const Blocks =
         {"src": "microchip1.png", "id":"step"},
         {"src": "microchip1.png", "id":"jump"},
         {"src": "microchip1.png", "id":"repeat"},
+        {"src": "microchip1.png", "id":"while"},
         {"src": "conditionBlock.png", "id":"textField"}
      ]
   }

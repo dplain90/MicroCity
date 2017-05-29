@@ -5,13 +5,23 @@ class CodeTree {
     this.getQueue = this.getQueue.bind(this);
     this.execute = this.execute.bind(this);
     this.clearCompleted = this.clearCompleted.bind(this);
+
   }
 
   execute(block) {
-    return block.fn.call(block, ...block.fnParams);
+
+    let frame = block.fn.call(block, ...block.fnParams);
+    if(frame.length !== 0) {
+      if(frame[0].type === 'conditional'){
+      debugger
+      this.level.processCondition(frame[0].condition);
+      }
+    }
+    return frame;
   }
 
-  getQueue(){
+  getQueue(level){
+    this.level = level;
     let queue = this.processTree(this.root);
     this.clearCompleted(this.root);
     return queue;
@@ -30,7 +40,7 @@ class CodeTree {
   }
 
   processTree(blockNode){
-    debugger
+
     let children = Array.from(blockNode.codeChildren);
     let result = this.execute(blockNode);
     if(children.length < 1) {
@@ -40,7 +50,12 @@ class CodeTree {
     while(!blockNode.completed) {
       for (var i = 0; i < children.length; i++) {
         let descendents = this.processTree(children[i]);
+        // console.log('this is completed');
+        // console.log(blockNode.completed);
+        // this.execute(blockNode);
+        // if(blockNode.completed) break;
         queue = queue.concat(descendents);
+        this.level.history = queue;
       }
       if(blockNode === this.root) blockNode.completed = true;
       this.execute(blockNode);

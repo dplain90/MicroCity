@@ -6,7 +6,21 @@ class SelectInput extends Condition {
     this.addOptions(data.selectOptions);
     this.addListener = this.addListener.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.hide = this.hide.bind(this);
+    this.unhide = this.unhide.bind(this);
+    this.removeDOM = this.removeDOM.bind(this);
     this.addListener();
+  }
+
+  removeDOM(){
+    this.dom.remove();
+  }
+
+  hide() {
+    this.visible = false;
+  }
+  unhide(){
+    this.visible = true;
   }
 
   addOptions(options){

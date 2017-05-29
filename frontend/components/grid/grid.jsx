@@ -20,6 +20,7 @@ class Grid extends React.Component {
     this.handleStatus = this.handleStatus.bind(this);
     this.defaultFrame = defaultFrame();
     this.state = {
+      disabled: false,
       runStatus: false,
       code: this.props.code,
       completed: false,
@@ -44,12 +45,15 @@ class Grid extends React.Component {
       this.setState({completed: false});
       this.stage.removeAllChildren();
       this.level = new LevelGenerator(newProps.levelData, this.stage);
+      // let newCode = Object.assign(this.props.code.constructor.prototype);
     }
   }
   componentDidMount() {
     this.stage = new createjs.Stage("gridCanvas");
     this.level = new LevelGenerator(this.props.levelData, this.stage);
+    // Object.assign(this.state.code.constructor.prototype, { level: this.level });
     this.stage.update();
+
     window.grid = this.stage;
      createjs.Ticker.addEventListener("tick", this.handleTick);
      createjs.Ticker.setInterval(10);
@@ -58,7 +62,7 @@ class Grid extends React.Component {
 
   handleRun(e) {
     e.preventDefault();
-    this.queue = this.state.code.getQueue();
+    this.queue = this.state.code.getQueue(this.level);
     console.log(this.queue);
   }
 
@@ -68,14 +72,14 @@ class Grid extends React.Component {
   }
 
   runButton(){
-    let {runStatus} = this.state;
-    if(runStatus) {
+    let {runStatus, disabled} = this.state;
+    if(disabled) {
       return (
-        <button className="runningCode" disabled> Running... </button>
+        <button className="runningCode" disabled></button>
       );
     } else {
       return (
-        <button className="runCode" onClick={this.handleRun} > Run </button>
+        <button className="runCode" onClick={this.handleRun}> Run </button>
       );
     }
   }
@@ -97,7 +101,7 @@ class Grid extends React.Component {
         this.setState({completed: true});
         break;
       case 'lost':
-        this.handleReset();
+        this.setState({disabled: true});
         break;
     }
   }
@@ -108,18 +112,18 @@ class Grid extends React.Component {
     if(this.queue.length > 0) {
       let frame = this.queue.pop();
       let status = this.level.handleTick(frame);
-      console.log(status);
       this.handleStatus(status);
-      console.log(this.queue);
-      if(this.queue.length === 0) this.level.idle();
+      if(this.queue.length === 0) {
+        this.level.idle();
+        this.level.history = [];
     }
 
     this.stage.update();
   }
+}
 
-  handleReset(e){
-    e.preventDefault();
-    this.setState({completed: false});
+  handleReset(){
+    this.setState({completed: false, disabled: false});
     this.queue = [];
     this.level.reset();
   }
@@ -127,10 +131,11 @@ class Grid extends React.Component {
   render(){
     let number = this.props.level.number
     let nextLevelButton = this.nextLevelButton();
+    let runButton = this.runButton();
     return (
       <div className="grid">
         <button id="reset" onClick={this.handleReset}>Reset</button>
-        { this.runButton() }
+        { runButton }
         { nextLevelButton }
         <h2> {number} </h2>
         <canvas id="gridCanvas" width="500px" height="500px">

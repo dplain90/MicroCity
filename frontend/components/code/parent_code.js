@@ -63,7 +63,6 @@ class ParentCode {
   }
 
   static insertChild(closestBlock, child){
-    debugger
     let children;
     if(this.isParent(closestBlock)){
       children = Array.from(closestBlock.codeChildren);

@@ -6,7 +6,6 @@ const _defaultLevel= Object.freeze(level1);
 const LevelReducer = (state = _defaultLevel, action) => {
   switch(action.type) {
     case RECEIVE_LEVEL:
-      debugger
       return action.level;
       break;
     default:

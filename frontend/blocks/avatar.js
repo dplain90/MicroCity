@@ -14,6 +14,7 @@ class Avatar extends SpriteObject {
       'movement': this.move,
       'action': this.handleAction
     };
+    this.alpha = 1;
   }
 
   handleAction(action) {

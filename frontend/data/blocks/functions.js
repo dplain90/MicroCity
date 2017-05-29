@@ -37,7 +37,7 @@ export const step = function(num) {
 };
 
 export const forward = function() {
-  return step(17);
+  return step(15);
 };
 
 export const repeat = function(num, increment) {
@@ -49,11 +49,27 @@ export const repeat = function(num, increment) {
   }
 }
 
+export const whileLoop = function() {
+  let fnParams = this.fnParams;
+  let block = this;
+  const callback = function(x,y) {
+
+    let callbackResult = this.constructor.prototype[fnParams].call(this, x, y);
+    if(callbackResult === true){
+
+      block.completed = true;
+    } else {
+      block.completed = false;
+    }
+  };
+
+  return frame.condition(callback);
+};
 
 export const jump = function() {
   let result = frame.animate('jump');
   // [1, -1].forEach( (dir) => {
-  let moveY = frame.times(17, frame.move(0, -5));
+  let moveY = frame.times(15, frame.move(0, -5));
   // let moveX = frame.move(10,0);
   result = moveY.concat(result);
   // });

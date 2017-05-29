@@ -12,10 +12,13 @@ class Condition extends BasicBlock {
     input.style.top = 0;
     input.style.left = 0;
     workstation.appendChild(input);
+    this.removeDOM = this.removeDOM.bind(this);
+    this.hide = this.hide.bind(this);
+    this.unhide = this.unhide.bind(this);
     this.dom = input;
     this.domEl = new createjs.DOMElement(input);
 
-    this.domEl.x = ((this.width / 2) / 2) + 3 - 50;
+    this.domEl.x = ((this.width / 2) / 2) + 3 - 150;
     this.domEl.y = ((this.height / 2) / 2) + 3;
 
     this.removeChildAt(1);
@@ -25,8 +28,10 @@ class Condition extends BasicBlock {
     this.calibrateHeight = this.calibrateHeight.bind(this);
   }
 
+
+
   calibrateHeight(i){
-    this.domEl.y = ((this.height / 2) / 2) + 3 - (10*i) - (i*2);
+    this.domEl.y = ((this.height / 2) / 2) - 3 - (15*i) - (i*9);
   }
 }
 export default Condition;

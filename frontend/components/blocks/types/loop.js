@@ -7,7 +7,7 @@ import { addPlusButton } from '../../mixins/buttons';
 class Loop extends BasicBlock {
   constructor(data){
     super(data);
-    let { codeChildren } = data;
+    let { codeChildren, input } = data;
     if(codeChildren === undefined) codeChildren = new Set();
     this.editorCallbackComplete = false;
     this.codeChildren = codeChildren;
@@ -23,7 +23,7 @@ class Loop extends BasicBlock {
     this.reset = this.reset.bind(this);
     this.remove = this.remove.bind(this);
     this.completed = false;
-
+    this.inputData = input;
   let manifest = {
     "path": "images/blocks/",
      "manifest": [
@@ -40,27 +40,18 @@ class Loop extends BasicBlock {
     Object.assign(this.constructor.prototype, { addPlusButton: addPlusButton.bind(this)});
     this.addLoopButton();
     this.addPlusButton();
+    let inputData = Object.assign(this.inputData, {
+      prev: this,
+      x: this.x,
+      img: this.queue.getResult('textField')
+    });
 
-    this.sampleInputData =   {
-       prev: this,
-        x: this.x,
-        img: this.queue.getResult('textField'),
-        offset: 10,
-        name: 'selectField',
-        type: 'textInput',
-        inputType: 'input',
-        color: '#fff',
-        scaleX: 0.5,
-        scaleY: 0.5,
-        font: "7.5px Audiowide, cursive",
-        fn: function() {
-          return null;
-        },
-        selectOptions: [{ value: 'test', text: 'test' }, { value: 'test2', text: 'test2'}, { value: 'test3', text: 'test3' }],
-        fnParams: []
-      };
+    if(inputData.type === 'textField'){
+      this.inputField = new TextInput(inputData);
+    } else {
+      this.inputField = new SelectInput(inputData);
+    }
 
-    this.inputField = new TextInput(this.sampleInputData);
     this.addChild(this.inputField);
     this.inputField.y = 0;
     this.inputField.x = this.width + 2;

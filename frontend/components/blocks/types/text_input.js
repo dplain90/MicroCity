@@ -24,6 +24,7 @@ class TextInput extends Condition {
   unhide(){
     this.visible = true;
   }
+
   handleChange(e){
     this.parent.updateParams([parseInt(e.currentTarget.value), 0]);
   }

@@ -9,7 +9,6 @@ class Editor extends BlockList {
     let { x, height, width } = data;
     super(stage);
     this.y = 0;
-    this.code = new CodeTree(this.head);
     this.head.fn = () => { return [] };
     this.head.fnParams = [];
     this.panel = new EditorPanel(height, width, x);
@@ -32,7 +31,15 @@ class Editor extends BlockList {
           return true;
         }
       });
-
+    this.code = new CodeTree(this.head);
+    window.code = this.code;
+  //   this.code.executeCode = new Proxy(this.code.execute, {
+  //     call: function(target, that, args) {
+  //       let result = target.apply(that, args);
+  //
+  //
+  //   }
+  // }
   }
 
   handleHover(block) {
@@ -119,6 +126,7 @@ class Editor extends BlockList {
     } else {
       block.remove();
       this.stage.removeChild(block);
+      this.recalibrate();
     }
 
 
