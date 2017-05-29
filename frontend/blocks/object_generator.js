@@ -17,13 +17,16 @@ class ObjectGenerator {
   }
 
   setupObjects(objs) {
+    debugger
     return () => {
       Object.keys(objs).forEach((key) => {
+
         let obj = objs[key];
+
         let spriteSheet = {spriteSheet: this.queue.getResult(obj.objData.id)};
 
         let objData = Object.assign({}, objs[key], spriteSheet);
-        
+
         this.createObject(objData);
 
       }, this);

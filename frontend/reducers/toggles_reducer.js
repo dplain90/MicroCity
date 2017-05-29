@@ -1,7 +1,7 @@
 import { UPDATE_TOGGLE } from '../actions/toggle_actions';
 
 const _defaultCode = Object.freeze({
-  paletteType: 'text'
+  run: false
 
 });
 

@@ -1,22 +1,27 @@
-import SpriteObject from "./sprite_object";
-
-class Tile extends SpriteObject {
-  constructor(data){
-    let { spriteSheet, objData } = data;
-    super(spriteSheet, objData);
-    let { rotation } = objData;
-    this.regX = (this.width / 2);
-    this.regY = (this.height / 2);
-    this.rotation = rotation;
+class Tile extends createjs.Container {
+  constructor(x, y, height, width){
+    super();
     this.touching = this.touching.bind(this);
-    this.setupBounds();
-    let bounds = this.getTransformedBounds();
-    this.hitArea = new createjs.Shape();
-    
-    this.hitArea.graphics.setStrokeStyle(1).beginStroke("white").beginFill("white").drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    this.create = this.create.bind(this);
+    this.x = x;
+    this.y = y;
+    this.height = height;
+    this.width = width;
+    this.tile = this.create();
+    this.alpha = 0.3;
+    this.addChild(this.tile);
+    this.hitArea = this.create();
 
+  }
 
-
+  create(){
+    let block = new createjs.Shape();
+    block.graphics
+      .f("white")
+      .setStrokeStyle(2)
+      .beginStroke("black")
+      .dr(0, 0, this.width, this.height);
+    return block;
   }
 
   touching(obj){
@@ -24,10 +29,9 @@ class Tile extends SpriteObject {
     let tilePt = new createjs.Point(xRotate, yRotate);
     // let { x, y} = tilePt.localToLocal(0, 0, obj);
     this.hitTest(obj.x, obj.y);
-    debugger
     return Math.abs(x) <= this.width && Math.abs(y) <= this.height;
   }
 
 }
 
-export default Tile;
+export default createjs.promote(Tile, "Container");

@@ -14,8 +14,7 @@ export const getLevels = (difficulty) => ({
 });
 
 export const levelCompleted = level => {
-  newLevel = level + 1;
-  if(levelDirectory[newLevel]) {
-    return updateLevel(levelDirectory[newLevel]);
-  }
+  let newLevel = levelDirectory[level + 1];
+  let updated = updateLevel(newLevel);
+  return updated;
 };

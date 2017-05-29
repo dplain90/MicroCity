@@ -1,7 +1,7 @@
 class GridObject extends createjs.Sprite {
   constructor(spriteSheet, objData){
     super(spriteSheet);
-    debugger
+
     let { x, y, scaleX, scaleY, frame } = objData;
 
     this.x = x;
@@ -9,9 +9,10 @@ class GridObject extends createjs.Sprite {
     this.scaleX = scaleX;
     this.scaleY = scaleY;
 
-    this.gotoAndStop(frame);
+    if(frame) this.gotoAndStop(frame);
     this.mid = this.mid.bind(this);
     this.setupBounds = this.setupBounds.bind(this);
+    this.setupBounds();
   }
 
   setupBounds(){

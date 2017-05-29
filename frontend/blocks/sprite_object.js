@@ -14,10 +14,11 @@ class SpriteObject extends GridObject {
     this.x = this.startX;
     this.y = this.startY;
   }
-  
+
   touching(obj){
-    let { x, y} = this.localToLocal(0, 0, obj);
-    return Math.abs(x) <= this.width && Math.abs(y) <= this.height;
+    let yDif = obj.mid().y - this.mid().y;
+    let xDif = obj.mid().x - (this.x + this.width);
+    return Math.abs(xDif) <= obj.width / 2  && Math.abs(yDif) <= obj.height / 2;
   }
 
   move(pos){

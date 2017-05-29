@@ -63,6 +63,7 @@ class ParentCode {
   }
 
   static insertChild(closestBlock, child){
+    debugger
     let children;
     if(this.isParent(closestBlock)){
       children = Array.from(closestBlock.codeChildren);
@@ -76,7 +77,7 @@ class ParentCode {
       let i = 0;
       while(children[i] !== closestBlock) i++;
       children.splice(i, 0, child);
-      debugger
+
       parent.codeChildren = new Set(children);
       child.codeParent = parent;
 

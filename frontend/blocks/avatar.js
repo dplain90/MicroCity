@@ -8,6 +8,12 @@ class Avatar extends SpriteObject {
     this.actions = objData.actions;
     this.handleMove = this.handleMove.bind(this);
     this.handleAction = this.handleAction.bind(this);
+    this.gotoAndPlay = this.gotoAndPlay.bind(this);
+    this.handleFrame = {
+      'animation': this.gotoAndPlay,
+      'movement': this.move,
+      'action': this.handleAction
+    };
   }
 
   handleAction(action) {
@@ -15,14 +21,9 @@ class Avatar extends SpriteObject {
     this[actionProperty] = action[actionProperty];
   }
 
-  handleMove(moveData){
-    let { move, animation, action } = moveData;
-    this.handleAction(action);
-    if(animation){
-      this.gotoAndPlay(animation);
-    } else {
-      this.move(move);
-    }
+  handleMove(frame){
+    let val = frame[frame.type];
+    this.handleFrame[frame.type](val);
   }
 
 }

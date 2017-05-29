@@ -13,10 +13,15 @@ class WorkStation extends React.Component {
   }
 
   componentDidMount() {
+  // let editorData = {
+  //   x: 100,
+  //   width: 150,
+  //   height: 250
+  // };
   let editorData = {
-    x: 100,
-    width: 150,
-    height: 250
+    x: 60,
+    width: 380,
+    height: 430
   };
     // this.blockList.each((block) => { this.stage.addChild(block) });
     // this.newBlock = new BasicBlock(sampleData);
@@ -44,11 +49,12 @@ class WorkStation extends React.Component {
      this.stage.update();
   }
 
-
+  // height: 300px;
+  // width: 300px;
   render(){
     return (
       <div className="workstation">
-        <canvas id="workstationCanvas" width="450px" height="450px">
+        <canvas id="workstationCanvas" width="500px" height="500px">
         </canvas>
       </div>
     );

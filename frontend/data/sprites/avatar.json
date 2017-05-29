@@ -1,8 +1,7 @@
 {
   "animations": {
     "idle": [
-      10,
-      12
+      10
     ],
     "jump": [
       16

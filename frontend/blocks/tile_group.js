@@ -1,21 +1,29 @@
 import Tile from './tile';
 
-class TileGroup extends createjs.SpriteContainer {
-  constructor(data){
-    super(data.spriteSheet);
+class TileGroup {
+  constructor(data, stage){
+    this.stage = stage;
     this.createTiles = this.createTiles.bind(this);
-
-    this.createTiles(data.tiles);
+    this.createTiles(data);
   }
 
-  createTiles(tiles){
-    tiles.forEach((tileData) => {
-      let newTile = new Tile(tileData);
-      this.addChild(newTile);
-    }, this);
-
+  createTiles(data){
+    let { x, y, width, height, num, axis } = data.objData;
+    const start_y = y;
+    const start_x = x;
+    for (let i = 0; i < num; i++) {
+      if(axis === 'y') {
+        y = start_y + (height * i);
+        console.log(y);
+      } else {
+        x = start_x + (width * i);
+      }
+      let tile = new Tile(x, y, width, height);
+      this.stage.addChild(tile);
+      this.stage.update();
+    }
   }
 
 
 }
-export default createjs.promote(TileGroup, "SpriteContainer");
+export default TileGroup;

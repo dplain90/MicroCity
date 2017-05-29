@@ -13,9 +13,9 @@ class Level extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if(newProps.toggle.run !== this.props.toggle.run) {
-      this.setState({runStatus: newProps.toggle.run});
-    }
+    // if(newProps.toggle.run !== this.props.toggle.run) {
+    //   this.setState({runStatus: newProps.toggle.run});
+    // }
   }
 
   handleClick(e) {
@@ -43,9 +43,9 @@ class Level extends React.Component {
     return (
       <div className="level">
         <div className="levelMenu">
-          <h2> Level {number}: {title} </h2>
+
           <h3> { description } </h3>
-        
+
         </div>
         <div className="levelWidget">
           <WorkStationContainer />
