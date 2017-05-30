@@ -14,7 +14,7 @@ class ParentCode {
   }
 
   static isParent(block){
-    return block.codeChildren !== undefined && block.codeChildren.size > 0;
+    return block !== undefined && block.codeChildren !== undefined && block.codeChildren.size > 0 && block.closed;
   }
 
   static removeChild(child){
@@ -34,7 +34,7 @@ class ParentCode {
         parent.codeChildren.delete(child);
       }
 
-      child.codeParent = null;
+      // child.codeParent = null;
 
       if(parent.line !== undefined){
         parent.reset();
@@ -55,7 +55,7 @@ class ParentCode {
   static clearChildren(parent){
     if(parent.prev === null) return null;
     ParentCode.each(parent.codeChildren, (child) => {
-      child.codeParent = parent.codeParent;
+      this.addChild(parent.codeParent, child);
       child.removeChild(child.connectContainer);
     });
 
@@ -64,7 +64,8 @@ class ParentCode {
 
   static insertChild(closestBlock, child){
     let children;
-    if(this.isParent(closestBlock)){
+    debugger
+    if(this.isParent(closestBlock) && this.lastChild(closestBlock).y > child.y){
       children = Array.from(closestBlock.codeChildren);
       children.unshift(child);
       closestBlock.codeChildren = new Set(children);

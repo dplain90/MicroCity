@@ -6,6 +6,7 @@ class BlockList {
     this.head = new Block();
     this.head.y = 5;
     this.head.idx = -1;
+    this.head.closed = true;
     this.tail = new Block();
     this.stage = stage;
     this.head.next = this.tail;

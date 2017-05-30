@@ -33,13 +33,7 @@ class Editor extends BlockList {
       });
     this.code = new CodeTree(this.head);
     window.code = this.code;
-  //   this.code.executeCode = new Proxy(this.code.execute, {
-  //     call: function(target, that, args) {
-  //       let result = target.apply(that, args);
-  //
-  //
-  //   }
-  // }
+
   }
 
   handleHover(block) {
@@ -82,6 +76,7 @@ class Editor extends BlockList {
 
   addLoopChildren(loop){
     let callback = (evt) => {
+      loop.closed = true;
       let stage = this.stage;
       loop.removeAllEventListeners();
       stage.removeAllEventListeners();
@@ -143,13 +138,19 @@ class Editor extends BlockList {
     let { x: panelX, width: panelW } = this.panel.getTransformedBounds();
     let editor = this;
     this.each(function() {
+      let parent = this.codeParent;
       this.hover = 0;
       Block.setY(this, 15, editor.getIdx(this));
+      if(ParentCode.isParent(parent) && parent !== editor.head) {
+        parent.completeConnection();
+      }
     });
+
     this.stage.update();
   }
 
   resetChildren(){
+
     ParentCode.clearChildren(this.code.root);
     let rootNode = this.head;
     this.each(function(){
@@ -168,7 +169,7 @@ class Editor extends BlockList {
     block.prev = closestBlock;
     closestBlock.next.prev = block;
     closestBlock.next = block;
-      if(closestBlock === this.head){
+      if(closestBlock === this.head || ParentCode.lastChild(closestBlock.codeParent) === closestBlock ){
         ParentCode.addChild(this.head, block);
         this.recalibrate();
       } else {

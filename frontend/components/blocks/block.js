@@ -18,6 +18,7 @@ class Block extends createjs.Container {
     this.calcHover = this.calcHover.bind(this);
     this.intersects = this.intersects.bind(this);
     this.farY = this.farY.bind(this);
+    this.hoverCallback = this.hoverCallback.bind(this);
     this.codeChildren = codeChildren;
     this.mouseChildren = false;
   }
@@ -108,6 +109,10 @@ class Block extends createjs.Container {
 
     return Math.abs(diff) < size;
 
+  }
+
+  hoverCallback(e){
+    this.cursor = "pointer";
   }
 
   farY(){

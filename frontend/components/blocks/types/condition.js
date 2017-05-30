@@ -18,7 +18,7 @@ class Condition extends BasicBlock {
     this.dom = input;
     this.domEl = new createjs.DOMElement(input);
 
-    this.domEl.x = ((this.width / 2) / 2) + 3 - 150;
+    this.domEl.x = ((this.width / 2) / 2) + 3 - 35;
     this.domEl.y = ((this.height / 2) / 2) + 3;
 
     this.removeChildAt(1);

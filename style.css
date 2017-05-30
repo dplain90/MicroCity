@@ -119,6 +119,16 @@ header {
 
 }
 
+select {
+
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  background-image: none;
+  -webkit-appearance: none;
+  font-size: 5px;
+}
+
 .grid {
   display: flex;
   flex-direction: column;
@@ -183,12 +193,14 @@ header {
 .grid button:hover {
   color: #fff;
 }
-.grid button:active, .grid button:focus {
+.grid button:focus {
   outline: none;
-  color: #fff;
 }
 
-
+select:focus {
+  border: none;
+  outline: none;
+}
 .workstation {
   background-color: #cbefe9;
   display: flex;
@@ -208,9 +220,12 @@ header {
   height: 5px;*/
 }
 
+#levelCompleted {
+  left: 100px;
+}
+
 .workstation input:focus{
    outline-width: 0;
-
 }
 .paletteContainer {
  flex: 0.5;

@@ -1,4 +1,4 @@
-import { jump, step, forward, repeat, whileLoop } from './functions';
+import { jump, step, forward, repeat, whileLoop, down, left } from './functions';
 import { textInput, selectInput } from './inputs';
 export const Blocks =
   {
@@ -6,7 +6,7 @@ export const Blocks =
     blocks: {
       1:{
         offset: 10,
-        name: 'jump',
+        name: 'up',
         type: 'basic',
         color: '#fff',
         scaleX: 0.5,
@@ -15,21 +15,31 @@ export const Blocks =
         fn: jump,
         fnParams: []
       },
-
     2: {
+      offset: 10,
+      name: 'down',
+      type: 'basic',
+      color: '#fff',
+      scaleX: 0.5,
+      scaleY: 0.5,
+      font: "7.5px Audiowide, cursive",
+      fn: down,
+      fnParams: []
+    },
+    3: {
         offset: 10,
-        name: 'step',
+        name: 'left',
         type: 'basic',
         color: '#fff',
         scaleX: 0.5,
         scaleY: 0.5,
         font: "7.5px Audiowide, cursive",
-        fn: step,
-       fnParams: [2]
+        fn: left,
+       fnParams: []
       },
-    3: {
+    4: {
       offset: 10,
-      name: 'forward',
+      name: 'right',
       type: 'basic',
       color: '#fff',
       scaleX: 0.5,
@@ -38,7 +48,7 @@ export const Blocks =
       fn: forward,
       fnParams: []
     },
-    4: {
+    5: {
       offset: 10,
       name: 'repeat',
       type: 'loop',
@@ -50,7 +60,7 @@ export const Blocks =
       fnParams: [0, 0],
       input: textInput
     },
-    5: {
+    6: {
       offset: 10,
       name: 'while',
       type: 'loop',
@@ -66,9 +76,10 @@ export const Blocks =
   manifest: {
     "path": "images/blocks/",
      "manifest": [
-        {"src": "microchip1.png", "id":"forward"},
-        {"src": "microchip1.png", "id":"step"},
-        {"src": "microchip1.png", "id":"jump"},
+        {"src": "microchip1.png", "id":"right"},
+        {"src": "microchip1.png", "id":"left"},
+        {"src": "microchip1.png", "id":"up"},
+        {"src": "microchip1.png", "id":"down"},
         {"src": "microchip1.png", "id":"repeat"},
         {"src": "microchip1.png", "id":"while"},
         {"src": "conditionBlock.png", "id":"textField"}

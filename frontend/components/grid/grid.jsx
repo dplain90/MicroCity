@@ -87,7 +87,7 @@ class Grid extends React.Component {
   nextLevelButton(){
     if(this.state.completed) {
     return (
-      <button className="levelCompleted" onClick={this.nextLevel} > Next Level
+      <button className="levelCompleted" id="levelCompleted" onClick={this.nextLevel} > Next Level
       </button>
       );
     }
@@ -126,6 +126,7 @@ class Grid extends React.Component {
     this.setState({completed: false, disabled: false});
     this.queue = [];
     this.level.reset();
+    this.stage.update();
   }
 
   render(){

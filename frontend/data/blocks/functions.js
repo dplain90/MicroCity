@@ -29,15 +29,15 @@ export const defaultFrame = function(){
   return frame.animate('idle');
 };
 
-export const step = function(num) {
+export const step = function(num, dir) {
   let result = frame.animate('move');
-  let steps = frame.times(num, frame.move(5,0));
+  let steps = frame.times(num, frame.move(5 * dir,0));
   result = steps.concat(result);
   return result;
 };
 
 export const forward = function() {
-  return step(15);
+  return step(15, 1);
 };
 
 export const repeat = function(num, increment) {
@@ -47,6 +47,7 @@ export const repeat = function(num, increment) {
   } else {
   this.fnParams = [num, increment + 1];
   }
+  return [frame];
 }
 
 export const whileLoop = function() {
@@ -68,10 +69,17 @@ export const whileLoop = function() {
 
 export const jump = function() {
   let result = frame.animate('jump');
-  // [1, -1].forEach( (dir) => {
   let moveY = frame.times(15, frame.move(0, -5));
-  // let moveX = frame.move(10,0);
   result = moveY.concat(result);
-  // });
   return result;
+};
+export const down = function() {
+  let result = frame.animate('jump');
+  let moveY = frame.times(15, frame.move(0, 5));
+  result = moveY.concat(result);
+  return result;
+};
+
+export const left = function() {
+  return step(15, -1);
 };

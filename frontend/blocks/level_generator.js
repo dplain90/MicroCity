@@ -2,6 +2,7 @@ import ObjectGenerator from './object_generator';
 import Avatar from './avatar';
 import Tile from './tile';
 import Key from './key';
+import Evil from './evil';
 import TileGroup from './tile_group';
 class Level extends ObjectGenerator {
   constructor(data, stage){
@@ -14,6 +15,7 @@ class Level extends ObjectGenerator {
     this.tileAhead = this.tileAhead.bind(this);
     this.offBoard = this.offBoard.bind(this);
     this.projectOffBoard = this.projectOffBoard.bind(this);
+    this.touchingGameEnder = this.touchingGameEnder.bind(this);
     this.gameEnders = [];
     this.allChildren = [];
     this.processCondition = this.processCondition.bind(this);
@@ -35,6 +37,14 @@ class Level extends ObjectGenerator {
     callback.call(this, pt.x, pt.y);
   }
 
+  touchingGameEnder() {
+    for (var i = 0; i < this.gameEnders.length; i++) {
+      if(this.avatar.touching(this.gameEnders[i])){
+        return true;
+      }
+    }
+    return false;
+  }
   tracePath(){
     let point = {x: this.avatar.x, y: this.avatar.y};
     this.history.forEach((frame) => {
@@ -48,7 +58,7 @@ class Level extends ObjectGenerator {
   }
 
   lost(){
-    if(this.offBoard(this.avatar.x, this.avatar.y)) {
+    if(this.offBoard(this.avatar.x, this.avatar.y) || this.touchingGameEnder()) {
       this.lineStroke.style = "#f00000";
       return true;
     } else {
@@ -74,7 +84,7 @@ class Level extends ObjectGenerator {
     let lastHistory = this.history[0];
     let myNextX = lastHistory.movement.x;
     let myNextY = lastHistory.movement.y;
-    debugger
+
     // if(myNextX === 0 && myNextY === 0){
     // } else if (myNextX === 0) {
     //
@@ -148,6 +158,11 @@ class Level extends ObjectGenerator {
         window.key = object;
         this.stage.addChild(object);
         // this.allChildren.push(object);
+        break;
+      case 'evil':
+        object = new Evil(data);
+        this.gameEnders.push(object);
+        this.stage.addChild(object);
         break;
       case 'line':
         let line = new createjs.Shape();

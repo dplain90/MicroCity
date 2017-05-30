@@ -15,8 +15,8 @@ class BasicBlock extends Block {
   imgSetup(){
     Block.setup(this);
     this.on("pressmove", this.dragCallback);
+    this.on("mouseover", this.hoverCallback);
   }
-
 
 }
 

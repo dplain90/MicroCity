@@ -8,10 +8,11 @@ class TextInput extends Condition {
     this.unhide = this.unhide.bind(this);
     this.hide = this.hide.bind(this);
     this.addListener();
+    this.domEl.x += 5;
   }
 
   addListener(){
-    this.domEl.htmlElement.onchange = this.handleChange;
+    this.domEl.htmlElement.oninput = this.handleChange;
   }
 
   removeDOM(){
@@ -26,6 +27,8 @@ class TextInput extends Condition {
   }
 
   handleChange(e){
+    let val = e.currentTarget.value;
+    if(val === "") val = "0";
     this.parent.updateParams([parseInt(e.currentTarget.value), 0]);
   }
 }

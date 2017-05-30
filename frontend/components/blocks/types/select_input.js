@@ -2,14 +2,18 @@ import Condition from './condition';
 class SelectInput extends Condition {
   constructor(data){
     super(data);
+    this.options = data.selectOptions;
     this.addOptions = this.addOptions.bind(this);
-    this.addOptions(data.selectOptions);
+    this.addOptions();
     this.addListener = this.addListener.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.hide = this.hide.bind(this);
     this.unhide = this.unhide.bind(this);
     this.removeDOM = this.removeDOM.bind(this);
     this.addListener();
+    this.dom.style.width = "30px"
+    this.dom.style.height = "10px";
+
   }
 
   removeDOM(){
@@ -23,11 +27,12 @@ class SelectInput extends Condition {
     this.visible = true;
   }
 
-  addOptions(options){
-    for (var i = 0; i < options.length; i++) {
+  addOptions(){
+
+    for (var i = 0; i < this.options.length; i++) {
       let htmlEl = document.createElement('option');
-      htmlEl.setAttribute('value', options[i].value);
-      htmlEl.textContent = options[i].text;
+      htmlEl.setAttribute('value', this.options[i].value);
+      htmlEl.textContent = this.options[i].text;
       this.domEl.htmlElement.append(htmlEl);
     }
   }

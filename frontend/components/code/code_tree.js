@@ -13,7 +13,6 @@ class CodeTree {
     let frame = block.fn.call(block, ...block.fnParams);
     if(frame.length !== 0) {
       if(frame[0].type === 'conditional'){
-      debugger
       this.level.processCondition(frame[0].condition);
       }
     }
@@ -48,15 +47,20 @@ class CodeTree {
     }
     let queue = [];
     while(!blockNode.completed) {
-      for (var i = 0; i < children.length; i++) {
+      for (let i = 0; i < children.length; i++) {
         let descendents = this.processTree(children[i]);
         // console.log('this is completed');
         // console.log(blockNode.completed);
         // this.execute(blockNode);
         // if(blockNode.completed) break;
-        queue = queue.concat(descendents);
+        if(blockNode === this.root) {
+          queue = descendents.concat(queue);
+        } else {
+          queue = queue.concat(descendents);
+        }
         this.level.history = queue;
       }
+
       if(blockNode === this.root) blockNode.completed = true;
       this.execute(blockNode);
     }
@@ -64,7 +68,5 @@ class CodeTree {
     blockNode.completed = false;
     return queue;
   }
-
 }
-
 export default CodeTree;

@@ -59,7 +59,6 @@ class Palette extends BlockList {
       default:
         return null;
     }
-
     return block;
   }
 

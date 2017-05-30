@@ -1,7 +1,7 @@
 import { UPDATE_LEVEL, RECEIVE_LEVEL } from '../actions/level_actions';
-import { level1 } from '../data/levels/level_1.js';
+import { level2 } from '../data/levels/level_2.js';
 
-const _defaultLevel= Object.freeze(level1);
+const _defaultLevel= Object.freeze(level2);
 
 const LevelReducer = (state = _defaultLevel, action) => {
   switch(action.type) {

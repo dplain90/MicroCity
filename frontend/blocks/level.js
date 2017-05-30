@@ -247,7 +247,7 @@ class Avatar {
   }
 
   touchingGround(){
-  
+
     if(this.obj.jumping){
       return true
     } else {

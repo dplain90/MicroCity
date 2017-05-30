@@ -9,6 +9,7 @@ class Loop extends BasicBlock {
     super(data);
     let { codeChildren, input } = data;
     if(codeChildren === undefined) codeChildren = new Set();
+    this.closed = false;
     this.editorCallbackComplete = false;
     this.codeChildren = codeChildren;
     this.drawConnector = this.drawConnector.bind(this);
@@ -50,8 +51,8 @@ class Loop extends BasicBlock {
       this.inputField = new TextInput(inputData);
     } else {
       this.inputField = new SelectInput(inputData);
+      this.updateParams(this.inputField.options[0].value);
     }
-
     this.addChild(this.inputField);
     this.inputField.y = 0;
     this.inputField.x = this.width + 2;
