@@ -1,6 +1,6 @@
 var path = require('path');
 module.exports = {
-  entry: './frontend/micro_city.jsx',
+  entry: './lib/micro_city.jsx',
   output: {
     filename: "./bundle.js"
   },
