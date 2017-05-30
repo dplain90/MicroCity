@@ -8,7 +8,8 @@
     "url": "git+https://github.com/dplain90/MicroCity.git"
   },
   "scripts": {
-    "postinstall": "webpack"
+    "postinstall": "webpack",
+    "start": "http-server"
   },
   "engines": {
     "node": "6.10.1",
@@ -28,6 +29,7 @@
     "babel-preset-react": "^6.24.1",
     "createjs-easeljs": "^0.8.2",
     "easel-js": "^1.0.0",
+    "http-server": "^0.10.0",
     "preload-js": "^0.6.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
