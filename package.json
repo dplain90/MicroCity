@@ -8,8 +8,7 @@
     "url": "git+https://github.com/dplain90/MicroCity.git"
   },
   "scripts": {
-    "postinstall": "webpack",
-    "start": "webpack-dev-server --inline"
+    "postinstall": "webpack"
   },
   "engines": {
     "node": "6.10.1",
