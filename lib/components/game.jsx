@@ -19,10 +19,8 @@ class Game extends React.Component {
     return (
       <div className="gameContainer">
         <div className="chooseLevel">
-          <h2> Choose your difficulty: </h2>
-          <button onClick={this.handleClick} value="easy"> Easy </button>
-          <button onClick={this.handleClick} value="medium"> Medium </button>
-          <button onClick={this.handleClick} value="hard"> Hard </button>
+          <h2> Welcome! </h2>
+          <button onClick={this.handleClick} value="easy"> Play Now! </button>
         </div>
 
       </div>

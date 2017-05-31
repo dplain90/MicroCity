@@ -51,6 +51,17 @@ class Level extends React.Component {
           <WorkStationContainer />
           <GridContainer />
         </div>
+        <div className="HowTo">
+          <h3> How To Play </h3>
+          Objective: <p> Get your robot to the key without going out of bounds or hitting an enemy.
+
+          To move your robot, you must first give it code instructions by dragging code blocks located on the far left to your editor panel.
+
+          To test your code, click the Run button.
+
+          Good luck!
+          </p>
+        </div>
       </div>
     );
 

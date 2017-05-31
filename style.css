@@ -159,7 +159,7 @@ select {
   padding-right: 45px;
 }
 
-.grid button {
+.grid button, .chooseLevel button {
   background-color: #1abc9c;
   display: inline-block;
   border: none;
@@ -182,17 +182,17 @@ select {
           user-select: none;
 }
 
-.grid button:active {
+.grid button:active, .chooseLevel button:active {
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.1), inset 0 0.25em 0.5em rgba(0, 0, 0, 0.05);
   margin-top: .25em;
   padding-bottom: .5em;
 }
 
 
-.grid button:hover {
+.grid button:hover, .chooseLevel button:hover {
   color: #fff;
 }
-.grid button:focus {
+.grid button:focus, .chooseLevel button:focus {
   outline: none;
 }
 
