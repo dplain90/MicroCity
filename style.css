@@ -126,6 +126,7 @@ select {
   background-image: none;
   -webkit-appearance: none;
   font-size: 5px;
+  font-family: 'Audiowide', cursive;
 }
 
 .grid {
