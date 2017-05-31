@@ -103,8 +103,8 @@ header {
   position: relative;
 }
 #workstationCanvas {
-  height: 600px;
-  width: 600px;
+  height: 500px;
+  width: 500px;
 }
 #gridCanvas {
   background-image: url('./assets/images/palettebackground.png');
@@ -207,7 +207,7 @@ select:focus {
   justify-content: flex-start;
   border: 3px solid white;
   border-radius: 8px;
-  height: 600px;
+  height: 500px;
 }
 
 .workstation input{
