@@ -138,7 +138,7 @@ select {
 .grid button {
   position: absolute;
   left: -58px;
-  top: 249px;
+  top: 459px;
   z-index: 400;
 }
 
@@ -155,7 +155,7 @@ select {
 }
 .grid button#reset {
   left: -126px;
-  top: 249px;
+  top: 459px;
   padding-right: 45px;
 }
 
