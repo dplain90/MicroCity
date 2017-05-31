@@ -207,7 +207,7 @@ select:focus {
   justify-content: flex-start;
   border: 3px solid white;
   border-radius: 8px;
-  height: 280px;
+  height: 600px;
 }
 
 .workstation input{
