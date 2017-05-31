@@ -17,21 +17,18 @@ class Condition extends BasicBlock {
     this.unhide = this.unhide.bind(this);
     this.dom = input;
     this.domEl = new createjs.DOMElement(input);
-
-    this.domEl.x = ((this.width / 2) / 2) + 3 - 37;
-    this.domEl.y = ((this.height / 2) / 2) + 33;
-
+    this.domEl.x = ((this.width / 2) / 2) + 3 - 35;
+    this.domEl.y = ((this.height / 2) / 2) + 3;
     this.removeChildAt(1);
     // this.domEl.y = this.domEl.y - (this.height / 2) - 7;
     this.addChild(this.domEl);
-
     this.calibrateHeight = this.calibrateHeight.bind(this);
   }
 
 
 
   calibrateHeight(i){
-    this.domEl.y = ((this.height / 2) / 2) - (15*i) - (i*7);
+    this.domEl.y = ((this.height / 2) / 2) - 3 - (15*i) - (i*9);
   }
 }
 export default Condition;
