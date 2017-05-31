@@ -104,16 +104,16 @@ header {
   position: relative;
 }
 #workstationCanvas {
-  height: 280px;
-  width: 280px;
+  height: 600px;
+  width: 600px;
 }
 #gridCanvas {
   background-image: url('./assets/images/palettebackground.png');
   background-size: cover;
   background-color: rgba(0,0,0,0.5);
   background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url('./assets/images/palettebackground.png');
-  height: 280px;
-  width: 280px;
+  height: 500px;
+  width: 500px;
   border: 3px solid white;
   border-radius: 8px;
 
