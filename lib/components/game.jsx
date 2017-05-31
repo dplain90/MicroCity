@@ -20,6 +20,7 @@ class Game extends React.Component {
       <div className="gameContainer">
         <div className="chooseLevel">
           <h2> Welcome! </h2>
+          <p> Micro City is an interactive programming game, for students ages 10-13. Click the button below to give it a try. </p>
           <button onClick={this.handleClick} value="easy"> Play Now! </button>
         </div>
 
