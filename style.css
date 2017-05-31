@@ -12,7 +12,6 @@ div, h1, h2, h3, h4 {
   height: 10px;
   width: 5px;
   font-size: 8px;
-  /*position: absolute;*/
   z-index: 10000;
   border: none;
 }
