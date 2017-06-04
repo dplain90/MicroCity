@@ -4,6 +4,7 @@ import { resetGrid } from '../../actions/grid_actions';
 import { levelCompleted } from '../../actions/level_actions';
 import { updateToggle } from '../../actions/toggle_actions';
 import { asArray } from '../../reducers/selectors';
+import { setStage } from '../../actions/stage_actions';
 const mapStateToProps = (state, ownProps) => {
   return {
   toggles: state.toggles,
@@ -16,7 +17,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
   resetGrid: () => dispatch(resetGrid()),
   levelCompleted: (level) => dispatch(levelCompleted(level)),
-  updateToggle: (toggle) => dispatch(updateToggle(toggle))
+  updateToggle: (toggle) => dispatch(updateToggle(toggle)),
+  setStage: (stage) => dispatch(setStage(stage))
 });
 
 export default connect(

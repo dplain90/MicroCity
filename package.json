@@ -9,7 +9,7 @@
   },
   "scripts": {
     "postinstall": "webpack",
-    "start": "http-server"
+    "start": "webpack-dev-server --inline"
   },
   "engines": {
     "node": "6.10.1",

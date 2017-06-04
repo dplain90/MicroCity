@@ -46,6 +46,7 @@ class Grid extends React.Component {
      createjs.Ticker.addEventListener("tick", this.handleTick);
      createjs.Ticker.setInterval(10);
      createjs.Ticker.setFPS(50);
+     this.props.setStage({grid: this.stage});
   }
 
   handleRun(e) {

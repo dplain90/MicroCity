@@ -24,6 +24,7 @@ class WorkStation extends React.Component {
      this.stage.regX = this.stage.regY = -.5;
     this.palette = new Palette(this.stage, this.props.blockData);
     this.editor = new Editor(this.stage, editorData);
+
     this.stage.enableMouseOver(10);
     this.stage.mouseMoveOutside = true;
     this.stage.isMainStage = true;
@@ -33,7 +34,7 @@ class WorkStation extends React.Component {
     this.stage.update();
     createjs.Ticker.addEventListener("tick", this.handleTick);
     this.props.updateCode(this.editor.code);
-
+    this.props.setStage({workstation: this.stage});
   }
   handleTick(e){
      this.stage.update();
