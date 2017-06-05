@@ -15,9 +15,9 @@ class WorkStation extends React.Component {
 
   componentDidMount() {
   let editorData = {
-    x: 60,
+    x: 110,
     width: 480,
-    height: 600
+    height: 620
   };
 
     this.stage = new createjs.Stage("workstationCanvas");
@@ -25,7 +25,7 @@ class WorkStation extends React.Component {
      this.stage.regX = this.stage.regY = -.5;
     this.palette = new Palette(this.stage, this.props.blockData);
     this.editor = new Editor(this.stage, editorData);
-
+    window.editor = this.editor;
     this.stage.enableMouseOver(10);
     this.stage.mouseMoveOutside = true;
     this.stage.isMainStage = true;

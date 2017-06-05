@@ -198,7 +198,7 @@ select {
 .grid button, .workstation button {
   position: absolute;
   left: 40%;
-  bottom: 19%;
+  bottom: 20%;
   z-index: 400;
 }
 
@@ -219,7 +219,7 @@ select {
 }
 .grid button#reset {
   left: 33%;
-  bottom: 19%;
+  bottom: 20%;
   padding-right: 45px;
 }
 
@@ -244,6 +244,7 @@ select {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  text-align: center;
 }
 .next-btn {
   display: flex;
@@ -266,7 +267,7 @@ select {
 }
 
 
-.grid button:hover, .chooseLevel button:hover {
+.grid button:hover, .chooseLevel button:hover, .workstation button:hover {
   color: #fff;
 }
 .grid button:focus, .chooseLevel button:focus, .next-btn button:focus, .workstation button:focus {
