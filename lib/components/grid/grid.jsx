@@ -32,7 +32,7 @@ class Grid extends React.Component {
     }
 
     if(newProps.level !== this.props.level) {
-      this.setState({completed: false});
+      this.setState({completed: false, number: newProps.level.number});
       this.stage.removeAllChildren();
       this.level = new LevelGenerator(newProps.levelData, this.stage);
     }
@@ -57,6 +57,7 @@ class Grid extends React.Component {
   nextLevel(e) {
     e.preventDefault();
     this.props.levelCompleted(this.state.number);
+    this.setState({disabled: false, completed: false});
   }
 
   runButton(){
@@ -86,6 +87,8 @@ class Grid extends React.Component {
       case 'ongoing':
         break;
       case 'won':
+      this.level.key.gotoAndStop(3);
+      this.stage.update();
         this.setState({completed: true});
         break;
       case 'lost':
@@ -97,13 +100,21 @@ class Grid extends React.Component {
 
   handleTick(event){
 // if (this.queue.length > 0) this.setState({ code: [] });
+    // if(this.state.completed){
+    //
+    //
+    // }
+    // this.stage.update();
+
     if(this.queue.length > 0) {
       let frame = this.queue.pop();
       let status = this.level.handleTick(frame);
+
       this.handleStatus(status);
       if(this.queue.length === 0) {
         this.level.idle();
         this.level.history = [];
+        this.setState({disabled: true});
     }
 
     this.stage.update();

@@ -7,6 +7,7 @@ class WorkStation extends React.Component {
   constructor(props){
     super(props);
     this.handleTick = this.handleTick.bind(this);
+    this.handleClear = this.handleClear.bind(this);
     this.state = {
       category: 'motion'
     };
@@ -39,10 +40,15 @@ class WorkStation extends React.Component {
   handleTick(e){
      this.stage.update();
   }
+  handleClear(e){
+    this.editor.clearBlocks();
+    this.stage.update();
+  }
 
   render(){
     return (
       <div className="workstation">
+        <button onClick={this.handleClear}>Clear</button>
         <canvas id="workstationCanvas" width="700px" height="700px">
         </canvas>
       </div>

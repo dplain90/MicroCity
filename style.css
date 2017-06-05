@@ -1,7 +1,7 @@
 div, h1, h2, h3, h4, p {
   margin: 0px;
   padding: 0px;
-  font-family: 'Audiowide', cursive;
+  font-family: 'Orbitron', sans-serif;
 }
 
 html, body {
@@ -13,13 +13,27 @@ html, body {
 }
 
 .instruction {
-  position: absolute;
-  bottom: 0%;
-  left: 0%;
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 4px;
   width: 100%;
-  height: 20%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 
+.instruction-body {
+  width: 100%;
+  margin-top: 20px;
+  height: 100%;
+  /*padding: 5px*/
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  border-radius: 4px;
 }
 
 .block-input {
@@ -44,8 +58,15 @@ div.chooseLevel {
 html, body {
   width: 100%;
   height: 100%;
-  background-color: #69B4A7;
+  /*background-color: #69B4A7;*/
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: rgba(0,0,0,0.5);
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.3) 100%), url('./assets/images/palettebackground.png');
+
+  background-color: #247847;
 }
+
 
 body {
   margin-top: 0px;
@@ -54,6 +75,7 @@ body {
 }
 
 header {
+  margin-top: 20px;
   display: flex;
   justify-content: center;
   color: #fff;
@@ -75,7 +97,8 @@ header {
 #root {
   width: 94%;
   height: 100%;
-  background-color: #ffffff;
+  background-color: rgba(255,255,255,0.2);
+  /*background-color: #ffffff;*/
   display: flex;
   justify-content: center;
   align-items: center
@@ -109,12 +132,30 @@ header {
 }
 
 .level {
-  width: 100%;
+
   display: inherit;
   flex-direction: column;
 }
 
+.levelStages {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.instructionWidget {
+  width: 100%;
+}
 .levelWidget {
+  position: absolute;
+  left: 100%;
+  top: 0%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+}
+.levelWidget-container{
   width: 100%;
   position: relative;
 }
@@ -129,9 +170,10 @@ header {
   background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url('./assets/images/palettebackground.png');
   height: 500px;
   width: 500px;
-  border: 3px solid white;
-  border-radius: 8px;
 
+  border-radius: 8px;
+  border: 2px solid white;
+  box-shadow: 0 0 20px white;
 }
 
 select {
@@ -142,23 +184,26 @@ select {
   background-image: none;
   -webkit-appearance: none;
   font-size: 5px;
-  font-family: 'Audiowide', cursive;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .grid {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  position: absolute;
-  top: 0%;
-  right: 0%;
+
+
 }
 
-.grid button {
+.grid button, .workstation button {
   position: absolute;
-  left: -58px;
-  top: 459px;
+  left: 40%;
+  bottom: 19%;
   z-index: 400;
+}
+
+.workstation button {
+  left: 26%;
 }
 
 .grid button.levelCompleted {
@@ -173,12 +218,12 @@ select {
   z-index: 400;
 }
 .grid button#reset {
-  left: -126px;
-  top: 459px;
+  left: 33%;
+  bottom: 19%;
   padding-right: 45px;
 }
 
-.grid button, .chooseLevel button {
+.grid button, .chooseLevel button, .next-btn button, .workstation button {
   background-color: #1abc9c;
   display: inline-block;
   border: none;
@@ -186,9 +231,9 @@ select {
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 -0.25em 0 rgba(0, 0, 0, 0.25), 0 0.25em 0.25em rgba(0, 0, 0, 0.05);
   color: black;
   cursor: pointer;
-  font-family: 'Audiowide', cursive;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 300;
-  line-height: 1.5;
+  line-height: 2.5;
   letter-spacing: 1px;
   padding: .5em 1em .75em;
   width: 50px;
@@ -200,8 +245,21 @@ select {
       -ms-user-select: none;
           user-select: none;
 }
+.next-btn {
+  display: flex;
+  align-items: flex-start;
+}
 
-.grid button:active, .chooseLevel button:active {
+.next-btn button {
+  line-height: 50px;
+  width: 150px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align:center;
+  padding-left: 10px;
+  color: black;
+}
+.grid button:active, .chooseLevel button:active, .next-btn button:active, .workstation button:active {
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.1), inset 0 0.25em 0.5em rgba(0, 0, 0, 0.05);
   margin-top: .25em;
   padding-bottom: .5em;
@@ -211,7 +269,7 @@ select {
 .grid button:hover, .chooseLevel button:hover {
   color: #fff;
 }
-.grid button:focus, .chooseLevel button:focus {
+.grid button:focus, .chooseLevel button:focus, .next-btn button:focus, .workstation button:focus {
   outline: none;
 }
 
@@ -220,23 +278,31 @@ select:focus {
   outline: none;
 }
 .workstation {
-  background-color: #cbefe9;
+  /*background-color: #cbefe9;*/
+  /*background-size: cover;
+  background-repeat: no-repeat;
+  /*background-color: rgba(0,0,0,0.5);*/
+  /*background-color: black;
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.9) 100%), url('./assets/images/this.jpg');*/
+  background-image: url('./assets/images/palettebackground.png');
+  background-size: cover;
+  background-color: rgba(0,0,0,0.5);
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.8) 100%), url('./assets/images/palettebackground.png');
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  border: 3px solid white;
+  border: 2px solid white;
+  box-shadow: 0 0 20px white;
   border-radius: 8px;
   height: 500px;
-  position: absolute;
-  left: 2%;
-  top: 0%;
+
 }
 
 .workstation input{
   font-size: 7px;
   text-align: center;
   background-color: #f4dc95;
-  font-family: 'Audiowide', cursive;
+  font-family: 'Orbitron', sans-serif;
 }
 
 #levelCompleted {
@@ -257,4 +323,55 @@ select:focus {
 .editor {
   height: 100%;
   border: 1px solid red;
+}
+
+.instructor-robot {
+  background-image: url('./assets/images/robot-helper.png');
+  height: 90px;
+  width: 70px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.tip-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  margin-left: 30px;
+}
+
+.tip-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.tip-body p {
+  color: #fff;
+
+  font-size: 24px;
+  text-shadow: 0 0 10px black,
+           0 0 20px  #69B4A7,
+           0 0 30px  #69B4A7,
+           0 0 40px  #69B4A7;
+}
+
+.tip-body h3 {
+  color: #fff;
+
+  font-size: 36px;
+  text-shadow: 0 0 10px black,
+           0 0 20px  #69B4A7,
+           0 0 30px  #69B4A7,
+           0 0 40px  #69B4A7;
+}
+.next-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0.3
 }

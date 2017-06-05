@@ -47,12 +47,17 @@ class Level extends React.Component {
           <h3> { description } </h3>
 
         </div>
-        <div className="levelWidget">
-          <WorkStationContainer />
-          <GridContainer />
+        <div className="levelWidget-container">
+          <div className="levelWidget">
+            <div className="levelStages">
+              <WorkStationContainer />
+              <GridContainer />
+            </div>
+            <div className="instructionWidget">
+              <InstructionContainer />
+            </div>
+          </div>
         </div>
-
-        <InstructionContainer />
       </div>
     );
 

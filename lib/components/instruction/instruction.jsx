@@ -53,7 +53,7 @@ class Instruction extends React.Component {
 
   addTips(grid, workstation){
     let { tips } = this.state;
-    debugger
+
     if(tips.stage === "workstation"){
       workstation.addChild(tips.obj);
       workstation.update();
@@ -65,7 +65,7 @@ class Instruction extends React.Component {
 
   removeTips(){
     let {tips, grid, workstation} = this.state;
-    debugger
+
     if(tips.stage === "workstation"){
       workstation.removeChild(tips.obj);
       workstation.update();
@@ -116,14 +116,22 @@ class Instruction extends React.Component {
     let next = this.nextBtn();
     return (
         <div className="instruction">
-
-          <h3> {title} </h3>
-          <p>
-            {content}
-          </p>
-
-          { next }
-        </div>
+          <div className="instruction-body">
+            <div className="instructor-robot">
+            </div>
+            <div className="tip-body">
+              <div className="tip-content">
+                <h3> {title}  </h3>
+                <p>
+                  {content}
+                </p>
+              </div>
+              <div className="next-btn">
+                { next }
+              </div>
+            </div>
+          </div>
+      </div>
     );
 
   }
