@@ -99,12 +99,6 @@ class Grid extends React.Component {
 
 
   handleTick(event){
-// if (this.queue.length > 0) this.setState({ code: [] });
-    // if(this.state.completed){
-    //
-    //
-    // }
-    // this.stage.update();
 
     if(this.queue.length > 0) {
       let frame = this.queue.pop();
