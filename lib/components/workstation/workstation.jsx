@@ -13,6 +13,18 @@ class WorkStation extends React.Component {
     };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    this.stage.addChild(this.editor.panel);
+    this.stage.update();
+  }
+
+  componentWillReceiveProps(newProps) {
+    if(newProps.blockData !== this.props.blockData){
+      this.handleClear();
+      // this.palette.setupBlocks(newProps.blockData);
+
+    }
+  }
   componentDidMount() {
   let editorData = {
     x: 110,
@@ -21,6 +33,7 @@ class WorkStation extends React.Component {
   };
 
     this.stage = new createjs.Stage("workstationCanvas");
+    createjs.Touch.enable(this.stage);
     this.stage.snapToPixelEnabled = true;
      this.stage.regX = this.stage.regY = -.5;
     this.palette = new Palette(this.stage, this.props.blockData);
@@ -30,6 +43,7 @@ class WorkStation extends React.Component {
     this.stage.enableMouseOver(10);
     this.stage.mouseMoveOutside = true;
     this.stage.isMainStage = true;
+
     let cxt = this.stage.canvas.getContext("2d");
     cxt.webkitImageSmoothingEnabled = cxt.mozImageSmoothingEnabled = true;
 
