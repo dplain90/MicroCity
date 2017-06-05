@@ -26,6 +26,7 @@ class WorkStation extends React.Component {
     this.palette = new Palette(this.stage, this.props.blockData);
     this.editor = new Editor(this.stage, editorData);
     window.editor = this.editor;
+    window.palette = this.palette;
     this.stage.enableMouseOver(10);
     this.stage.mouseMoveOutside = true;
     this.stage.isMainStage = true;
